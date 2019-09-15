@@ -1,0 +1,45 @@
+.content-panel{
+  padding-top: 100px;
+}
+
+.navbar {
+  background-color: #192857;
+  padding: 0;
+  height: 70px;
+}
+
+.navbar-container{
+  padding: 0;
+  height: 70px;
+}
+
+.button-a{
+  height: 100%
+  text-align: center;
+  line-height: 70px;
+}
+
+a:hover {
+  color: #192857;
+}
+
+.navbar-button{
+  margin: auto;
+  color: #bfa458;
+  background-color: inherit;
+  font-size: 200%;
+  font-family: sans-serif;
+  font-weight: bold;
+  padding: 0 30px;
+}
+
+.navbar-button:hover{
+  color: #192857;
+  background-color: #bfa458;
+}
+
+.search-box-input{
+  border-radius: 10px;
+  line-height: 200%;
+  width: 400px; !important
+}
