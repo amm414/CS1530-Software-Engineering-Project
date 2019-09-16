@@ -3,6 +3,21 @@ body{
 
 }
 
+body::-webkit-scrollbar-button:vertical:single-button{
+  display: block;
+  background-color: #192857;
+  color: #bfa458;
+}
+
+body::-webkit-scrollbar-button:vertical:increment{
+  background-image: url("fontawesome-free-5.10.2-web/svgs/solid/arrow-down-scroll.svg");
+  color: #bfa458;
+}
+
+body::-webkit-scrollbar-button:vertical:decrement{
+  background-image: url("fontawesome-free-5.10.2-web/svgs/solid/arrow-up-scroll.svg");
+  fill: #bfa458;
+}
 body::-webkit-scrollbar {
     width: 1em;
 }
@@ -144,7 +159,7 @@ a:hover {
 }
 
 .card-cost-amount{
-  width: 80%;
+  width: 100%;
   display: inherit;
   margin: 0;
   font-size: 120%;
