@@ -1,0 +1,82 @@
+.posting-card{
+  overflow-y: hidden;
+  border-radius: 30px;
+  border: 6px solid #192857;
+  background-color: white;
+  margin: 30px 10px;
+}
+
+.card-button{
+  width: 90%;
+  line-height: 50px;
+  height: 50px;
+  margin: 10px auto;
+  color: #bfa458;
+  background-color: #192857;
+  font-size: 150%;
+  font-family: sans-serif;
+  font-weight: bold;
+  padding: 0 30px;
+  text-align: center;
+}
+
+.card-button:hover{
+  color: #192857;
+  background-color: #bfa458;
+}
+
+.card-seller-panel{
+  width: 100%;
+  border: 3px solid #bfa458;
+  margin-bottom: 20px;
+}
+
+.bottom-card-seller-panel{
+  display: inline-block;
+  width: 100%;
+  margin-top: 10px;
+  padding-bottom: 10px;
+}
+
+.card-seller-stars{
+  width: 45%;
+  margin: auto;
+  color: #bfa458;
+  display: inline-block;
+}
+
+.card-seller-price{
+  display: inline-block;
+  border: 2px solid #192857;
+  width: 45%;
+  padding: 0 10px;
+  margin: auto;
+  line-height: 30px;
+}
+
+.card-cost-amount{
+  width: 100%;
+  display: inherit;
+  margin: 0;
+  font-size: 120%;
+  font-family: sans-serif;
+  font-weight: bold;
+  text-align: right;
+}
+
+.footer-of-card{
+  background-color: #bfa458;
+  color: #192857;
+  font-size: 125%;
+  text-align: center;
+  padding-top: 5px;
+}
+
+.card-footer-see-more{
+  font-weight: bold;
+  color: #192857;
+}
+
+.card-body-description{
+  height: 148px !important;
+}
