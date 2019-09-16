@@ -6,6 +6,11 @@
   margin: 30px 10px;
 }
 
+.card-title{
+  font-weight: bold;
+  font-family: sans-serif;
+}
+
 .card-button{
   width: 90%;
   line-height: 50px;
@@ -78,5 +83,5 @@
 }
 
 .card-body-description{
-  height: 148px !important;
+  height: 100px !important;
 }
