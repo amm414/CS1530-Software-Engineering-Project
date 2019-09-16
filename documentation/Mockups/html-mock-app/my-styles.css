@@ -5,7 +5,7 @@
 .navbar {
   background-color: #192857;
   padding: 0;
-  height: 70px;
+  min-height: 70px;
 }
 
 .navbar-container{
