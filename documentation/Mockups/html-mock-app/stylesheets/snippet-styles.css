@@ -10,12 +10,12 @@ body::-webkit-scrollbar-button:vertical:single-button{
 }
 
 body::-webkit-scrollbar-button:vertical:increment{
-  background-image: url("../fontawesome-free-5.10.2-web/svgs/solid/arrow-down-scroll.svg");
+  background-image: url("../fontawesome-free-5.10.2-web/svgs/solid/chevron-down.svg");
   color: #bfa458;
 }
 
 body::-webkit-scrollbar-button:vertical:decrement{
-  background-image: url("../fontawesome-free-5.10.2-web/svgs/solid/arrow-up-scroll.svg");
+  background-image: url("../fontawesome-free-5.10.2-web/svgs/solid/chevron-up.svg");
   fill: #bfa458;
 }
 body::-webkit-scrollbar {
