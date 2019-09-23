@@ -36,10 +36,10 @@
 }
 
 .create-posting-hrline-empty{
-  height: 0px;
-  padding: 20px;
+  margin-top: 70px;
+  height: 2px;
   border: 0px solid white;
-  background-color: inherit;
+  background-color: #192857;
 }
 
 .create-posting-select-category{
@@ -218,4 +218,26 @@
 
 .textarea-box{
   border: 3px solid #192857;
+}
+
+
+
+
+/* TAGS */
+.tag-div{
+  display: inline-block;
+  padding: 10px 30px;
+  margin: 5px 5px;
+  border-radius: 4px;
+  background-color: #192857;
+  color: #bfa458;
+  font-size: 110%;
+  font-weight: 600;
+}
+
+#close-icon{
+  color: #bfa458;
+  width: 20px;
+  cursor: pointer;
+  margin-left: 10px;
 }
