@@ -1,8 +1,10 @@
 .login-content{
   background-color: white;
   border: 3px solid #192857;
-  margin: 30px 10px;
+  margin: auto;
+  margin-top: 30px;
   padding: 15px;
+  max-width: 800px;
 }
 
 .login-title{
