@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>MOCKUP | CREATE ACCOUNT VIEW</title>
+
+    <link href="fontawesome-free-5.10.2-web/css/all.css" rel="stylesheet"> <!--load all styles -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="stylesheets/snippet-styles.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/create-account-styles.css">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="test.js"></script>
+
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container nav-container">
+        <a class="button-a" href="#">
+          <div class="navbar-button navbar-button-home ">
+            <i class="fas fa-home"></i>
+            CraigVersity
+          </div>
+        </a>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="create-account-border-box">
+          <div class="create-account-title">
+            <h2>Create a New Account</h2>
+          </div>
+
+          <hr class="styled-hrline"/>
+
+          <div class="form">
+            <div class="row">
+              <div class="col-md-12 col-lg-6">
+                <div class="create-account-input-group">
+                  <h5 class="create-account-label">University Email</h5>
+                  <input class="form-control form-control-lg" type="text" placeholder="Username...">
+                </div>
+
+                <div class="create-account-input-group">
+                  <h5 class="create-account-label">Password</h5>
+                  <input class="form-control form-control-lg" type="password" placeholder="Password...">
+                </div>
+
+                <div class="create-account-input-group">
+                  <h5 class="create-account-label">Retype Password</h5>
+                  <input class="form-control form-control-lg" type="password" placeholder="Retype Password...">
+                </div>
+
+
+              </div>
+
+
+
+
+            <div class="col-md-12 col-lg-6">
+
+              <div class="create-account-input-group">
+                <h5 class="create-account-label">Phone Number (Optional)</h5>
+                <input class="form-control form-control-lg" type="text" placeholder="Phone Number...">
+              </div>
+
+              <div class="create-account-input-group">
+                <h5 class="create-account-label">Personal Email (Optional)</h5>
+                <input class="form-control form-control-lg" type="text" placeholder="Username...">
+              </div>
+
+              <div class="create-account-input-group">
+                <h5 class="create-account-label">Preferred Contact Method (for postings)</h5>
+                <div class="create-account-radio-contact list-radio-options">
+                  <label class="form-check-label radio-label">
+                    <input type="radio" class="form-check-input create-account-radio-buttons" name="optradio" checked="checked">
+                    <span class="radio-button-span"></span>
+                    Email (University)
+                  </label>
+
+                  <label class="form-check-label radio-label">
+                    <input type="radio" class="form-check-input create-account-radio-buttons" name="optradio">
+                    <span class="radio-button-span"></span>
+                    Phone (Must be entered)
+                  </label>
+
+                  <label class="form-check-label radio-label">
+                    <input type="radio" class="form-check-input create-posting-radio-buttons" name="optradio">
+                    <span class="radio-button-span"></span>
+                    Personal Email (Must be entered)
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="styled-hrline"/>
+
+          <div class="row">
+            <div class="col-xs-12 col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
+
+              <div class="create-account-description-box">
+                <h5 class="create-posting-label">Describe yourself!</h5>
+                <p>
+                  This description may help attract users to your postings.
+                  It can help paint a picture to other users about whou <i>you</i> are.
+                  This is completely OPTIONAL as well.
+                </p>
+                <textarea class="form-control textarea-box" id="exampleFormControlTextarea1" rows="10"></textarea>
+              </div>
+
+            </div>
+          </div>
+
+
+          <hr class="styled-hrline"/>
+
+          <div class="create-posting-submit-button-group">
+
+            <div class="create-account-accept-conditions">
+              <div class="conditions-and-term-group">
+                <p>View conditions and terms <a href="#">here</a></p>
+                <label class="form-check-label checkmark-label ">
+                  <input type="checkbox" class="form-check-input create-posting-checkmark" name="checkmark">
+                  <span class="checkmark-span"></span>
+                  Accept Conditions
+                </label>
+
+                <button type="submit" class="btn btn-primary create-account-submit-button submit-button">Create Account!</button>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
