@@ -1,0 +1,39 @@
+
+.navbar {
+  background-color: #192857;
+  padding: 0;
+  min-height: 70px;
+}
+
+.nav-container{
+    min-height: 70px;
+}
+
+.button-a{
+  height: 100%
+  text-align: center;
+  line-height: 70px;
+}
+
+a:hover {
+  color: #192857;
+}
+
+.navbar-button-home{
+  font-size: 175% !important;
+  margin-right: 10px !important;
+}
+
+.navbar-button{
+  color: #bfa458;
+  background-color: inherit;
+  font-size: 125%;
+  font-family: sans-serif;
+  font-weight: bold;
+  padding: 0 15px;
+}
+
+.navbar-button:hover{
+  color: #192857;
+  background-color: #bfa458;
+}

@@ -1,0 +1,143 @@
+#sidebar {
+    width: 90%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 999;
+    background: #192857;
+    color: #fff;
+    transition: all .15s;
+    border-right: 2px solid  black;
+}
+
+
+
+
+
+.sidebar-header{
+  padding: 5px 5px 30px 5px;
+  color: #bfa458;
+  text-align: center;
+  font-weight: bold;
+}
+
+.inline-search{
+  display: inline-block;
+}
+
+.sidebar-search-bar{
+  display: inline-block;
+  width: 200px;
+}
+
+.sidebar-search-submit{
+  display: inline-block;
+  padding: 4px 8px;
+  margin-right: 5px;
+}
+
+.sidebar-group{
+  padding: 20px 0 20px 10px;
+  color: #bfa458;
+}
+
+.sidebar-search-submit{
+  color: #bfa458;
+  float: right;
+}
+
+.sidebar-header-text{
+  padding: 25px 0 0px 5px;
+  display: inline-block;
+  font-size: 170%;
+  font-weight: bold;
+}
+
+.sidebar-search-submit:hover{
+  background-color: #bfa458;
+  color: #192857;
+}
+
+.sidebar-select-category{
+  width: 90%;
+  margin: 5px 0;
+  border-radius: 5px;
+  font-size: 110%;
+  padding: 10px;
+}
+
+.sidebar-label{
+  font-size: 140%;
+}
+
+.sidebar-subtext{
+  font-size: 90%;
+}
+
+.sidebar-price-grouping{
+  display: block;
+  padding: 10px;
+  margin: 15px 0;
+}
+
+.sidebar-price-text{
+  display: inline-block;
+  margin: auto;
+  line-height: 38px;
+  font-size: 120%;
+}
+
+.sidebar-price-box{
+  width: 50%;
+  margin-right: 10px;
+}
+
+.sidebar-submit-button-group{
+  margin-top: 10px;
+  text-align: center;
+}
+
+.sidebar-filter-submit-button{
+  font-size: 150%;
+  font-weight: bold;
+  padding: 10px 30px;
+  color: #bfa458;
+  background-color: #192857;
+  border: 3px solid #bfa458;
+}
+
+.sidebar-filter-submit-button:hover{
+  color: #192857;
+  background-color: #bfa458;
+  border: 3px solid #bfa458;
+  text-decoration: underline;
+}
+
+
+.navbar-toggle-filter{
+  padding: auto;
+  color: #bfa458;
+  background-color: #192857;
+  border: 0px;
+  line-height: 70px;
+  cursor: pointer;
+}
+
+.navbar-toggle-filter:hover{
+  text-decoration: underline;
+}
+
+@media (min-width: 410px) {
+  #sidebar{
+    width: 400px !important;
+  }
+
+  .sidebar-search-bar{
+    width: 330px;
+  }
+
+  .sidebar-price-box{
+    float: right;
+  }
+}

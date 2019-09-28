@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="stylesheets/snippet-styles.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/user-view-styles.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/navbar-styles.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/sidebar-styles.css">
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -25,22 +27,25 @@
           </div>
         </a>
 
+        <button class="mr-2 navbar-toggle-filter navbar-button navbar-sidebar-toggle-button" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="true" aria-label="Toggle navigation">
+          <a class="button-a">
+            <i class="fas fa-align-left mr-2"></i>
+            Toggle Search
+          </a>
+        </button>
 
         <button class="navbar-toggler mr-2" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control nav-search-input" type="search" placeholder="Search..." aria-label="Search">
-            <button class="btn navbar-button nav-search-submit" type="submit"><i class="fas fa-search"></i></button>
-          </form>
 
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
               <a class="button-a" href="#">
                 <div class="navbar-button">
-                  Filter Search
+                  New Posting
+                  <i class="fas fa-file"></i>
                 </div>
               </a>
             </li>
@@ -48,7 +53,8 @@
             <li class="nav-item">
               <a class="button-a" href="#">
                 <div class="navbar-button">
-                  New Posting
+                  Help & FAQs
+                  <i class="fas fa-info-circle"></i>
                 </div>
               </a>
             </li>
@@ -72,6 +78,69 @@
         </div>
       </div>
     </nav>
+
+
+    <nav class="collapse show" id="sidebar">
+      <div class="sidebar-header">
+        <button class="navbar-toggler mr-2 sidebar-search-submit" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="true" aria-label="Toggle navigation">
+          <i class="fas fa-times-circle sidebar-close"></i>
+        </button>
+        <h3 class="sidebar-header-text">Filter Your Search</h3>
+      </div>
+
+      <form>
+        <ul class="list-unstyled components">
+          <li class="sidebar-group">
+            <div class="search-inline">
+              <input class="form-control sidebar-search-bar" type="search" placeholder="Search..." aria-label="Search">
+              <button class="btn navbar-button sidebar-search-submit" type="submit"><i class="fas fa-search"></i></button>
+            </div>
+          </li>
+
+          <li class="sidebar-group">
+            <div class="sidebar-category">
+              <h4 class="sidebar-label">Filter by Category</h4>
+              <select class="selectpicker sidebar-select-category">
+                <option>Textbooks</option>
+                <option>Events</option>
+                <option>Opprotunities</option>
+                <option>Furniture</option>
+                <option>Goods</option>
+                <option>Software or Digital Media</option>
+                <option>Miscellaneous</option>
+              </select>
+            </div>
+          </li>
+
+
+
+          <li class="sidebar-group">
+            <h4 class="sidebar-label">Price Range</h4>
+            <p class="sidebar-subtext">Note: if the maximum price is equal or less than minimum price, maximum price will be ignored.</p>
+
+            <div class="sidebar-price-grouping">
+              <h5 class="sidebar-price-text">Minimum Price: </h5>
+              <input type="text" class="form-control mb-2 mr-sm-2 sidebar-price-box" id="inlineFormInputName2" value="0">
+            </div>
+
+            <div class="sidebar-price-grouping">
+              <h5 class="sidebar-price-text">Maximum Price:</h5>
+              <input type="text" class="form-control mb-2 mr-sm-2 sidebar-price-box" id="inlineFormInputName2" value="0">
+            </div>
+          </li>
+
+          <li class="sidebar-group">
+            <div class="sidebar-submit-button-group">
+              <button type="submit" class="btn btn-primary sidebar-filter-submit-button">Filter Listings!</button>
+            </div>
+          </li>
+
+
+        </ul>
+      </form>
+    </nav>
+
+
 
     <div class="container content-panel">
       <div class="row">
