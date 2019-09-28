@@ -9,6 +9,7 @@
     color: #fff;
     transition: all .15s;
     border-right: 2px solid  black;
+    overflow-y: auto;
 }
 
 
@@ -31,20 +32,18 @@
   width: 200px;
 }
 
-.sidebar-search-submit{
-  display: inline-block;
-  padding: 4px 8px;
-  margin-right: 5px;
-}
-
 .sidebar-group{
   padding: 20px 0 20px 10px;
   color: #bfa458;
 }
 
 .sidebar-search-submit{
+  background-color: #192857;
   color: #bfa458;
   float: right;
+  display: inline-block;
+  padding: 4px 8px;
+  margin-right: 5px;
 }
 
 .sidebar-header-text{
