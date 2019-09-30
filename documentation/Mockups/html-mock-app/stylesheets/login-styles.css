@@ -3,8 +3,8 @@
   border: 3px solid #192857;
   margin: auto;
   margin-top: 30px;
-  padding: 15px;
-  max-width: 800px;
+  padding: 5px;
+  max-width: 450px;
 }
 
 .login-title{
@@ -16,8 +16,8 @@
 .login-enter-info{
   display: block;
   width: 100%;
-  margin: 20px 10px;
-  padding: 10px;
+  margin: 20px 0;
+  padding: 10px 0;
 }
 
 .login-label{
