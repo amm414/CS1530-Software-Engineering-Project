@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>MOCKUP | ACCOUNT VIEW</title>
+    <title>MOCKUP | SELLER CLAIM VIEW</title>
 
     <link href="fontawesome-free-5.10.2-web/css/all.css" rel="stylesheet"> <!--load all styles -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="stylesheets/snippet-styles.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/navbar-styles.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/account-styles.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/claim-styles.css">
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -18,7 +18,6 @@
 
   </head>
   <body>
-
 
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container nav-container">
@@ -74,79 +73,38 @@
       </div>
     </nav>
 
-
     <div class="container">
-      <div class="account-page-box">
+      <div class="col-xs-12 col-xl-8 offset-xl-2">
+        <div class="claim-content">
+          <h2 class="claim-title">Submit Claim of Transaction</h2>
 
-        <div class="row">
-          <div class="col-xs-12 col-sm-8 account-information-title">
-            <h2>User: <b>ABC1234</b>
-          </div>
+          <form class="form">
+            <div class="claim-enter-info">
+              <h4 class="claim-label">Buyer Account: </h4>
+              <input class="form-control form-control-md claim-text-box" type="text" value="Username...">
+            </div>
 
-          <div class="col-xs-12 col-sm-4 account-information-title">
-            <a href="#">
-              <div class="account-edit-button">
-                <i class="fas fa-user-edit"></i>
-                Edit Account
+            <div class="claim-input-group">
+              <h4 class="claim-label">Rating of Buyer: </h4>
+              <select class="selectpicker claim-select-category">
+                <option>5</option>
+                <option>4</option>
+                <option>3</option>
+                <option>2</option>
+                <option>1</option>
+                <option>0</option>
+              </select>
+            </div>
+            <div class="claim-options-group">
+              <div class="claim-submit-button-group">
+                <button type="submit" class="btn btn-primary claim-submit-button">Submit!</button>
               </div>
-            </a>
-          </div>
+            </div>
+
+          </form>
 
         </div>
-
-        <hr class="styled-hrline"/>
-
-        <div class="row account-content">
-          <div class="col-xs-12 col-lg-6 account-column-info">
-            <div class="account-email account-group">
-              <h3 class="account-label">Email:</h3>
-              ABC1234@pitt.edu
-            </div>
-
-            <div class="account-phone account-group">
-              <h3 class="account-label">Phone Number: </h3>
-              1-123-456-7890
-            </div>
-
-            <div class="account-personal-email account-group">
-              <h3 class="account-label">Personal Email:</h3>
-              N/A
-            </div>
-
-            <div class="account-preferred-contact account-group">
-              <h4 class="account-label">Preferred Contact Method:</h4>
-              I prefer to be contacted by <b>Phone</b>.
-            </div>
-
-            <div class="account-rating account-group">
-              <h4 class="account-label">ABC1234's Rating: <b>4.3/5</b></h4>
-              <div class="account-rating-stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="col-xs-12 col-lg-6 account-column-info">
-            <div class="account-rating account-group">
-              <h4 class="account-label bio-label">User ABC1234's Bio:</h4>
-              <div class="account-personal-information">
-                Hi! I am username, ABC1234; real name: Allan Brock Cook. I am a junior at Pitt and am currently majoring in
-                Mathematics and minoring in French (yes, it is a weird combo!). I like off-campus in South-Oakland.
-                I can typically meet for my postings at campus if that is desired any day of the week (I have class
-                every weekday). <br><br> To finalize any transactions: I am free Monday, Wednesday, and Friday
-                in the morning (before roughly 1pm). Tuesday and Thursday I am free between 3-6pm most of the time.
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
-
   </body>
 </html>
