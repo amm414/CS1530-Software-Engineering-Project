@@ -7,7 +7,7 @@
     z-index: 999;
     background: #192857;
     color: #fff;
-    transition: all .15s;
+    transition: all .2s;
     border-right: 2px solid  black;
     overflow-y: auto;
 }
