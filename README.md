@@ -9,3 +9,5 @@ https://timmyreilly.azurewebsites.net/python-flask-windows-development-environme
 Good Tutorial on FLASK:
 
 https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world
+
+Chapters 1-5 are good for now.
