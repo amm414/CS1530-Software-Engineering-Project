@@ -8,7 +8,7 @@
 }
 
 .posting-information-title{
-  font-size: 130%;
+  font-size: 150%;
   font-weight: bold;
   text-align: center;
   padding: 10px 0 30px 0;
@@ -97,4 +97,25 @@
 
 .posting-label-small{
   font-size: 120%;
+}
+
+.posting-heading{
+  display: block;
+}
+
+.posting-button-action{
+  margin: auto;
+  text-align: center;
+  border: 2px solid #192857;
+  padding: 0 10px;
+  background-color: #192857;
+  display: inline-block;
+  color: #bfa458;
+  width: 45%;
+  padding: 10px 0;
+}
+
+.posting-button-action:hover{
+  background-color: #bfa458;
+  color: #192857;
 }

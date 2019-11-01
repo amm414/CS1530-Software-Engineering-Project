@@ -25,8 +25,20 @@
 }
 
 .account-information-title{
+  padding-left: 30px;
+}
+
+.account-edit-button{
+  padding: 10px 0;
   text-align: center;
-  padding: 10px 0 30px 0;
+  border: 2px solid #bfa458;
+  color: #bfa458;
+  background-color: #192857;
+}
+
+.account-edit-button:hover{
+  background-color: #bfa458;
+  color: #192857;
 }
 
 .bio-label{
