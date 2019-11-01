@@ -4,3 +4,8 @@ The Repository for Code and Documentation for the CS1530 class.
 Get FLASK installed:
 
 https://timmyreilly.azurewebsites.net/python-flask-windows-development-environment-setup/
+
+
+Good Tutorial on FLASK:
+
+https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world
