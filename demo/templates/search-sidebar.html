@@ -1,0 +1,63 @@
+
+<nav class="collapse show" id="sidebar">
+  <div class="sidebar-header">
+    <button class="navbar-toggler mr-2 sidebar-search-submit" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="true" aria-label="Toggle navigation">
+      <i class="fas fa-times-circle sidebar-close"></i>
+    </button>
+    <h3 class="sidebar-header-text">Filter Your Search</h3>
+  </div>
+
+  <form>
+    <ul class="list-unstyled components">
+      <li class="sidebar-group">
+        <div class="search-inline">
+          <input class="form-control sidebar-search-bar" type="search" placeholder="Search..." aria-label="Search">
+          <button class="btn navbar-button sidebar-search-submit" type="submit"><i class="fas fa-search"></i></button>
+        </div>
+      </li>
+
+      <li class="sidebar-group">
+        <div class="sidebar-category">
+          <h4 class="sidebar-label">Filter by Category</h4>
+          <select class="selectpicker sidebar-select-category">
+            {% for category in category_list %}
+              <option>{{ category }}</option>
+            {% endfor %}
+<!--
+            <option>Events</option>
+            <option>Opprotunities</option>
+            <option>Furniture</option>
+            <option>Goods</option>
+            <option>Software or Digital Media</option>
+            <option>Miscellaneous</option> -->
+          </select>
+        </div>
+      </li>
+
+
+
+      <li class="sidebar-group">
+        <h4 class="sidebar-label">Price Range</h4>
+        <p class="sidebar-subtext">Note: if the maximum price is equal or less than minimum price, maximum price will be ignored.</p>
+
+        <div class="sidebar-price-grouping">
+          <h5 class="sidebar-price-text">Minimum Price: </h5>
+          <input type="text" class="form-control mb-2 mr-sm-2 sidebar-price-box" id="inlineFormInputName2" value="0">
+        </div>
+
+        <div class="sidebar-price-grouping">
+          <h5 class="sidebar-price-text">Maximum Price:</h5>
+          <input type="text" class="form-control mb-2 mr-sm-2 sidebar-price-box" id="inlineFormInputName2" value="0">
+        </div>
+      </li>
+
+      <li class="sidebar-group">
+        <div class="sidebar-submit-button-group">
+          <button type="submit" class="btn btn-primary sidebar-filter-submit-button">Filter Listings!</button>
+        </div>
+      </li>
+
+
+    </ul>
+  </form>
+</nav>

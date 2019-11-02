@@ -1,0 +1,59 @@
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container nav-container">
+    <a class="button-a" href="#">
+      <div class="navbar-button navbar-button-home ">
+        <i class="fas fa-home"></i>
+        CraigVersity
+      </div>
+    </a>
+
+    <button class="navbar-toggler mr-2" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+      <ul class="navbar-nav ml-auto">
+
+        {% if current_user.authenticated %}
+        <li class="nav-item">
+          <a class="button-a" href="#">
+            <div class="navbar-button">
+              New Posting
+              <i class="fas fa-file"></i>
+            </div>
+          </a>
+        </li>
+        {% endblock %}
+
+        <li class="nav-item">
+          <a class="button-a" href="#">
+            <div class="navbar-button">
+              Help & FAQs
+              <i class="fas fa-info-circle"></i>
+            </div>
+          </a>
+        </li>
+
+        {% if current_user.authenticated %}
+        <li class="nav-item">
+          <a class="button-a" href="#">
+            <div class="navbar-button">
+              Account
+              <i class="fas fa-cog"></i>
+            </div>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+        {% endblock %}
+      </ul>
+
+    </div>
+  </div>
+</nav>
