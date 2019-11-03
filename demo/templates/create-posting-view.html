@@ -1,0 +1,125 @@
+{% extends 'base-template.html' %}
+
+
+{% block content %}
+<div class="container">
+  <div class="posting-border-box">
+    <div class="create-posting-title">
+      <h2>Create-a-Post Submission Form</h2>
+      <hr class="styled-hrline"/>
+    </div>
+
+      <div class="form">
+        <div class="row">
+          <div class="col-md-12 col-lg-6">
+            <div class="create-posting-input-group">
+              <h4 class="create-posting-label">Posting Title</h4>
+              <input class="form-control form-control-lg" type="text" placeholder="Used Good for Sale!">
+            </div>
+
+            <div class="create-posting-input-group">
+              <h4 class="create-posting-label">Category for Post</h4>
+              <select class="selectpicker create-posting-select-category">
+                <option>Textbooks</option>
+                <option>Events</option>
+                <option>Opprotunities</option>
+                <option>Furniture</option>
+                <option>Goods</option>
+                <option>Software or Digital Media</option>
+                <option>Miscellaneous</option>
+              </select>
+            </div>
+
+            <div class="create-posting-input-group">
+              <h4 class="create-posting-label">Preferred Contact Method</h4>
+              <div class="create-posting-radio-contact list-radio-options create-posting-list-group">
+                <label class="form-check-label radio-label">
+                  <input type="radio" class="form-check-input create-posting-radio-buttons" name="optradio" checked="checked">
+                  <span class="radio-button-span"></span>
+                  Email
+                </label>
+
+                <label class="form-check-label radio-label">
+                  <input type="radio" class="form-check-input create-posting-radio-buttons" name="optradio">
+                  <span class="radio-button-span"></span>
+                  Phone
+                </label>
+              </div>
+            </div>
+
+            <div class="create-posting-input-group create-posting-list-group">
+              <h4 class="create-posting-label">Accepted Payment Methods</h4>
+              <div class="list-checkmark-options">
+                <label class="form-check-label checkmark-label no-hover">
+                  <input type="checkbox" class="form-check-input create-posting-checkmark" name="checkmark" disabled checked="checked">
+                  <span class="checkmark-span"></span>
+                  Cash (Must be accepted)
+                </label>
+
+                <label class="form-check-label checkmark-label">
+                  <input type="checkbox" class="form-check-input create-posting-checkmark" name="checkmark">
+                  <span class="checkmark-span"></span>
+                  Venmo
+                </label>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-md-12 col-lg-6">
+            <div class="create-posting-input-group price-group">
+              <h4 class="create-posting-label price-label">Listing Price</h4>
+              <div class="input-group mb-2 mr-sm-2">
+                <div class="input-group-prepend">
+                  <div class="input-group-text" style="background-color:  #bfa458;"><i class="fas fa-dollar-sign" style="color: #192857; font-size: 120%;"></i></div>
+                </div>
+                <input type="text" class="form-control form-control-lg" id="inlineFormInputGroupUsername2" placeholder="40.00">
+              </div>
+            </div>
+
+            <div class="create-posting-input-group">
+              <h4 class="create-posting-label">Description of Good or Service</h4>
+              <textarea class="form-control textarea-box" id="exampleFormControlTextarea1" rows="10"></textarea>
+            </div>
+
+            <div class="create-posting-input-group">
+              <h4 class="create-posting-label">Requirements for Buyer to Meet</h4>
+              <textarea class="form-control textarea-box" id="exampleFormControlTextarea1" rows="5"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <hr class="styled-hrline"/>
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="collection-of-tags">
+              <!-- THE FORMAT OF THE DIV representing the tags 
+              <div class="tag-div">
+                Computer
+                <i class="fas fa-times-circle" id="close-icon"></i>
+              </div> -->
+
+            </div>
+          </div>
+        </div>
+        <br><br>
+        <div class="row">
+          <div class="col-xs-12 col-lg-8 offset-lg-2">
+            <div class="create-posting-input-group">
+              <h4 class="create-posting-label">Enter Tags for Filtering Searches:</h4>
+              <input class="form-control form-control-lg" type="text" placeholder='couch, seating, soft, striped, furniture, ...'>
+            </div>
+          </div>
+        </div>
+
+        <hr class="styled-hrline"/>
+        <div class="create-posting-submit-button-group">
+          <button type="submit" class="btn btn-primary create-posting-submit-button">Create Post!</button>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
