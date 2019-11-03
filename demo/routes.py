@@ -64,7 +64,7 @@ def user_home_screen():
         redirect("/login")
     title = "Search and Filter Postings!"
     postings = POSTINGS
-    return render_template('user-view.html', user_id=CURRENT_USER_ID, page_title=title, css_file=generate_linked_files('user-view'), filtered_postings=postings)
+    return render_template('user-view.html', able_to_filter=True, user_id=CURRENT_USER_ID, page_title=title, css_file=generate_linked_files('user-view'), filtered_postings=postings)
 
 
 # The new posting submission screen
