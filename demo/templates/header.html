@@ -1,7 +1,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark">
   <div class="container nav-container">
-    <a class="button-a" href="#">
+    <a class="button-a" href="search-and-filter-postings">
       <div class="navbar-button navbar-button-home ">
         <i class="fas fa-home"></i>
         CraigVersity
@@ -16,7 +16,6 @@
 
       <ul class="navbar-nav ml-auto">
 
-        {% if current_user.authenticated %}
         <li class="nav-item">
           <a class="button-a" href="#">
             <div class="navbar-button">
@@ -25,7 +24,6 @@
             </div>
           </a>
         </li>
-        {% endblock %}
 
         <li class="nav-item">
           <a class="button-a" href="#">
@@ -36,7 +34,6 @@
           </a>
         </li>
 
-        {% if current_user.authenticated %}
         <li class="nav-item">
           <a class="button-a" href="#">
             <div class="navbar-button">
@@ -51,7 +48,6 @@
             <a class="dropdown-item" href="#">Something else here</a>
           </div>
         </li>
-        {% endblock %}
       </ul>
 
     </div>

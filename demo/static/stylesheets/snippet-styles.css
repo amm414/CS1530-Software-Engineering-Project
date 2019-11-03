@@ -1,0 +1,213 @@
+body{
+  background-color: #ccc;
+
+}
+
+body::-webkit-scrollbar-button:vertical:single-button{
+  display: block;
+  background-color: #192857;
+  color: #bfa458;
+}
+
+body::-webkit-scrollbar-button:vertical:increment{
+  background-image: url("/static/fontawesome-free-5.10.2-web/svgs/solid/chevron-down.svg");
+  color: #bfa458;
+}
+
+body::-webkit-scrollbar-button:vertical:decrement{
+  background-image: url("/static/fontawesome-free-5.10.2-web/svgs/solid/chevron-up.svg");
+  fill: #bfa458;
+}
+body::-webkit-scrollbar {
+    width: 1em;
+}
+
+body::-webkit-scrollbar-track {
+    background-color: #192857;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #bfa458;
+}
+
+.content-panel{
+  margin-top: 20px;
+}
+
+@media (min-width: 1200px) {
+  .nav-search-input{
+    width: 350px !important;
+  }
+
+}
+
+
+
+/* Style the Radio Buttons */
+.list-radio-options{
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: block;
+  width: 100%;
+  font-size: 110%;
+}
+
+.radio-label{
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: block;
+  position: relative;
+  width: 100%;
+  padding: 5px 40px;
+  font-size: inherit;
+  height: 40px;
+}
+
+.radio-label input{
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.radio-button-span{
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  padding: 10px;
+  left: 5px;
+  top: 10px;
+  background-color: #192857;
+  border-radius: 50%;
+}
+
+.radio-button-span:after{
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.radio-label input:checked ~ .radio-button-span:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio-label .radio-button-span:after {
+  top: 6px;
+  left: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #bfa458;
+}
+
+.radio-label:hover{
+  cursor: pointer;
+  background-color: #eee;
+}
+
+/* checkbox styling */
+.list-checkmark-options{
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: block;
+  width: 100%;
+  font-size: inherit;
+}
+
+.checkmark-label{
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: block;
+  position: relative;
+  width: 100%;
+  padding: 5px 40px;
+  font-size: 110%;
+  height: 40px;
+}
+
+.checkmark-label input{
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark-span{
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  padding: 10px;
+  left: 5px;
+  top: 10px;
+  background-color: #192857;
+  border-radius: 4px;
+}
+
+.checkmark-span:after{
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkmark-label  input:checked ~ .checkmark-span:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkmark-label  .checkmark-span:after {
+  left: 7px;
+  top: 4px;
+  width: 6px;
+  height: 11px;
+  border: solid #bfa458;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.checkmark-label:hover{
+  cursor: pointer;
+  background-color: #eee;
+}
+
+.no-hover:hover{
+  cursor: default;
+  background-color: inherit;
+}
+
+
+.textarea-box{
+  border: 3px solid #192857;
+}
+
+.styled-hrline{
+  height: 1px;
+  color: #192857;
+  background-color: #192857;
+}
+
+.submit-button{
+  font-size: 140%;
+  font-weight: bold;
+  color:  #bfa458;
+  background-color: #192857;
+  padding: 10px 40px;
+  border-width: 0;
+}
+
+.submit-button:hover{
+  color: #192857;
+  background-color: #bfa458;
+}
