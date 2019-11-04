@@ -6,17 +6,17 @@ from models import db, User, Book
 # Utilities
 #########################################################################################
 
-# Given a username, gives
-def get_user_id(username):
-	rv = User.query.filter_by(username=username).first()
-	return rv.user_id if rv else None
+# Given a email (universit), gives
+def get_userid(email):
+	rv = User.query.filter_by(email=email).first()
+	return rv.userid if rv else None
 
 # Run at the beginning of each request before functions run to check if logged in
 @app.before_request
 def before_request():
 	g.user = None
-	if 'user_id' in session:
-		g.user = User.query.filter_by(user_id=session['user_id']).first()
+	if 'userid' in session:
+		g.user = User.query.filter_by(userid=session['userid']).first()
 
 #########################################################################################
 # User account management page routes
@@ -37,7 +37,7 @@ def login():
 			error = 'Invalid password'
 		else:
 			flash('You were logged in')
-			session['user_id'] = user.user_id
+			session['userid'] = user.userid
 			return redirect(url_for('home'))
 
 	return render_template('login.html', error=error)
@@ -52,7 +52,7 @@ def register():
 	if request.method == 'POST':
 		if not request.form['username']:
 			error = 'You have to enter a username'
-        elif get_user_id(request.form['username']) is not None:
+        elif get_userid(request.form['username']) is not None:
         	error = 'The username is already taken'
 		elif not request.form['email'] or '@pitt.edu' not in request.form['email']:
 			error = 'You have to enter a valid Pitt email address'
@@ -83,7 +83,7 @@ def register():
 def logout():
 	"""Logs the user out."""
 	flash('You were logged out. Thanks!')
-	session.pop('user_id', None)
+	session.pop('userid', None)
 	return redirect(url_for('home'))
 
 @app.route('/home')
