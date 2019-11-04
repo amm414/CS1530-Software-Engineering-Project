@@ -1,5 +1,5 @@
 from flask import Flask, redirect, render_template, request, session, url_for, abort, g, flash
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 
 USERS = [{'userid': '1', 'username': 'abc1234', 'password': 'pbkdf2:sha256:150000$T9GGNiOw$3f787c6b78e1ef9f18795a433468f65aa553a127eaa8501912a98df10ed3a646', 'email': 'abc1234@pitt.edu', 'personalemail': 'abcdef@gmail.com', 'phonenumber': '1-412-445-6789', 'rating': '4.02', 'bio': 'Hello I am Bob Ross, and I am an English Lit major. I am in my sophmore year. I am often at campus, so that is where the transactions should take place. '}, {'userid': '2', 'username': 'abd142', 'password': 'pbkdf2:sha256:150000$kvmPXwde$4ab47e6374de26e0463910c33fc85b3a71749c1fa3b6ee2e1acae63ef44385a0', 'email': 'abd142@pitt.edu', 'personalemail': 'helloworld@yahoo.com', 'phonenumber': '1-561-203-5234', 'rating': '3.65', 'bio': 'Hello, I hope to work with you!'}]
@@ -40,12 +40,26 @@ def internal_error(error):
     return render_template('500.html'), 500
 
 
-# The login screen
 @app.route('/')
+def slash_redirect():
+    return redirect(url_for('login'))
+
+
+# The login screen
 @app.route('/login', methods=['GET', 'POST'])
-def login():
+def login(error=""):
     title = "Login to Craigversity!"
-    return render_template('login.html', error="", page_title=title, css_file=generate_linked_files('login'),)
+    if request.method == "POST":
+        error = "There was an issue: please retry submitting!"
+        CURRENT_USER_ID = -1
+        for i, user in enumerate(USERS, start=1):
+            if user['email'] == request.form['email']:
+                error = "Password is wrong!"
+                if check_password_hash(user['password'], request.form['password']):
+                    CURRENT_USER_ID = i
+        if CURRENT_USER_ID > 0:
+            return redirect(url_for('user_home_screen'))
+    return render_template('login.html', error=error, page_title=title, css_file=generate_linked_files('login'),)
 
 
 # The create account screen
