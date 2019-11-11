@@ -1,8 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
-from app import app
+from app import app, db
+from werkzeug.security import generate_password_hash, check_password_hash
 
-db = SQLAlchemy()
-db.init_app(app)
+
+# INITS THE DBs
 
 @app.cli.command('initdb')
 def initdb_command():
@@ -11,7 +12,9 @@ def initdb_command():
 	db.create_all()
 
 	# add some default data
-	db.session.add(User(username='jmd230', email="jmd230@pitt.edu", password='pass', phonenumber='4121234567', personalemail='jordanmdeller@gmail.com', contactmethod=1, bio='Serious offers only'))
+	db.session.add(User(username='jmd230', email="jmd230@pitt.edu", password=generate_password_hash('pass'), phonenumber='4121234567', personalemail='jordanmdeller@gmail.com', bio='Serious offers only'))
+	db.session.add(User(username='admin', email="admin@pitt.edu", password=generate_password_hash('foobiz'), phonenumber='2341172381', personalemail='admin@admin.com', bio='I am an admin. This account is used to manage and test out the APP!'))
+	db.session.add(User(username='tester1', email="tester1@pitt.edu", password=generate_password_hash('foobar'), phonenumber='2456734224', personalemail='tester1@gmail.com', bio='Tester is testing account for testing...'))
 
 	db.session.commit()
 

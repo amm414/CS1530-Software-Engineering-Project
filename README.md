@@ -23,6 +23,10 @@ Chapters 1-5 are good for now.
 
 4. Use the 'pip install' commands to install 'flask' and 'flask_sqlalchemy' individually.
 
-5. Run the 'export FLASK_APP=microblog.py' (NOTE: replace 'export' with 'set' for WINDOWS). Followed by 'flask run' to initialize application.
+5. Run the 'export FLASK=craigversity.py' (NOTE: replace 'export' with 'set' for WINDOWS). Followed by 'flask run' to initialize application.
 
 6. Open browser and navigate to URL: 'localhost:5000' and be amazed!!
+
+7. If you need to initialize the database, run 'flask initdb' when the application is not running, and after you 'set' or 'export' the FLASK (part 5 above).
+
+* NOTE: To turn on 'development mode' to allow changes to be loaded without restarting the flask application: before running 'flask run'; enter 'export FLASK_ENV=development' (remember to replace 'export' with 'set' for WINDOWS)

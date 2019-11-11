@@ -1,4 +1,5 @@
 from app import app, helper_functions
+from app.models import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import redirect, render_template, request, session, url_for, abort, g, flash
 from random import shuffle
@@ -15,8 +16,12 @@ if DEBUG:
 # ROUTES START HERE
 #######################################
 
-
-
+# Run at the beginning of each request before functions run to check if logged in
+@app.before_request
+def before_request():
+	g.user = None
+	if 'userid' in session:
+		g.user = User.query.filter_by(userid=session['userid']).first()
 
 ### ERROR HANDLING PAGES
 @app.route('/error')
@@ -41,16 +46,17 @@ def slash_redirect():
 # The login screen
 @app.route('/login', methods=['GET', 'POST'])
 def login(error=""):
-    CURRENT_USER_ID = -1
     title = "Login to Craigversity!"
+    if g.user:
+        return redirect(url_for('user_home_screen'))
     if request.method == "POST":
         error = "Incorrect Information Submitted"
-        for i, user in enumerate(USERS, start=1):
-            if user['email'] == request.form['email']:
-                error = "Password is wrong!"
-                if check_password_hash(user['password'], request.form['password']):
-                    CURRENT_USER_ID = i
-        if CURRENT_USER_ID > 0:
+        user = User.query.filter_by(email=request.form['email']).first()
+        if user is None or not check_password_hash(user.password, str(request.form['password'])):
+            error = "Incorrect Information Submitted"
+        else:
+            print("correct!")
+            session['userid'] = user.userid
             return redirect(url_for('user_home_screen'))
     return render_template('login.html', CURRENT_USER_ID=CURRENT_USER_ID, error=error, page_title=title, css_file=helper_functions.generate_linked_files('login'),)
 
