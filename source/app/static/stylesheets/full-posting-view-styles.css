@@ -7,7 +7,13 @@
   font-size: 120%;
 }
 
+.posting-information-functions{
+  display: inline-block;
+  padding: 0 10px 0 20px;
+}
+
 .posting-information-title{
+  width: 100%;
   font-size: 150%;
   font-weight: bold;
   text-align: center;
@@ -113,6 +119,12 @@
   color: #bfa458;
   width: 45%;
   padding: 10px 0;
+}
+
+@media screen and (max-width: 500px) {
+  .posting-button-action{
+    font-size: 80%;
+  }
 }
 
 .posting-button-action:hover{

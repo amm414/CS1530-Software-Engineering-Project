@@ -10,6 +10,7 @@
         <h2>User: <b>{{ account.username }}</b>
       </div>
 
+      {% if (CURRENT_USER_ID | int ) == (account.userid | int) %}
       <div class="col-xs-12 col-sm-4 account-information-title">
         <a href="#">
           <div class="account-edit-button">
@@ -18,7 +19,7 @@
           </div>
         </a>
       </div>
-
+      {% endif %}
     </div>
 
     <hr class="styled-hrline"/>
