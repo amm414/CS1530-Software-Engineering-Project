@@ -9,11 +9,11 @@
     <h3 class="sidebar-header-text">Filter Your Search</h3>
   </div>
 
-  <form>
+  <form class="form" action="" method="get">
     <ul class="list-unstyled components">
       <li class="sidebar-group">
         <div class="search-inline">
-          <input class="form-control sidebar-search-bar" type="search" placeholder="Search..." aria-label="Search">
+          <input class="form-control sidebar-search-bar" name="search" type="search" placeholder="Search..." {% if (submitted.search | string) != '' %} value="{{ submitted.search }}" {% endif %} aria-label="Search">
           <button class="btn navbar-button sidebar-search-submit" type="submit"><i class="fas fa-search"></i></button>
         </div>
       </li>
@@ -21,7 +21,7 @@
       <li class="sidebar-group">
         <div class="sidebar-category">
           <h4 class="sidebar-label">Filter by Category</h4>
-          <select class="selectpicker sidebar-select-category">
+          <select class="selectpicker sidebar-select-category" name="category">
             <option>Textbooks</option>
             <option>Events</option>
             <option>Opprotunities</option>
@@ -41,12 +41,12 @@
 
         <div class="sidebar-price-grouping">
           <h5 class="sidebar-price-text">Minimum Price: </h5>
-          <input type="text" class="form-control mb-2 mr-sm-2 sidebar-price-box" id="inlineFormInputName2" value="0">
+          <input type="text" name="minPrice" class="form-control mb-2 mr-sm-2 sidebar-price-box" id="inlineFormInputName2" {% if (submitted.minPrice | string) != '' %} value="{{ submitted.minPrice }}" {% endif %}>
         </div>
 
         <div class="sidebar-price-grouping">
           <h5 class="sidebar-price-text">Maximum Price:</h5>
-          <input type="text" class="form-control mb-2 mr-sm-2 sidebar-price-box" id="inlineFormInputName2" value="0">
+          <input type="text" name="maxPrice" class="form-control mb-2 mr-sm-2 sidebar-price-box" id="inlineFormInputName2" {% if (submitted.maxPrice | string) != '' %} value="{{ submitted.maxPrice }}" {% endif %}>
         </div>
       </li>
 
@@ -55,8 +55,6 @@
           <button type="submit" class="btn btn-primary sidebar-filter-submit-button">Filter Listings!</button>
         </div>
       </li>
-
-
     </ul>
   </form>
 </nav>

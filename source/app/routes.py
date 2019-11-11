@@ -1,6 +1,7 @@
 from app import app, helper_functions
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import redirect, render_template, request, session, url_for, abort, g, flash
+from random import shuffle
 
 DEBUG = True
 if DEBUG:
@@ -68,7 +69,29 @@ def user_home_screen():
         return redirect(url_for('login'))
     title = "Search and Filter Postings!"
     postings = POSTINGS
-    return render_template('user-view.html', able_to_filter=True, CURRENT_USER_ID=CURRENT_USER_ID, user_id=CURRENT_USER_ID, page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings)
+    submitted = {'minPrice': ''}
+    submitted = {'maxPrice': ''}
+    submitted = {'search': ''}
+    submitted = {'category': ''}
+    if request.method == 'GET':
+        # need to filter somehow
+        userid = (request.args.get('userid'))
+        submitted['minPrice'] = request.args.get('minPrice')
+        submitted['maxPrice'] = request.args.get('maxPrice')
+        submitted['search'] = request.args.get('search')
+        submitted['category'] = request.args.get('category')
+        shuffle(POSTINGS)
+
+    print(submitted)
+    for key, item in submitted.items():
+        if item is None:
+            submitted[key] = ''
+            if key == "minPrice" or key == "maxPrice":
+                submitted[key] = "0"
+
+    print(submitted)
+
+    return render_template('user-view.html', able_to_filter=True, submitted=submitted, CURRENT_USER_ID=CURRENT_USER_ID, user_id=CURRENT_USER_ID, page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings)
 
 
 # The new posting submission screen
@@ -114,7 +137,7 @@ def full_posting_view():
             if postid == post['post_id']:
                 posting_info = post
         if len(posting_info) == 0:
-            return redirect(url_for('not_found_error_item')) 
+            return redirect(url_for('not_found_error_item'))
 
     title = "POSTING: " + posting_info['title']
     return render_template('full-posting-view.html', user_id=CURRENT_USER_ID, CURRENT_USER_ID=CURRENT_USER_ID, page_title=title, css_file=helper_functions.generate_linked_files('full-posting-view'), post=posting_info)
