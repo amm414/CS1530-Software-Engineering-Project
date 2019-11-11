@@ -70,7 +70,7 @@
            <h4 class="card-title">{{ post.title }}</h4>
 
            <div class="card-seller-panel">
-             <a href="/user/post.user_id">
+             <a href="/user?userid={{ post.userid }}">
                <div class="card-button">
                   {{ post.poster_username }}
                </div>
@@ -100,7 +100,7 @@
            </div>
          </div>
          <div class="card-footer footer-of-card">
-           <a href="{{ post.link }}" class="card-footer-see-more">Click to View Details</a>
+           <a href="/posting?postid={{ post.post_id }}" class="card-footer-see-more">Click to View Details</a>
          </div>
        </div>
     </div>
