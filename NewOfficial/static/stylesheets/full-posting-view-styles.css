@@ -1,0 +1,121 @@
+.posting-page-box{
+  background-color: #fff !important;
+  width: 100%;
+  padding: 30px 10px;
+  margin: 30px 0;
+  border: 5px solid #192857;
+  font-size: 120%;
+}
+
+.posting-information-title{
+  font-size: 150%;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px 0 30px 0;
+}
+
+.posting-metadata{
+  font-size: 110%;
+  margin-bottom: 50px;
+}
+
+.posting-column{
+  padding: 30px 10px;
+  border: 3px solid #bfa458;
+}
+
+.posting-price-label{
+  width: auto;
+  display: inline-block;
+}
+
+.posting-price{
+  line-height: 50px;
+}
+
+.posting-grouping{
+  padding: 10px 0 20px 0;
+}
+
+.posting-grouping-small{
+  padding: 10px 0 20px 0;
+  font-size: 90%;
+}
+
+.posting-price-value{
+  font-weight: bold;
+  font-size: 120%;
+  float:right;
+  color:  #bfa458;
+  padding: 0 20px;
+  background-color: #192857;
+}
+
+.posting-poster-rating-stars{
+  margin: 20px 0 10px 0;
+  font-size: 115%;
+  margin: auto;
+  color: #bfa458;
+  display: inline-block;
+}
+
+.posting-poster-rating-text{
+  float: right;
+  display: inline-block;
+  font-size: 110%;
+  font-weight: bold;
+}
+
+.posting-poster-data{
+  background-color: #eee;
+  padding:10px;
+  border: 2px solid #192857;
+}
+
+.posting-poster-account-button{
+  width: 90%;
+  line-height: 50px;
+  height: 50px;
+  margin: 10px auto;
+  color: #bfa458;
+  background-color: #192857;
+  font-size: 120%;
+  font-family: sans-serif;
+  font-weight: bold;
+  padding: 0 30px;
+  text-align: center;
+}
+
+.posting-poster-account-button:hover{
+  color: #192857;
+  background-color: #bfa458;
+}
+
+.posting-tags{
+  font-size: 80%;
+}
+
+.posting-label-small{
+  font-size: 120%;
+}
+
+.posting-heading{
+  display: block;
+}
+
+.posting-button-action{
+  margin: auto;
+  text-align: center;
+  border: 2px solid #192857;
+  padding: 0 10px;
+  background-color: #192857;
+  display: inline-block;
+  color: #bfa458;
+  width: 45%;
+  padding: 10px 0;
+}
+
+.posting-button-action:hover{
+  background-color: #bfa458;
+  color: #192857;
+}
