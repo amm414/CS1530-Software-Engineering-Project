@@ -113,6 +113,8 @@ def full_posting_view():
         for post in POSTINGS:
             if postid == post['post_id']:
                 posting_info = post
+        if len(posting_info) == 0:
+            return redirect(url_for('not_found_error_item')) 
 
     title = "POSTING: " + posting_info['title']
     return render_template('full-posting-view.html', user_id=CURRENT_USER_ID, CURRENT_USER_ID=CURRENT_USER_ID, page_title=title, css_file=helper_functions.generate_linked_files('full-posting-view'), post=posting_info)
