@@ -6,15 +6,21 @@
     <div class="login-content">
       <h2 class="login-title">Sign In</h2>
 
-      <form class="form">
+      {% if error != '' %}
+        {% with error_message=error %}
+          {% include 'error.html' %}
+        {% endwith %}
+      {% endif %}
+
+      <form class="form" action="" method="post">
         <div class="login-enter-info">
           <h4 class="login-label">Email: </h4>
-          <input class="form-control form-control-md login-text-box" type="text" placeholder="Enter Email...">
+          <input class="form-control form-control-md login-text-box"  name="email" type="text" placeholder="Enter Email...">
         </div>
 
         <div class="login-enter-info">
           <h4 class="login-label">Password: </h4>
-          <input class="form-control form-control-md login-text-box" type="password" placeholder="Enter Password...">
+          <input class="form-control form-control-md login-text-box"  name="password" type="password" placeholder="Enter Password...">
         </div>
 
         <hr class="login-hr-line" />
@@ -27,7 +33,7 @@
 
         <div class="login-other-options row">
           <div class="col-xs-12 col-sm-6">
-            <a class="login-create-account" href="create-account.html">Create Account</a>
+            <a class="login-create-account" href="/create-account">Create Account</a>
           </div>
         </div>
       </form>

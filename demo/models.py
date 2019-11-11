@@ -36,11 +36,12 @@ class Posting(db.Model):
 	userid 			= db.Column(db.Integer, nullable = False)
 	date 			= db.Column(db.Date, nullable = False)
 	title   		= db.Column(db.String(80), nullable = False)
+	requirements 	= db.Column(db.String(140), nullable = False)
 	description 	= db.Column(db.String(140), nullable = False)
 	price 			= db.Column(db.Integer, nullable = False)
 	category 		= db.Column(db.String(80), nullable = False)
-	contactmethod 	= db.Column(db.String(80), nullable = False)
-	tags 			= db.Column(db.String(80), nullable = False)
-	
+	contactmethod 	= db.Column(db.String(80), nullable = True)
+	tags 			= db.Column(db.String(80), nullable = True)
+
 	def __repr__(self):
 		return '<Posting {}: "{}">'.format(self.post_id, self.title)
