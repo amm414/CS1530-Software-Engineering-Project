@@ -21,12 +21,11 @@ Chapters 1-5 are good for now.
 
 3. Use the virtual environment by the command "workon {name-of-env}" and navigate to the directory where source code is/will be located. Then, enter "setprojectdir ." to specify this as working directory location. This means whenever virtual environment is started (through the 'workon' command) it will automatically navigate to this directory.
 
-4. Use the 'pip install' commands to install 'flask' and 'flask_sqlalchemy' individually.
+4. Use the 'pip install' commands to install 'flask' and 'flask_sqlalchemy' and 'flask_socketio' individually.
 
-5. Run the 'export FLASK=craigversity.py' (NOTE: replace 'export' with 'set' for WINDOWS). Followed by 'flask run' to initialize application.
+5. Run the 'export FLASK=craigversity.py' (NOTE: replace 'export' with 'set' for WINDOWS). Then, setup the database using the 'flask initdb' command.
 
-6. Open browser and navigate to URL: 'localhost:5000' and be amazed!!
+6. Run the application server by entering 'python craigversity' (this assumes craigversity.py is within your current directory)
 
-7. If you need to initialize the database, run 'flask initdb' when the application is not running, and after you 'set' or 'export' the FLASK (part 5 above).
+7. Open browser and navigate to URL: 'localhost:5000' and be amazed!!
 
-* NOTE: To turn on 'development mode' to allow changes to be loaded without restarting the flask application: before running 'flask run'; enter 'export FLASK_ENV=development' (remember to replace 'export' with 'set' for WINDOWS)
