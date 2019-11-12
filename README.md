@@ -29,3 +29,5 @@ Chapters 1-5 are good for now.
 
 7. Open browser and navigate to URL: 'localhost:5000' and be amazed!!
 
+
+* NOTE: 'flask run' does not work with the sockets. Therefore, we must run it with the 'python craigversity.py' command
