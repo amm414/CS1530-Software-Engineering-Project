@@ -1,4 +1,4 @@
-from app import app, helper_functions
+from app import app, helper_functions, socketio
 from app.models import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import redirect, render_template, request, session, url_for, abort, g, flash
@@ -11,11 +11,20 @@ if DEBUG:
     POSTINGS = helper_functions.get_simple_data_postings()
 
 
+@socketio.on('disconnect')
+def disconnect_user():
+    logout()
+
 
 #######################################
 # ROUTES START HERE
 #######################################
-
+# Log the user out
+@app.route('/logout')
+def logout():
+    session.pop('userid', None)
+    return redirect(url_for('login'))
+    
 # Run at the beginning of each request before functions run to check if logged in
 @app.before_request
 def before_request():
