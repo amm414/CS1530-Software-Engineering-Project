@@ -24,13 +24,14 @@ def disconnect_user():
 def logout():
     session.pop('userid', None)
     return redirect(url_for('login'))
-    
+
 # Run at the beginning of each request before functions run to check if logged in
 @app.before_request
-def before_request():
-	g.user = None
-	if 'userid' in session:
-		g.user = User.query.filter_by(userid=session['userid']).first()
+def request_authentication():
+    g.user = None
+    if 'userid' in session:
+        g.user = User.query.filter_by(userid=session['userid']).first()
+
 
 ### ERROR HANDLING PAGES
 @app.route('/error')
@@ -64,7 +65,6 @@ def login(error=""):
         if user is None or not check_password_hash(user.password, str(request.form['password'])):
             error = "Incorrect Information Submitted"
         else:
-            print("correct!")
             session['userid'] = user.userid
             return redirect(url_for('user_home_screen'))
     return render_template('login.html', CURRENT_USER_ID=CURRENT_USER_ID, error=error, page_title=title, css_file=helper_functions.generate_linked_files('login'),)
@@ -80,7 +80,7 @@ def create_account():
 # The home user logged in screen that lists postings
 @app.route('/search-and-filter-postings', methods=['GET'])
 def user_home_screen():
-    if CURRENT_USER_ID == -1:
+    if g.user is None:
         return redirect(url_for('login'))
     title = "Search and Filter Postings!"
     postings = POSTINGS
@@ -97,22 +97,18 @@ def user_home_screen():
         submitted['category'] = request.args.get('category')
         shuffle(POSTINGS)
 
-    print(submitted)
     for key, item in submitted.items():
         if item is None:
             submitted[key] = ''
             if key == "minPrice" or key == "maxPrice":
                 submitted[key] = "0"
-
-    print(submitted)
-
     return render_template('user-view.html', able_to_filter=True, submitted=submitted, CURRENT_USER_ID=CURRENT_USER_ID, user_id=CURRENT_USER_ID, page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings)
 
 
 # The new posting submission screen
 @app.route('/new-posting-submission')
 def new_posting_submission():
-    if CURRENT_USER_ID == -1:
+    if g.user is None:
         return redirect(url_for('login'))
     title = "Submit a New Posting!"
     return render_template('create-posting-view.html', user_id=CURRENT_USER_ID,  CURRENT_USER_ID=CURRENT_USER_ID, page_title=title, css_file=helper_functions.generate_linked_files('create-posting-view'))
@@ -127,6 +123,8 @@ def help():
 # The user screen
 @app.route('/user', methods=['GET', 'POST'])
 def users_account():
+    if g.user is None:
+        return redirect(url_for('login'))
     global CURRENT_USER_ID
     account_info = {}
     if request.method == "GET":
@@ -143,6 +141,8 @@ def users_account():
 # The posting screen
 @app.route('/posting', methods=['GET'])
 def full_posting_view():
+    if g.user is None:
+        return redirect(url_for('login'))
     posting_info = {}
     if CURRENT_USER_ID == -1:
         return redirect(url_for('login'))

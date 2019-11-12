@@ -9,17 +9,18 @@
       <hr class="styled-hrline"/>
     </div>
 
+    <form action="" method="post">
       <div class="form">
         <div class="row">
           <div class="col-md-12 col-lg-6">
             <div class="create-posting-input-group">
               <h4 class="create-posting-label">Posting Title</h4>
-              <input class="form-control form-control-lg" type="text" placeholder="Used Good for Sale!">
+              <input class="form-control form-control-lg" type="text" placeholder="Used Good for Sale!" name="title">
             </div>
 
             <div class="create-posting-input-group">
               <h4 class="create-posting-label">Category for Post</h4>
-              <select class="selectpicker create-posting-select-category">
+              <select class="selectpicker create-posting-select-category" name="category">
                 <option>Textbooks</option>
                 <option>Events</option>
                 <option>Opprotunities</option>
@@ -34,32 +35,21 @@
               <h4 class="create-posting-label">Preferred Contact Method</h4>
               <div class="create-posting-radio-contact list-radio-options create-posting-list-group">
                 <label class="form-check-label radio-label">
-                  <input type="radio" class="form-check-input create-posting-radio-buttons" name="optradio" checked="checked">
+                  <input type="radio" class="form-check-input create-posting-radio-buttons" name="preferredContactEmail" checked="checked" >
                   <span class="radio-button-span"></span>
                   Email
                 </label>
 
                 <label class="form-check-label radio-label">
-                  <input type="radio" class="form-check-input create-posting-radio-buttons" name="optradio">
+                  <input type="radio" class="form-check-input create-posting-radio-buttons" name="preferredContactPhone">
                   <span class="radio-button-span"></span>
                   Phone
                 </label>
-              </div>
-            </div>
 
-            <div class="create-posting-input-group create-posting-list-group">
-              <h4 class="create-posting-label">Accepted Payment Methods</h4>
-              <div class="list-checkmark-options">
-                <label class="form-check-label checkmark-label no-hover">
-                  <input type="checkbox" class="form-check-input create-posting-checkmark" name="checkmark" disabled checked="checked">
-                  <span class="checkmark-span"></span>
-                  Cash (Must be accepted)
-                </label>
-
-                <label class="form-check-label checkmark-label">
-                  <input type="checkbox" class="form-check-input create-posting-checkmark" name="checkmark">
-                  <span class="checkmark-span"></span>
-                  Venmo
+                <label class="form-check-label radio-label">
+                  <input type="radio" class="form-check-input create-posting-radio-buttons" name="preferredContactPersonalEmail">
+                  <span class="radio-button-span"></span>
+                  Personal Email
                 </label>
               </div>
             </div>
@@ -73,18 +63,13 @@
                 <div class="input-group-prepend">
                   <div class="input-group-text" style="background-color:  #bfa458;"><i class="fas fa-dollar-sign" style="color: #192857; font-size: 120%;"></i></div>
                 </div>
-                <input type="text" class="form-control form-control-lg" id="inlineFormInputGroupUsername2" placeholder="40.00">
+                <input type="text" class="form-control form-control-lg" id="inlineFormInputGroupUsername2" placeholder="40.00" name="price">
               </div>
             </div>
 
             <div class="create-posting-input-group">
               <h4 class="create-posting-label">Description of Good or Service</h4>
-              <textarea class="form-control textarea-box" id="exampleFormControlTextarea1" rows="10"></textarea>
-            </div>
-
-            <div class="create-posting-input-group">
-              <h4 class="create-posting-label">Requirements for Buyer to Meet</h4>
-              <textarea class="form-control textarea-box" id="exampleFormControlTextarea1" rows="5"></textarea>
+              <textarea class="form-control textarea-box" id="exampleFormControlTextarea1" rows="10" name="description"></textarea>
             </div>
           </div>
         </div>
@@ -94,7 +79,7 @@
         <div class="row">
           <div class="col-xs-12">
             <div class="collection-of-tags">
-              <!-- THE FORMAT OF THE DIV representing the tags 
+              <!-- THE FORMAT OF THE DIV representing the tags
               <div class="tag-div">
                 Computer
                 <i class="fas fa-times-circle" id="close-icon"></i>
@@ -118,7 +103,8 @@
           <button type="submit" class="btn btn-primary create-posting-submit-button">Create Post!</button>
         </div>
 
-    </div>
+      </div>
+    </form>
   </div>
 </div>
 
