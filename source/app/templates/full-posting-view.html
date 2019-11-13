@@ -1,0 +1,112 @@
+{% extends 'base-template.html' %}
+
+
+{% block content %}
+<div class="container">
+  <div class="posting-page-box">
+
+    <div class="col-xs-12">
+      <div class="posting-information-title">
+        {{ post.title }}
+      </div>
+    </div>
+
+    <div class="col-xs-12">
+      <h3 class="posting-information-functions">Functions: </h3>
+      {% if (post.userid | int) == (CURRENT_USER_ID | int) %}
+      <a href="#">
+        <div class="posting-button-action">
+          <i class="fas fa-edit"></i>
+          Edit Posting
+        </div>
+      </a>
+      {% endif %}
+
+      <a href="#">
+        <div class="posting-button-action">
+          <i class="fas fa-file-signature"></i>
+          Claim Transaction
+        </div>
+      </a>
+    </div>
+
+    <hr class="styled-hrline"/>
+
+    <div class="row posting-content">
+      <div class="col-xs-12 col-lg-6 col-xl-4">
+        <div class="posting-metadata posting-column">
+          <div class="posting-price posting-grouping">
+            <h4 class="posting-price-label">Price: </h4>
+             <div class="posting-price-value">
+               $ {{ post.price }}
+             </div>
+          </div>
+
+          <div class="posting-preferred-contact posting-grouping">
+            <h4 class="posting-label">Preferred Contact Method: </h4>
+            {{ post.preferredcontact }}
+          </div>
+
+          <div class="posting-poster-data posting-grouping">
+            <h4 class="posting-label">Poster Information: </h4>
+            <div class="posting-poster-account">
+              Poster's username is {{ post.poster_username }}.
+              <a href="/user?userid={{ post.userid }}">
+                <div class="posting-poster-account-button">
+                   {{ post.poster_username }}
+                </div>
+              </a>
+            </div>
+
+            <div class="posting-poster-rating">
+              Rating:
+              <h5 class="posting-poster-rating-text">{{ post.stars }}/5</h5>
+            </div>
+
+            <div class="posting-poster-rating-stars">
+              {% set seq = [0, 1, 2, 3, 4] %}
+              {% for i in seq %}
+                {% if post.stars | int > i %}
+                  <i class="fas fa-star"></i>
+                {% else %}
+                  <i class="far fa-star"></i>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-lg-6 col-xl-8 ">
+        <div class="posting-requirements posting-grouping">
+          <h4 class="posting-label">Potential Buyer Requirements: </h4>
+          Needs to take couch themselves, I will not help.
+          Needs to pay upfront, and no refunds at all.
+        </div>
+
+        <div class="posting-written-description posting-grouping">
+          <h4 class="posting-label">Detailed Information for Posting: </h4>
+          The couch is in great condition. Was bought 1-1.5 years ago, but I need to move soon.
+          I want to get a larger couch so I will not be able to take this couch with me. I paid
+          300 for the couch, and since it is in good condition, I would like to recoup a
+          significant portion of full-price. <br><br> Please contact me by phone Monday or Wednesday anytime;
+          Tuesday and Thursday before noon; or Friday-Sunday anytime (but less likely to answer).
+          If you leave voicemail, I will try to return a call ASAP.
+        </div>
+
+        <div class="posting-category posting-grouping">
+          <h4 class="posting-label">Category: </h4>
+          Furniture
+        </div>
+
+        <div class="posting-tags posting-grouping-small">
+          <h4 class="posting-label-small">Tags: </h4>
+          couch, furniture, living room, seat, futon, sofa, love seat, black, dark,
+          gaming, tv, television
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends "base-template.html" %}
+
+{% block content %}
+<nav class="collapse collapse" id="sidebar">
+  <div class="sidebar-header">
+    <button class="navbar-toggler mr-2 sidebar-search-submit" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="true" aria-label="Toggle navigation">
+      <i class="fas fa-times-circle sidebar-close"></i>
+    </button>
+    <h3 class="sidebar-header-text">Filter Your Search</h3>
+  </div>
+
+  <form class="form" action="" method="get">
+    <ul class="list-unstyled components">
+      <li class="sidebar-group">
+        <div class="search-inline">
+          <input class="form-control sidebar-search-bar" name="search" type="search" placeholder="Search..." {% if (submitted.search | string) != '' %} value="{{ submitted.search }}" {% endif %} aria-label="Search">
+          <button class="btn navbar-button sidebar-search-submit" type="submit"><i class="fas fa-search"></i></button>
+        </div>
+      </li>
+
+      <li class="sidebar-group">
+        <div class="sidebar-category">
+          <h4 class="sidebar-label">Filter by Category</h4>
+          <select class="selectpicker sidebar-select-category" name="category">
+            <option>Textbooks</option>
+            <option>Events</option>
+            <option>Opprotunities</option>
+            <option>Furniture</option>
+            <option>Goods</option>
+            <option>Software or Digital Media</option>
+            <option>Miscellaneous</option>
+          </select>
+        </div>
+      </li>
+
+
+
+      <li class="sidebar-group">
+        <h4 class="sidebar-label">Price Range</h4>
+        <p class="sidebar-subtext">Note: if the maximum price is equal or less than minimum price, maximum price will be ignored.</p>
+
+        <div class="sidebar-price-grouping">
+          <h5 class="sidebar-price-text">Minimum Price: </h5>
+          <input type="text" name="minPrice" class="form-control mb-2 mr-sm-2 sidebar-price-box" id="inlineFormInputName2" {% if (submitted.minPrice | string) != '' %} value="{{ submitted.minPrice }}" {% endif %}>
+        </div>
+
+        <div class="sidebar-price-grouping">
+          <h5 class="sidebar-price-text">Maximum Price:</h5>
+          <input type="text" name="maxPrice" class="form-control mb-2 mr-sm-2 sidebar-price-box" id="inlineFormInputName2" {% if (submitted.maxPrice | string) != '' %} value="{{ submitted.maxPrice }}" {% endif %}>
+        </div>
+      </li>
+
+      <li class="sidebar-group">
+        <div class="sidebar-submit-button-group">
+          <button type="submit" class="btn btn-primary sidebar-filter-submit-button">Filter Listings!</button>
+        </div>
+      </li>
+    </ul>
+  </form>
+</nav>
+
+<div class="container content-panel">
+  <div class="row">
+    {% for post in filtered_postings %}
+    <div class="col-lg-6 col-xl-4">
+      <div class="card posting-card">
+         <div class="card-body">
+           <h4 class="card-title">{{ post.title }}</h4>
+
+           <div class="card-seller-panel">
+             <a href="/user?userid={{ post.userid }}">
+               <div class="card-button">
+                  {{ post.poster_username }}
+               </div>
+             </a>
+             <div class="bottom-card-seller-panel">
+               <div class="card-seller-stars">
+                 {% set seq = [0, 1, 2, 3, 4] %}
+                 {% for i in seq %}
+                   {% if post.stars > i %}
+                     <i class="fas fa-star"></i>
+                   {% else %}
+                     <i class="far fa-star"></i>
+                   {% endif %}
+                 {% endfor %}
+               </div>
+
+               <div class="card-seller-price">
+                 <div class="card-cost-amount">${{ post.price }}</div>
+               </div>
+             </div>
+           </div>
+
+           <div class="card-body-description">
+             <p class="card-text">
+               {{ post.description }}
+             </p>
+           </div>
+         </div>
+         <div class="card-footer footer-of-card">
+           <a href="/posting?postid={{ post.post_id }}" class="card-footer-see-more">Click to View Details</a>
+         </div>
+       </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
