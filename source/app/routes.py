@@ -32,6 +32,11 @@ def request_authentication():
     if 'userid' in session:
         g.user = User.query.filter_by(userid=session['userid']).first()
 
+# Given a email (universit), gives
+def get_userid(email):
+	rv = User.query.filter_by(email=email).first()
+	return rv.userid if rv else None
+
 
 ### ERROR HANDLING PAGES
 @app.route('/error')
@@ -71,9 +76,31 @@ def login(error=""):
 
 
 # The create account screen
-@app.route('/create-account')
+@app.route('/create-account', methods=['GET', 'POST'])
 def create_account():
     title = "Welcome to Craigversity!"
+    if g.user:
+        return redirect(url_for('user_home_screen'))
+    if request.method == 'POST':
+        error = "Incorrect Information Submitted"
+        if not request.form['email'] or '@pitt.edu' not in request.form['email']:
+            error = 'You have to enter a valid Pitt email address'
+        elif get_userid(request.form['email']) is not None:
+            error = 'The username is already taken'
+        elif not request.form['password']:
+            error = 'You have to enter a password'
+        elif request.form['password'] != request.form['password2']:
+            error = 'The two passwords do not match'
+        else:
+            db.session.add(User(
+                username = request.form['email'].split('@')[0],
+				email = request.form['email'],
+				password = generate_password_hash(request.form['password']),
+                phonenumber = request.form['phonenumber'],
+                personalemail = request.form['personalemail'],
+                bio = request.form['bio']))
+            db.session.commit()
+            return redirect(url_for('login'))
     return render_template('create-account.html',  CURRENT_USER_ID=CURRENT_USER_ID, user_id=CURRENT_USER_ID, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
 
 
