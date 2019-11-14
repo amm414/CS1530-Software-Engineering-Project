@@ -70,14 +70,14 @@
            <div class="card-seller-panel">
              <a href="/user?userid={{ post.userid }}">
                <div class="card-button">
-                  {{ post.poster_username }}
+                  {{ post.username }}
                </div>
              </a>
              <div class="bottom-card-seller-panel">
                <div class="card-seller-stars">
                  {% set seq = [0, 1, 2, 3, 4] %}
                  {% for i in seq %}
-                   {% if post.stars > i %}
+                   {% if 3 > i %}
                      <i class="fas fa-star"></i>
                    {% else %}
                      <i class="far fa-star"></i>
@@ -98,7 +98,7 @@
            </div>
          </div>
          <div class="card-footer footer-of-card">
-           <a href="/posting?postid={{ post.post_id }}" class="card-footer-see-more">Click to View Details</a>
+           <a href="/posting?postid={{ post.postid }}" class="card-footer-see-more">Click to View Details</a>
          </div>
        </div>
     </div>
