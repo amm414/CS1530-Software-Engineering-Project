@@ -42,11 +42,11 @@
         </div>
 
         <div class="account-rating account-group">
-          <h4 class="account-label">{{ account.username }}'s Rating: <b>{{ account.rating }}/5</b></h4>
+          <h4 class="account-label">{{ account.username }}'s Rating: <b>{{ 5 }}/5</b></h4>
           <div class="account-rating-stars">
             {% set seq = [0, 1, 2, 3, 4] %}
             {% for i in seq %}
-              {% if account.rating | int > i %}
+              {% if 5 | int > i %}
                 <i class="fas fa-star"></i>
               {% else %}
                 <i class="far fa-star"></i>
@@ -60,13 +60,7 @@
       <div class="col-xs-12 col-lg-6 account-column-info">
         <div class="account-rating account-group">
           <h4 class="account-label bio-label">User {{ account.username }}'s Bio:</h4>
-          <div class="account-personal-information">
-            Hi! I am username, ABC1234; real name: Allan Brock Cook. I am a junior at Pitt and am currently majoring in
-            Mathematics and minoring in French (yes, it is a weird combo!). I like off-campus in South-Oakland.
-            I can typically meet for my postings at campus if that is desired any day of the week (I have class
-            every weekday). <br><br> To finalize any transactions: I am free Monday, Wednesday, and Friday
-            in the morning (before roughly 1pm). Tuesday and Thursday I am free between 3-6pm most of the time.
-          </div>
+          <div class="account-personal-information"> {{account.bio}}</div>
         </div>
       </div>
     </div>

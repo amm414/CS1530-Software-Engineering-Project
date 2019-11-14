@@ -3,6 +3,7 @@ from app.models import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import redirect, render_template, request, session, url_for, abort, g, flash
 from random import shuffle
+from datetime import datetime
 
 DEBUG = True
 if DEBUG:
@@ -72,7 +73,7 @@ def login(error=""):
         else:
             session['userid'] = user.userid
             return redirect(url_for('user_home_screen'))
-    return render_template('login.html', CURRENT_USER_ID=CURRENT_USER_ID, error=error, page_title=title, css_file=helper_functions.generate_linked_files('login'),)
+    return render_template('login.html', error=error, page_title=title, css_file=helper_functions.generate_linked_files('login'),)
 
 
 # The create account screen
@@ -101,7 +102,7 @@ def create_account():
                 bio = request.form['bio']))
             db.session.commit()
             return redirect(url_for('login'))
-    return render_template('create-account.html',  CURRENT_USER_ID=CURRENT_USER_ID, user_id=CURRENT_USER_ID, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
+    return render_template('create-account.html', page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
 
 
 # The home user logged in screen that lists postings
@@ -129,16 +130,37 @@ def user_home_screen():
             submitted[key] = ''
             if key == "minPrice" or key == "maxPrice":
                 submitted[key] = "0"
-    return render_template('user-view.html', able_to_filter=True, submitted=submitted, CURRENT_USER_ID=CURRENT_USER_ID, user_id=CURRENT_USER_ID, page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings)
+    return render_template('user-view.html', able_to_filter=True, submitted=submitted, CURRENT_USER_ID=g.user.userid, user_id=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings)
 
 
 # The new posting submission screen
-@app.route('/new-posting-submission')
+@app.route('/new-posting-submission', methods=['GET', 'POST'])
 def new_posting_submission():
     if g.user is None:
         return redirect(url_for('login'))
     title = "Submit a New Posting!"
-    return render_template('create-posting-view.html', user_id=CURRENT_USER_ID,  CURRENT_USER_ID=CURRENT_USER_ID, page_title=title, css_file=helper_functions.generate_linked_files('create-posting-view'))
+    if request.method == 'POST':
+        if not request.form['title']:
+            error = 'You have to enter a title'
+        elif not request.form['category']:
+            error = 'You have to choose a category'
+        elif not request.form['price']:
+            error = 'You have to enter a price'
+        elif not request.form['description']:
+            error = 'You have to enter a description'
+        else:
+            db.session.add(Posting(
+                postid = 55,
+                userid = g.user.userid,
+                date = datetime.now(),
+				title = request.form['title'],
+				description = request.form['description'],
+                price = request.form['price'],
+                category = request.form['category']))
+                #tags = request.form['tags']))
+            db.session.commit()
+            return redirect(url_for('login'))
+    return render_template('create-posting-view.html', user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('create-posting-view'))
 
 
 # The HELP page
@@ -149,20 +171,36 @@ def help():
 
 # The user screen
 @app.route('/user', methods=['GET', 'POST'])
-def users_account():
+@app.route('/user/<user_id>', methods=['GET', 'POST'])
+def users_account(user_id=None):
     if g.user is None:
         return redirect(url_for('login'))
-    global CURRENT_USER_ID
-    account_info = {}
-    if request.method == "GET":
-        userid = (request.args.get('userid'))
-        for user in USERS:
-            if user['userid'] == userid:
-                account_info = user
-    if len(account_info) == 0:
-        return redirect(url_for('not_found_error_item'))
-    title = "USER: " + account_info['username']
-    return render_template('account-view.html', user_id=CURRENT_USER_ID, CURRENT_USER_ID=CURRENT_USER_ID, page_title=title, css_file=helper_functions.generate_linked_files('account-view'), account=account_info)
+    if user_id is None:
+        global CURRENT_USER_ID
+        #account_info = {}
+        account_info = g.user
+        if request.method == "GET":
+            userid = (request.args.get('userid'))
+            for user in USERS:
+                if user['userid'] == userid:
+                    account_info = user
+                    #if len(account_info) == 0:
+                    #return redirect(url_for('not_found_error_item'))
+        title = "USER: " + g.user.username
+        return render_template('account-view.html', user_id=g.user.userid, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('account-view'), account=account_info)
+    else:
+        global CURRENT_USER_ID
+        #account_info = {}
+        account_info = User.query.filter_by(userid=user_id).first()
+        if request.method == "GET":
+            userid = (request.args.get('userid'))
+            for user in USERS:
+                if user['userid'] == userid:
+                    account_info = user
+                    #if len(account_info) == 0:
+                    #return redirect(url_for('not_found_error_item'))
+        title = "USER: " + g.user.username
+        return render_template('account-view.html', user_id=g.user.userid, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('account-view'), account=account_info)
 
 
 # The posting screen
@@ -182,4 +220,4 @@ def full_posting_view():
             return redirect(url_for('not_found_error_item'))
 
     title = "POSTING: " + posting_info['title']
-    return render_template('full-posting-view.html', user_id=CURRENT_USER_ID, CURRENT_USER_ID=CURRENT_USER_ID, page_title=title, css_file=helper_functions.generate_linked_files('full-posting-view'), post=posting_info)
+    return render_template('full-posting-view.html', user_id=g.user.userid, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('full-posting-view'), post=posting_info)

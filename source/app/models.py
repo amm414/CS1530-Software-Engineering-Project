@@ -39,7 +39,7 @@ class Posting(db.Model):
 	userid 			= db.Column(db.Integer, nullable = False)
 	date 			= db.Column(db.Date, nullable = False)
 	title   		= db.Column(db.String(80), nullable = False)
-	requirements 	= db.Column(db.String(140), nullable = False)
+	requirements 	= db.Column(db.String(140), nullable = True)
 	description 	= db.Column(db.String(140), nullable = False)
 	price 			= db.Column(db.Integer, nullable = False)
 	category 		= db.Column(db.String(80), nullable = False)
