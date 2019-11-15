@@ -9,7 +9,7 @@
 <div class="container">
   <div class="create-account-border-box">
       <div class="create-account-title">
-        <h2>Create a New Account</h2>
+        <h2>Edit Account</h2>
       </div>
 
       {% if error != '' %}
@@ -24,18 +24,18 @@
         <div class="row">
           <div class="col-md-12 col-lg-6">
             <div class="create-account-input-group">
-              <h5 class="create-account-label">University Email</h5>
-              <input class="form-control form-control-lg" name="email" type="text" placeholder="Username...">
+              <h5 class="create-account-label">Old Password (Must Enter)</h5>
+              <input class="form-control form-control-lg" name="oldpassword" type="password" placeholder="Password...">
             </div>
 
             <div class="create-account-input-group">
-              <h5 class="create-account-label">Password</h5>
-              <input class="form-control form-control-lg" name="password" type="password" placeholder="Password...">
+              <h5 class="create-account-label">New Password</h5>
+              <input class="form-control form-control-lg" name="newpassword" type="password" placeholder="New Password...">
             </div>
 
             <div class="create-account-input-group">
-              <h5 class="create-account-label">Retype Password</h5>
-              <input class="form-control form-control-lg" name="password2" type="password" placeholder="Retype Password...">
+              <h5 class="create-account-label">Retype New Password</h5>
+              <input class="form-control form-control-lg" name="newpassword2" type="password" placeholder="Retype New Password...">
             </div>
 
 
@@ -48,12 +48,12 @@
 
           <div class="create-account-input-group">
             <h5 class="create-account-label">Phone Number (Optional)</h5>
-            <input class="form-control form-control-lg" name="phonenumber" type="text" placeholder="Phone Number...">
+            <input class="form-control form-control-lg" name="phonenumber" type="text" value={{current_user.phonenumber}}>
           </div>
 
           <div class="create-account-input-group">
             <h5 class="create-account-label">Personal Email (Optional)</h5>
-            <input class="form-control form-control-lg" name="personalemail" type="text" placeholder="Username...">
+            <input class="form-control form-control-lg" name="personalemail" type="text" value={{current_user.personalemail}}>
           </div>
         </div>
 
@@ -69,7 +69,7 @@
                 It can help paint a picture to other users about whou <i>you</i> are.
                 This is completely OPTIONAL as well.
               </p>
-              <textarea class="form-control textarea-box" name="bio" id="exampleFormControlTextarea1" rows="10"></textarea>
+              <textarea class="form-control textarea-box" name="bio" id="exampleFormControlTextarea1" rows="10">{{current_user.bio}}</textarea>
             </div>
 
           </div>

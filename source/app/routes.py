@@ -78,7 +78,7 @@ def login(error=""):
 
 # The create account screen
 @app.route('/create-account', methods=['GET', 'POST'])
-def create_account():
+def create_account(error=""):
     title = "Welcome to Craigversity!"
     if g.user:
         return redirect(url_for('user_home_screen'))
@@ -87,7 +87,7 @@ def create_account():
         if not request.form['email'] or '@pitt.edu' not in request.form['email']:
             error = 'You have to enter a valid Pitt email address'
         elif get_userid(request.form['email']) is not None:
-            error = 'The username is already taken'
+            error = 'That email is already taken'
         elif not request.form['password']:
             error = 'You have to enter a password'
         elif request.form['password'] != request.form['password2']:
@@ -102,7 +102,7 @@ def create_account():
                 bio = request.form['bio']))
             db.session.commit()
             return redirect(url_for('login'))
-    return render_template('create-account.html', page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
+    return render_template('create-account.html', error=error, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
 
 
 # The home user logged in screen that lists postings
@@ -149,6 +149,12 @@ def new_posting_submission():
         elif not request.form['description']:
             error = 'You have to enter a description'
         else:
+            if request.form['preferredContact'] == "Email":
+                contact = g.user.email
+            elif request.form['preferredContact'] == "Phone":
+                contact = g.user.phonenumber
+            else:
+                contact = g.user.personalemail
             db.session.add(Posting(
                 userid = g.user.userid,
                 username = g.user.username,
@@ -156,8 +162,9 @@ def new_posting_submission():
 				title = request.form['title'],
 				description = request.form['description'],
                 price = request.form['price'],
-                category = request.form['category']))
-                #tags = request.form['tags']))
+                category = request.form['category'],
+                contactmethod = contact,
+                tags = request.form['tags']))
             db.session.commit()
             return redirect(url_for('login'))
     return render_template('create-posting-view.html', user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('create-posting-view'))
@@ -200,3 +207,69 @@ def full_posting_view():
         user_info = User.query.filter_by(userid=posting_info.userid).first()
     title = "POSTING: " + posting_info.title
     return render_template('full-posting-view.html', user_id=g.user.userid, CURRENT_USER_ID=g.user.userid, username=user_info.username, page_title=title, css_file=helper_functions.generate_linked_files('full-posting-view'), post=posting_info)
+
+# The edit account screen
+@app.route('/edit-account', methods=['GET', 'POST'])
+def edit_account(error=""):
+    if g.user is None:
+        return redirect(url_for('login'))
+    title = 'Edit Account'
+    if request.method == 'POST':
+        if not check_password_hash(g.user.password, str(request.form['oldpassword'])):
+            error = "Old password does not match"
+        elif request.form['newpassword'] != request.form['newpassword2']:
+            error = "New passwords do not match"
+        else:
+            if not request.form['newpassword']:
+                g.user.phonenumber = request.form['phonenumber']
+                g.user.personalemail = request.form['personalemail']
+                g.user.bio = request.form['bio']
+                db.session.commit()
+                return redirect(url_for('user_home_screen'))
+            else:
+                g.user.password = generate_password_hash(request.form['newpassword'])
+                g.user.phonenumber = request.form['phonenumber']
+                g.user.personalemail = request.form['personalemail']
+                g.user.bio = request.form['bio']
+                db.session.commit()
+                return redirect(url_for('user_home_screen'))
+    current_user = g.user
+    return render_template('edit-account.html', error=error, current_user=current_user, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
+
+@app.route('/edit-posting', methods=['GET', 'POST'])
+def edit_posting(error=""):
+    if g.user is None:
+        return redirect(url_for('login'))
+    post_id = (request.args.get('postid'))
+    if post_id is None:
+        return redirect(url_for('user_home_screen'))
+    posting_info = Posting.query.filter_by(postid=post_id).first()
+    if g.user.userid != posting_info.userid:
+        return redirect(url_for('user_home_screen'))
+    title = 'Edit Posting'
+    if request.method == 'POST':
+        if not request.form['title']:
+            error = 'You have to enter a title'
+        elif not request.form['category']:
+            error = 'You have to choose a category'
+        elif not request.form['price']:
+            error = 'You have to enter a price'
+        elif not request.form['description']:
+            error = 'You have to enter a description'
+        else:
+            if request.form['preferredContact'] == "Email":
+                contact = g.user.email
+            elif request.form['preferredContact'] == "Phone":
+                contact = g.user.phonenumber
+            else:
+                contact = g.user.personalemail
+            posting_info.date = datetime.now()
+            posting_info.title = request.form['title']
+            posting_info.description = request.form['description']
+            posting_info.price = request.form['price']
+            posting_info.category = request.form['category']
+            posting_info.contactmethod = contact
+            posting_info.tags = request.form['tags']
+            db.session.commit()
+            return redirect(url_for('user_home_screen'))
+    return render_template('edit-posting-view.html', user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('create-posting-view'), post=posting_info)
