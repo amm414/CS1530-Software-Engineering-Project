@@ -167,7 +167,7 @@ def new_posting_submission():
                 tags = request.form['tags']))
             db.session.commit()
             return redirect(url_for('login'))
-    return render_template('create-posting-view.html', current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('create-posting-view'))
+    return render_template('create-posting-view.html', js_file="tag-javascript.js", current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('create-posting-view'))
 
 
 # The HELP page

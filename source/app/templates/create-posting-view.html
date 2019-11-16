@@ -7,7 +7,7 @@
   <hr class="styled-hrline"/>
 </div>
 
-<form action="" method="post">
+<form onkeydown="return event.key != 'Enter';" action="" method="post">
   <div class="form">
     <div class="row">
       <div class="col-md-12 col-lg-6">
@@ -79,7 +79,8 @@
         <div class="collection-of-tags">
           <!-- THE FORMAT OF THE DIV representing the tags
           <div class="tag-div">
-            Computer
+
+            <span>Computer</span>
             <i class="fas fa-times-circle" id="close-icon"></i>
           </div> -->
 
@@ -91,7 +92,8 @@
       <div class="col-xs-12 col-lg-8 offset-lg-2">
         <div class="create-posting-input-group">
           <h4 class="create-posting-label">Enter Tags for Filtering Searches:</h4>
-          <input class="form-control form-control-lg" type="text" placeholder='couch, seating, soft, striped, furniture, ...' name='tags'>
+          <input id="tag-input" class="form-control form-control-lg" type="text" placeholder='couch, seating, soft, striped, furniture, ...' name='tags'>
+          <textarea id="hidden-tag-list-value" name="tags" hidden></textarea>
         </div>
       </div>
     </div>
