@@ -1,8 +1,17 @@
-
 .navbar {
   background-color: #192857;
   padding: 0;
   min-height: 70px;
+}
+
+.navbar-color-scheme{
+  background-color: #192857;
+  color: #bfa458;
+}
+
+.navbar-color-scheme:hover{
+  color: #192857;
+  background-color: #bfa458;
 }
 
 .nav-container{
@@ -36,4 +45,34 @@ a:hover {
 .navbar-button:hover{
   color: #192857;
   background-color: #bfa458;
+}
+
+.navbar-button-dropdown{
+  height: 70px;
+  margin: auto;
+}
+
+.navbar-button-dropdown-items{
+  width: inherit;
+  display: block;
+  padding: 5px 10px;
+  font-weight: 500;
+}
+
+.navbar-button-dropdown-icon{
+  float: right;
+  padding: 3px
+}
+
+.navbar-button-dropdown-menu{
+  width: inherit;
+  background-color: inherit;
+}
+
+.default-background-nav{
+  background-color: #192857;
+}
+
+#dropdown-button:hover{
+  text-decoration: underline;
 }

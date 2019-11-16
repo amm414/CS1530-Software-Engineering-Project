@@ -1,6 +1,18 @@
 body{
   background-color: #ccc;
 }
+.main-page{
+  background-color: #fff !important;
+  width: 100%;
+  padding: 30px;
+  margin: 30px 0;
+  border: 5px solid #192857;
+}
+
+.navbar-button-dropdown{
+  height: 100%;
+
+}
 
 .error-header{
   text-align: center;
