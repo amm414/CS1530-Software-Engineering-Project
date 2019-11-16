@@ -13,17 +13,6 @@
 
 <div class="row account-content">
   <div class="col-xs-12 col-lg-6 account-column-info">
-    {% if (CURRENT_USER_ID | int ) == (account.userid | int) %}
-    <div class="account-information-edit">
-      <a href="/edit-account">
-        <div class="account-edit-button">
-          <i class="fas fa-user-edit"></i>
-          Edit Account
-        </div>
-      </a>
-    </div>
-    {% endif %}
-
     <div class="account-email account-group">
       <h3 class="account-label">Email:</h3>
       <a href="mailto:{{ account.email }}?subject=Interest In Post" target="_blank">{{ account.email }}</a>

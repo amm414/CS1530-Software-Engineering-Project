@@ -73,7 +73,7 @@ def login(error=""):
         else:
             session['userid'] = user.userid
             return redirect(url_for('user_home_screen'))
-    return render_template('login.html', current_user_is_auth=(g.user.userid > 0),  error=error, page_title=title, css_file=helper_functions.generate_linked_files('login'),)
+    return render_template('login.html', current_user_is_auth=False,  error=error, page_title=title, css_file=helper_functions.generate_linked_files('login'),)
 
 
 # The create account screen
