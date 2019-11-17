@@ -13,7 +13,6 @@
 }
 
 .posting-information-title{
-  width: 100%;
   font-size: 150%;
   font-weight: bold;
   text-align: center;
@@ -117,8 +116,8 @@
   background-color: #192857;
   display: inline-block;
   color: #bfa458;
-  width: 45%;
-  padding: 10px 0;
+  width: auto;
+  padding: 5px 20px;
 }
 
 @media screen and (max-width: 500px) {

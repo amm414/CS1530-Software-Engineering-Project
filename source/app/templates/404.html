@@ -1,5 +1,10 @@
 {% extends 'base-template.html' %}
 
 {% block content %}
-<h2>404 ERROR</h2>
+<h2>An error occured: 404</h2>
+{% if error and error != '' %}
+  {% with error_message=error %}
+    {% include 'error.html' %}
+  {% endwith %}
+{% endif %}
 {% endblock %}

@@ -11,6 +11,11 @@
   padding: 20px 0;
 }
 
+.account-information-edit{
+  padding: 30px 10px;
+  text-align: center;
+  margin: auto;
+}
 
 .account-column-info{
   background-color: #fff !important;
@@ -25,11 +30,13 @@
 }
 
 .account-information-title{
-  padding-left: 30px;
+  padding: 30px 10px;
+  text-align: center;
+  margin: auto;
 }
 
 .account-edit-button{
-  padding: 10px 0;
+  padding: 10px 30px;
   text-align: center;
   border: 2px solid #bfa458;
   color: #bfa458;

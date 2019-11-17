@@ -6,92 +6,82 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-  <div class="create-account-border-box">
-      <div class="create-account-title">
-        <h2>Create a New Account</h2>
+<div class="create-account-title">
+  <h2>Create a New Account</h2>
+</div>
+
+{% if error != '' %}
+  {% with error_message=error %}
+    {% include 'error.html' %}
+  {% endwith %}
+{% endif %}
+
+<hr class="styled-hrline"/>
+
+<form class="form" action="" method="post">
+  <div class="row">
+    <div class="col-md-12 col-lg-6">
+      <div class="create-account-input-group">
+        <h5 class="create-account-label">University Email</h5>
+        <input class="form-control form-control-lg" name="email" type="text" placeholder="Username...">
       </div>
 
-      <hr class="styled-hrline"/>
-
-      <div class="form">
-        <div class="row">
-          <div class="col-md-12 col-lg-6">
-            <div class="create-account-input-group">
-              <h5 class="create-account-label">University Email</h5>
-              <input class="form-control form-control-lg" type="text" placeholder="Username...">
-            </div>
-
-            <div class="create-account-input-group">
-              <h5 class="create-account-label">Password</h5>
-              <input class="form-control form-control-lg" type="password" placeholder="Password...">
-            </div>
-
-            <div class="create-account-input-group">
-              <h5 class="create-account-label">Retype Password</h5>
-              <input class="form-control form-control-lg" type="password" placeholder="Retype Password...">
-            </div>
-
-
-          </div>
-
-
-
-
-        <div class="col-md-12 col-lg-6">
-
-          <div class="create-account-input-group">
-            <h5 class="create-account-label">Phone Number (Optional)</h5>
-            <input class="form-control form-control-lg" type="text" placeholder="Phone Number...">
-          </div>
-
-          <div class="create-account-input-group">
-            <h5 class="create-account-label">Personal Email (Optional)</h5>
-            <input class="form-control form-control-lg" type="text" placeholder="Username...">
-          </div>
-        </div>
+      <div class="create-account-input-group">
+        <h5 class="create-account-label">Password</h5>
+        <input class="form-control form-control-lg" name="password" type="password" placeholder="Password...">
       </div>
 
-      <hr class="styled-hrline"/>
-
-      <div class="row">
-        <div class="col-xs-12 col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
-
-          <div class="create-account-description-box">
-            <h5 class="create-posting-label">Describe yourself!</h5>
-            <p>
-              This description may help attract users to your postings.
-              It can help paint a picture to other users about whou <i>you</i> are.
-              This is completely OPTIONAL as well.
-            </p>
-            <textarea class="form-control textarea-box" id="exampleFormControlTextarea1" rows="10"></textarea>
-          </div>
-
-        </div>
+      <div class="create-account-input-group">
+        <h5 class="create-account-label">Retype Password</h5>
+        <input class="form-control form-control-lg" name="password2" type="password" placeholder="Retype Password...">
       </div>
 
 
-      <hr class="styled-hrline"/>
+    </div>
 
-      <div class="create-posting-submit-button-group">
+    <div class="col-md-12 col-lg-6">
 
-        <div class="create-account-accept-conditions">
-          <div class="conditions-and-term-group">
-            <p>View conditions and terms <a href="#">here</a></p>
-            <label class="form-check-label checkmark-label ">
-              <input type="checkbox" class="form-check-input create-posting-checkmark" name="checkmark">
-              <span class="checkmark-span"></span>
-              Accept Conditions
-            </label>
+      <div class="create-account-input-group">
+        <h5 class="create-account-label">Phone Number (Optional)</h5>
+        <input class="form-control form-control-lg" name="phonenumber" type="text" placeholder="Phone Number...">
+      </div>
 
-            <button type="submit" class="btn btn-primary create-account-submit-button submit-button">Create Account!</button>
+      <div class="create-account-input-group">
+        <h5 class="create-account-label">Personal Email (Optional)</h5>
+        <input class="form-control form-control-lg" name="personalemail" type="text" placeholder="Username...">
+      </div>
+    </div>
+  </div>
 
-          </div>
-        </div>
+  <hr class="styled-hrline"/>
 
+  <div class="row">
+    <div class="col-xs-12 col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
+
+      <div class="create-account-description-box">
+        <h5 class="create-posting-label">Describe yourself!</h5>
+        <p>
+          This description may help attract users to your postings.
+          It can help paint a picture to other users about whou <i>you</i> are.
+          This is completely OPTIONAL as well.
+        </p>
+        <textarea class="form-control textarea-box" name="bio" id="exampleFormControlTextarea1" rows="10"></textarea>
       </div>
 
     </div>
   </div>
+
+
+  <div class="create-posting-submit-button-group">
+    <div class="create-account-accept-conditions">
+      <div class="conditions-and-term-group">
+        <button type="submit" class="btn btn-primary create-account-submit-button submit-button">Create Account!</button>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+
 </div>
 {% endblock %}

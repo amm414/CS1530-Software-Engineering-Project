@@ -1,0 +1,82 @@
+{% extends "base-template.html" %}
+
+
+{% block linked_files %}
+  {{ linked_files }}
+{% endblock %}
+
+{% block content %}
+      <div class="create-account-title">
+        <h2>Edit Account</h2>
+      </div>
+
+      {% if error != '' %}
+        {% with error_message=error %}
+          {% include 'error.html' %}
+        {% endwith %}
+      {% endif %}
+
+      <hr class="styled-hrline"/>
+
+<form class="form" action="" method="post">
+  <div class="row">
+    <div class="col-md-12 col-lg-6">
+      <div class="create-account-input-group">
+        <h5 class="create-account-label">Old Password (Must Enter)</h5>
+        <input class="form-control form-control-lg" name="oldpassword" type="password" placeholder="Password...">
+      </div>
+
+      <div class="create-account-input-group">
+        <h5 class="create-account-label">New Password</h5>
+        <input class="form-control form-control-lg" name="newpassword" type="password" placeholder="New Password...">
+      </div>
+
+      <div class="create-account-input-group">
+        <h5 class="create-account-label">Retype New Password</h5>
+        <input class="form-control form-control-lg" name="newpassword2" type="password" placeholder="Retype New Password...">
+      </div>
+    </div>
+
+    <div class="col-md-12 col-lg-6">
+
+      <div class="create-account-input-group">
+        <h5 class="create-account-label">Phone Number (Optional)</h5>
+        <input class="form-control form-control-lg" name="phonenumber" type="text" value={{current_user.phonenumber}}>
+      </div>
+
+      <div class="create-account-input-group">
+        <h5 class="create-account-label">Personal Email (Optional)</h5>
+        <input class="form-control form-control-lg" name="personalemail" type="text" value={{current_user.personalemail}}>
+      </div>
+    </div>
+  </div>
+
+  <hr class="styled-hrline"/>
+
+  <div class="row">
+    <div class="col-xs-12 col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
+
+      <div class="create-account-description-box">
+        <h5 class="create-posting-label">Describe yourself!</h5>
+        <p>
+          This description may help attract users to your postings.
+          It can help paint a picture to other users about whou <i>you</i> are.
+          This is completely OPTIONAL as well.
+        </p>
+        <textarea class="form-control textarea-box" name="bio" id="exampleFormControlTextarea1" rows="10">{{current_user.bio}}</textarea>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="edit-posting-submit-button-group">
+    <div class="edit-account-accept-conditions">
+      <div class="conditions-and-term-group">
+        <button type="submit" class="btn btn-primary edit-account-submit-button submit-button">Save Changes to Account!</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+{% endblock %}

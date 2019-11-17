@@ -24,7 +24,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
       <ul class="navbar-nav ml-auto">
-        {% if CURRENT_USER_ID != -1 %}
+        {% if current_user_is_auth %}
         <li class="nav-item">
           <a class="button-a" href="/new-posting-submission">
             <div class="navbar-button">
@@ -44,19 +44,27 @@
           </a>
         </li>
 
-        {% if CURRENT_USER_ID != -1 %}
+        {% if current_user_is_auth %}
         <li class="nav-item">
-          <a class="button-a" href="/user?userid={{ CURRENT_USER_ID }}">
-            <div class="navbar-button">
-              Account
-              <i class="fas fa-cog"></i>
+          <div class="dropdown default-background-nav" id=account-dropdown-toggle>
+            <button type="button" id='dropdown-button' class="btn navbar-button navbar-button-dropdown navbar-color-scheme" data-toggle="dropdown">
+              Account Options
+              <i id='dropdown-icon' class="fas fa-caret-square-down"></i>
+            </button>
+            <div class="navbar-button-dropdown-menu dropdown-menu ">
+              <a class="navbar-button-dropdown-items navbar-color-scheme" href="/user?userid={{ CURRENT_USER_ID }}">
+                View Account
+                <i class="fas fa-user-edit navbar-button-dropdown-icon "></i>
+              </a>
+              <a class="navbar-button-dropdown-items navbar-color-scheme" href="/edit-account">
+                Edit Account
+                <i class="fas fa-desktop navbar-button-dropdown-icon "></i>
+              </a>
+              <a class="navbar-button-dropdown-items navbar-color-scheme" href="/logout">
+                Logout
+                <i class="fas fa-sign-out-alt navbar-button-dropdown-icon"></i>
+              </a>
             </div>
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
           </div>
         </li>
         {% endif %}
