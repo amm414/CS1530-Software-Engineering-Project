@@ -23,3 +23,15 @@ def add_new_post(form_input, current_user):
         tags = form_input['tags']))
     db.session.commit()
     return True
+
+def add_user(new_user_info):
+    db.session.add(models.User(
+        username        = new_user_info['username'],
+        email           = new_user_info['email'],
+        password        = new_user_info['password'],
+        phonenumber     = new_user_info['phone'],
+        personalemail   = new_user_info['personalemail'],
+        bio             = new_user_info['bio'],
+        rating          = new_user_info['rating'],
+        numRatings      = new_user_info['numRatings'],
+    ))

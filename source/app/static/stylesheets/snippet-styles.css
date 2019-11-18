@@ -49,6 +49,17 @@ body{
   text-align: center;
 }
 
+.requirement-submission{
+  margin-top: -10px;
+  font-size: 90%;
+  color: #6b6a6a;
+}
+
+.multiple-error-messages{
+  text-align: left;
+  padding-left: 10px;
+}
+
 body::-webkit-scrollbar-button:vertical:single-button{
   display: block;
   background-color: #192857;

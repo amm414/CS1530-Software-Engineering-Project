@@ -22,13 +22,9 @@
         <div class="sidebar-category">
           <h4 class="sidebar-label">Filter by Category</h4>
           <select class="selectpicker sidebar-select-category" name="category">
-            <option>Textbooks</option>
-            <option>Events</option>
-            <option>Opprotunities</option>
-            <option>Furniture</option>
-            <option>Goods</option>
-            <option>Software or Digital Media</option>
-            <option>Miscellaneous</option>
+            {% for category in categories %}
+              <option value="{{ category }}">{{ category}}</option>
+            {% endfor %}
           </select>
         </div>
       </li>

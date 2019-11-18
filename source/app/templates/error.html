@@ -5,9 +5,11 @@
     {% if error_message is string %}
       Message: {{ error_message }}
     {% elif error_message | length > 0  %}
-      {% for e in error_message %}
-        Message: {{e}}
-      {% endfor %}
+      <div class="multiple-error-messages">
+        {% for e in error_message %}
+        <p>Message: {{e}}</p>
+        {% endfor %}
+      </div>
     {% endif %}
   </div>
 </div>

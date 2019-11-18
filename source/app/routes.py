@@ -7,6 +7,7 @@ from datetime import datetime
 
 CATEGORIES = ['All', 'Textbooks', 'Furniture', 'Food', 'Events', 'Software', 'Electronics',
  'Beauty and Personal Care', 'Clothes', 'School Supplies', 'Appliances']
+CONTACT_METHOD = ['Email', 'Phone', 'PersonalEmail']
 
 @socketio.on('disconnect')
 def disconnect_user():
@@ -78,31 +79,15 @@ def login(error=""):
 def create_account(error=""):
     title = "Welcome to Craigversity!"
     CREATE_ERROR = "Need to fill in ALL fields marked with an '*'"
+    errors = []
     if g.user:
         return redirect(url_for('user_home_screen'))
     if request.method == 'POST':
-
-        if not request.form['email'] or '@pitt.edu' not in request.form['email']:
-            error = 'You have to enter a valid Pitt email address'
-        elif get_userid(request.form['email']) is not None:
-            error = 'That email is already taken'
-        elif not request.form['password']:
-            error = 'You have to enter a password'
-        elif request.form['password'] != request.form['password2']:
-            error = 'The two passwords do not match'
-        else:
-            db.session.add(User(
-                username = request.form['email'].split('@')[0],
-				email = request.form['email'],
-				password = generate_password_hash(request.form['password']),
-                phonenumber = request.form['phonenumber'],
-                personalemail = request.form['personalemail'],
-                bio = request.form['bio'],
-                rating = 5,
-                numRatings = 0))
-            db.session.commit()
+        [results, errors] = form_submissions.generate_new_account_form(request.form)
+        if len(errors) == 0:
+            database_helpers.addUser(results)
             return redirect(url_for('login'))
-    return render_template('create-account.html', current_user_is_auth=False, error=error, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
+    return render_template('create-account.html', current_user_is_auth=False, error=errors, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
 
 
 # The home user logged in screen that lists postings
@@ -119,7 +104,6 @@ def user_home_screen():
         else:
             # this is where the FILTERING should go
             postings = database_helpers.generate_random_postings()
-
     else:
         # do not bother filtering at all...
         submitted = form_submissions.get_filters('', True)
@@ -127,7 +111,7 @@ def user_home_screen():
         postings = database_helpers.generate_random_postings()
     for elem in postings:
         print(elem)
-    return render_template('user-view.html', able_to_filter=True, submitted=submitted, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings)
+    return render_template('user-view.html', category=CATEGORIES, able_to_filter=True, submitted=submitted, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings)
 
 
 # The new posting submission screen
@@ -144,7 +128,7 @@ def new_posting_submission(error=""):
             results['preferredContact'] = form_submissions.validate_contact_method(g.user, results['preferredContact'])
             database_helpers.add_new_post(results, g.user)
             return redirect(url_for('login'))
-    return render_template('create-posting-view.html', categories=CATEGORIES, current_user_id=g.user.userid, js_file="tag-javascript.js", current_user_is_auth=(g.user.userid > 0), page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'))
+    return render_template('create-posting-view.html', contact_options=CONTACT_METHOD, categories=CATEGORIES, current_user_id=g.user.userid, js_file="tag-javascript.js", current_user_is_auth=(g.user.userid > 0), page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'))
 
 
 # The HELP page
@@ -215,6 +199,7 @@ def edit_account(error=""):
     return render_template('edit-account.html', current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  error=error, current_user=current_user, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
 
 
+# NEED TO REWORK CONTACT METHOD!!!
 @app.route('/edit-posting', methods=['GET', 'POST'])
 def edit_posting(error=""):
     if g.user is None:
@@ -251,4 +236,4 @@ def edit_posting(error=""):
             posting_info.tags = request.form['tags']
             db.session.commit()
             return redirect(url_for('user_home_screen'))
-    return render_template('edit-posting-view.html', js_file="tag-javascript.js", current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'), post=posting_info)
+    return render_template('edit-posting-view.html',contact_options=CONTACT_METHOD,  categories=CATEGORIES, js_file="tag-javascript.js", current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'), post=posting_info)

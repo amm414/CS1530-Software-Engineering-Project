@@ -1,51 +1,73 @@
 import re
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 # Returns email if in valid format; else returns false
 def get_email(email_field):
-    if re.search('.+@(.*.)*pitt.edu', str(email_field)) is not None:
-        return email_field
-    return False
+    try:
+        if re.search('\w+@(\w+.)*pitt.edu', str(email_field)) is not None:
+            return email_field
+        raise ValueError
+    except Exception as e:
+        return False
 
 # verify password given in form; true for correct password, otherwise false
+# user: takes USER class from model;
+#       for TESTING object with value string of HASHED password
+# password: string of UNhashed password passed in by the user on login
 def verify_password(user, password):
-    if user is None or not check_password_hash(user.password, str(password)):
-        return False
-    return True
+    try:
+        if user is None or not check_password_hash(user.password, str(password)):
+            return False
+        return True
+    except Exception as e:
+        raise
+
 
 
 #########################################################################
 # Home View Search and filter methods
 
 def get_category(field):
-    if str(field) == "All":
+    try:
+        if str(field) == "All":
+            return ''
+        return str(field)
+    except Exception as e:
         return ''
-    return str(field)
 
-################## MAY WANT TO EDIT THIS ##################
+#               MAY WANT TO EDIT THIS
 # takes inputted search textbox input for backend search
 def get_search_text(field):
-    if str(field).strip() == '':
+    try:
+        if str(field).strip() == '':
+            return ''
+        return field
+    except Exception as e:
         return ''
-    return field
 
 def get_max_price(field, min_field):
-    field = float(field)
-    min_field = float(min_field)
-    if field > 0 and field > min_field and field <= 2000:
-        return str(field)
-    elif field > 2000:
-        return '2000'
-    else:
+    try:
+        field = float(field)
+        min_field = float(min_field)
+        if field > 0 and field > min_field and field <= 2000:
+            return str(field)
+        elif field > 2000:
+            return '2000'
+        else:
+            return '0'
+    except ValueError as e:
         return '0'
 
-def get_max_price(field):
-    field = float(field)
-    if field > 0 and field <= 2000:
-        return str(field)
-    elif field > 2000:
-        return '2000'
-    else:
+def get_min_price(field):
+    try:
+        field = float(field)
+        if field > 0 and field > min_field and field <= 2000:
+            return str(field)
+        elif field > 2000:
+            return '2000'
+        else:
+            return '0'
+    except ValueError as e:
         return '0'
 
 def should_randomize(submitted):
@@ -71,8 +93,8 @@ def validate_title(field):
         if len(field) > 0 and len(field) <31:
             return [True, field]
     except Exception as e:
-        return [False, "Title is too long. Needs to be 1-30 characters long. Your input was " + str(len(field))]
-    return [False, "Title is too long. Needs to be 1-30 characters long. Your input was " + str(len(field))]
+        return [False, "Title is too long. Needs to be 1-30 characters long."]
+    return [False, "Title is too long. Needs to be 1-30 characters long. Your input was " + str(len(field)) + " characters."]
 
 # this should never really fail. It is on us if it does
 def validate_category(field, CATEGORIES):
@@ -115,6 +137,16 @@ def validate_preferred_contact(field):
         return [False, "Invalid preffered contact method. Try resubmitting."]
     return [False, "Invalid preffered contact method. Try resubmitting."]
 
+def validate_contact_method(current_user, method):
+    try:
+        if form_input['preferredContact'] == 'PersonalEmail':
+            return current_user.personalemail
+        elif form_input['preferredContact'] == 'Phone':
+            return current_user.phone
+    except Exception as e:
+        return current_user.email
+    return current_user.email
+
 def validate_preferred_tags(field):
     try:
         field = str(field)
@@ -136,25 +168,93 @@ def validate_input(forms, CATEGORIES):
     result['tags'] = validate_preferred_tags(forms['tags'])
     return result
 
-
-def validate_contact_method(current_user, method):
-    try:
-        if form_input['preferredContact'] == 'PersonalEmail':
-            return current_user.personalemail
-        elif form_input['preferredContact'] == 'Phone':
-            return current_user.phone
-    except Exception as e:
-        return current_user.email
-    return current_user.email
-
-
-def get_form_create_post(forms, CATEGORIES):
-    initial = validate_input(forms, CATEGORIES)
+def generate_return_values(given):
     error = []
     good_results = {}
-    for key, elem in initial.items():
+    for key, elem in given.items():
         if elem[0]:
             good_results[key] = elem[1]
         else:
             error.append(str(elem[1]))
     return good_results, error
+
+
+def get_form_create_post(forms, CATEGORIES):
+    initial = validate_input(forms, CATEGORIES)
+    return generate_return_values(initial)
+
+#######################################################################
+# The CREATE ACCOUNT Functions
+def generate_new_account_form(forms):
+    results = generate_fields_create_account(forms)
+    return generate_return_values(results)
+
+
+def get_username(email):
+    try:
+        username = str(email).split('@')
+        if len(username) == 2 and username[0] != '':
+            return [True, username[0]]
+        raise ValueError
+    except Exception as e:
+        return [False, 'An unexpected error has occurred.']
+
+
+def generate_fields_create_account(forms):
+    new_account_info = {}
+    new_account_info['email']           = validate_email(forms['email'])
+    new_account_info['userid']          = get_username(new_account_info['email'])
+    new_account_info['password']        = validate_password(forms['password'], forms['password2'])
+    new_account_info['phone']           = validate_phone_number(forms['phonenumber'])
+    new_account_info['personalemail']   = validate_personal_email(forms['personalemail'])
+    new_account_info['bio']             = validate_bio(forms['bio'])
+    new_account_info['rating']          = [True, '5']
+    new_account_info['numRatings']      = [True, '0']
+    return new_account_info
+
+def validate_email(field):
+    try:
+        field = get_email(str(field))
+        if not field:
+            return [True, field]
+        raise ValueError
+    except Exception as e:
+        return [False, "The university email must end with a school domain (pitt.edu)."]
+
+def validate_password(password1, password2):
+    try:
+        password1 = str(password1)
+        password2 = str(password2)
+        if password1 == password2:
+            if len(password1) > 7 and len(password1) < 33:
+                return [True, generate_password_hash(password1)]
+        raise ValueError
+    except Exception as e:
+        return [False, "Both Password fields must match and have between 8 and 32 characters (inclusive)."]
+
+### ADD MORE HERE ###
+def validate_phone_number(field):
+    try:
+        phone_number = str(field)
+        if len(phone_number) == 10:
+            phone_number = '1' + phone_number
+            return [True, phone_number]
+        elif len(phone_number) == 11 and phone_number[0] == '1':
+            return [True, phone_number]
+    except Exception as e:
+        return [False, "Phone number must be 10 characters long or 11 characters long with the country code being '1' in order to be processed."]
+
+def validate_personal_email(field):
+    try:
+        field = str(field)
+        if re.search('\w+@(\w+.)+') is not None:
+            return [True, field]
+    except Exception as e:
+        return [False, "The personal email address is not a legal value."]
+
+def validate_bio(field):
+    try:
+        field = str(field)
+        return [True, field]
+    except Exception as e:
+        return [False, "The biography is unable to be processed. Possibly an invalid symbol."]

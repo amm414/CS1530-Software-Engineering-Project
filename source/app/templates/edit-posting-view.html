@@ -24,9 +24,11 @@
 
         <div class="create-posting-input-group">
           <h4 class="create-posting-label">Category for Post</h4>
-          <select class="selectpicker create-posting-select-category" value="{{post.category}}" name="category">
+          <select class="selectpicker create-posting-select-category" value="{{ post.category }}" name="category">
             {% for option in categories %}
-              <option>{{ option }}</option>
+              <option value="{{ option }}" {% if post.category | string == option | string %} selected {% endif %}>
+                {{ option }}
+              </option>
             {% endfor %}
           </select>
         </div>
@@ -34,23 +36,14 @@
         <div class="create-posting-input-group">
           <h4 class="create-posting-label">Preferred Contact Method</h4>
           <div class="create-posting-radio-contact list-radio-options create-posting-list-group">
+            {% for option in contact_options %}
             <label class="form-check-label radio-label">
-              <input type="radio" class="form-check-input create-posting-radio-buttons" name="preferredContact" value="Email" checked="checked">
+              <input type="radio" class="form-check-input create-posting-radio-buttons" name="preferredContact" value="{{ option }}" {% if option | string == post.contactmethod | string %} checked="checked" {% endif %}>
               <span class="radio-button-span"></span>
-              Email
+              {{ option }}
             </label>
-
-            <label class="form-check-label radio-label">
-              <input type="radio" class="form-check-input create-posting-radio-buttons" name="preferredContact" value="Phone">
-              <span class="radio-button-span"></span>
-              Phone
-            </label>
-
-            <label class="form-check-label radio-label">
-              <input type="radio" class="form-check-input create-posting-radio-buttons" name="preferredContact" value="PersonalEmail" >
-              <span class="radio-button-span"></span>
-              Personal Email
-            </label>
+            {% endfor %}
+            {{ post.contactmethod }}
           </div>
         </div>
       </div>
