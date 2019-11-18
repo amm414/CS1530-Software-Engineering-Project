@@ -14,6 +14,19 @@ body{
 
 }
 
+.form-control{
+  color: black;
+  font-weight: 450;
+}
+
+.form-control:focus{
+  color: black;
+  font-weight: 450;
+  outline: None;
+  border: 0px solid black;
+
+}
+
 .error-header{
   text-align: center;
   margin: auto;

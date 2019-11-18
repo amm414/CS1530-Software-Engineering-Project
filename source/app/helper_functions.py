@@ -13,15 +13,3 @@ def get_simple_data_postings():
 def generate_linked_files(filename):
     linked_css_files_and_javascripts = "stylesheets/{f}-styles.css".format(f=filename)
     return linked_css_files_and_javascripts
-
-def generate_postings():
-    postings = []
-    base = {'title': "A Used Couch", 'userid': "2",'poster_username': "abd142", 'stars': int(3), 'requirements': '', 'price': '42.00', 'post_id': 1, 'description': "The couch is in very good condition. Got it 1 year ago and need to get rid of it before I move. I am willing to bargain if needed." }
-    for i in range(30):
-        postings.append(base.copy())
-    ind = 1
-    for post in postings:
-        post['title'] = post['title'] + str(ind)
-        post['post_id'] = str(ind)
-        ind = ind + 1
-    return postings

@@ -29,7 +29,9 @@
     </div>
 
     <div class="account-rating account-group">
-      <h4 class="account-label">{{ account.username }}'s Rating: <b>{{ 5 }}/5</b></h4>
+      <h4 class="account-label">
+        {{ account.username }}'s Rating: <b>{{ account.rating | float | round(3, 'floor') }}/5</b>
+      </h4>
       <div class="account-rating-stars">
         {% set seq = [0, 1, 2, 3, 4] %}
         {% for i in seq %}

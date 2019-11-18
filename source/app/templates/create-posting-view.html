@@ -7,7 +7,7 @@
   <hr class="styled-hrline"/>
 </div>
 
-{% if error != '' %}
+{% if error != '' and error != [] %}
   {% with error_message=error %}
     {% include 'error.html' %}
   {% endwith %}
@@ -25,13 +25,9 @@
         <div class="create-posting-input-group">
           <h4 class="create-posting-label">Category for Post</h4>
           <select class="selectpicker create-posting-select-category" name="category">
-            <option>Textbooks</option>
-            <option>Events</option>
-            <option>Opprotunities</option>
-            <option>Furniture</option>
-            <option>Goods</option>
-            <option>Software or Digital Media</option>
-            <option>Miscellaneous</option>
+            {% for option in categories %}
+              <option>{{ option }}</option>
+            {% endfor %}
           </select>
         </div>
 
