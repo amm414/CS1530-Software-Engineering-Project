@@ -99,10 +99,12 @@ def create_account(error=""):
 				password = generate_password_hash(request.form['password']),
                 phonenumber = request.form['phonenumber'],
                 personalemail = request.form['personalemail'],
-                bio = request.form['bio']))
+                bio = request.form['bio'],
+                rating = 5,
+                numRatings = 0))
             db.session.commit()
             return redirect(url_for('login'))
-    return render_template('create-account.html', current_user_is_auth=False, current_user_id=g.user.userid, error=error, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
+    return render_template('create-account.html', current_user_is_auth=False, error=error, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
 
 
 # The home user logged in screen that lists postings
@@ -135,7 +137,7 @@ def user_home_screen():
 
 # The new posting submission screen
 @app.route('/new-posting-submission', methods=['GET', 'POST'])
-def new_posting_submission():
+def new_posting_submission(error=""):
     if g.user is None:
         return redirect(url_for('login'))
     title = "Submit a New Posting!"
@@ -167,7 +169,7 @@ def new_posting_submission():
                 tags = request.form['tags']))
             db.session.commit()
             return redirect(url_for('login'))
-    return render_template('create-posting-view.html', current_user_id=g.user.userid, js_file="tag-javascript.js", current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('create-posting-view'))
+    return render_template('create-posting-view.html', current_user_id=g.user.userid, js_file="tag-javascript.js", current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'))
 
 
 # The HELP page
@@ -184,12 +186,13 @@ def users_account():
     global CURRENT_USER_ID
     #account_info = {}
     account_info = g.user
+    title = "USER: " + g.user.username
     if request.method == "GET":
         userid = (request.args.get('userid'))
         account_info = User.query.filter_by(userid=userid).first()
         if account_info is None:
             return redirect(url_for('not_found_error_item'))
-    title = "USER: " + g.user.username
+        title = "USER: " + account_info.username
     return render_template('account-view.html',current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('account-view'), account=account_info)
 
 
@@ -273,4 +276,4 @@ def edit_posting(error=""):
             posting_info.tags = request.form['tags']
             db.session.commit()
             return redirect(url_for('user_home_screen'))
-    return render_template('edit-posting-view.html', js_file="tag-javascript.js", current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('create-posting-view'), post=posting_info)
+    return render_template('edit-posting-view.html', js_file="tag-javascript.js", current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'), post=posting_info)

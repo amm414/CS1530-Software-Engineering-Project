@@ -7,6 +7,12 @@
   <hr class="styled-hrline"/>
 </div>
 
+{% if error != '' %}
+  {% with error_message=error %}
+    {% include 'error.html' %}
+  {% endwith %}
+{% endif %}
+
 <form onkeydown="return event.key != 'Enter';" action="" method="post">
   <div class="form">
     <div class="row">

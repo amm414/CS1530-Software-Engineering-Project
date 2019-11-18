@@ -59,13 +59,13 @@
 
         <div class="posting-poster-rating">
           Rating:
-          <h5 class="posting-poster-rating-text">{{ 3 }}/5</h5>
+          <h5 class="posting-poster-rating-text">{{ 5 }}/5</h5>
         </div>
 
         <div class="posting-poster-rating-stars">
           {% set seq = [0, 1, 2, 3, 4] %}
           {% for i in seq %}
-            {% if 3 | int > i %}
+            {% if 5 | int > i %}
               <i class="fas fa-star"></i>
             {% else %}
               <i class="far fa-star"></i>

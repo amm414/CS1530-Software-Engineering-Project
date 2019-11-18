@@ -33,7 +33,7 @@
       <div class="account-rating-stars">
         {% set seq = [0, 1, 2, 3, 4] %}
         {% for i in seq %}
-          {% if 5 | int > i %}
+          {% if account.rating | int > i %}
             <i class="fas fa-star"></i>
           {% else %}
             <i class="far fa-star"></i>
