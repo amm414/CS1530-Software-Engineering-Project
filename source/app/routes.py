@@ -236,6 +236,7 @@ def edit_account(error=""):
     current_user = g.user
     return render_template('edit-account.html', current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  error=error, current_user=current_user, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
 
+
 @app.route('/edit-posting', methods=['GET', 'POST'])
 def edit_posting(error=""):
     if g.user is None:

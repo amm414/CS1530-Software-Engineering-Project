@@ -2,6 +2,10 @@
 
 {% block content %}
 <h2>An error occured: 404</h2>
+<p>
+  No page found with given URL. Please contact the admins
+  if you believe there should be some page here. 
+</p>
 {% if error and error != '' %}
   {% with error_message=error %}
     {% include 'error.html' %}
