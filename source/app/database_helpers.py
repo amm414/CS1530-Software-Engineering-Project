@@ -25,16 +25,26 @@ def add_new_post(form_input, current_user):
     return True
 
 def add_user(new_user_info):
-    db.session.add(models.User(
-        username        = new_user_info['username'],
-        email           = new_user_info['email'],
-        password        = new_user_info['password'],
-        phonenumber     = new_user_info['phone'],
-        personalemail   = new_user_info['personalemail'],
-        bio             = new_user_info['bio'],
-        rating          = new_user_info['rating'],
-        numRatings      = new_user_info['numRatings'],
-    ))
+    try:
+        newUser = models.User(
+            username        = new_user_info['username'],
+            email           = new_user_info['email'],
+            password        = new_user_info['password'],
+            phonenumber     = new_user_info['phone'],
+            personalemail   = new_user_info['personalemail'],
+            bio             = new_user_info['bio'],
+            rating          = float(new_user_info['rating']),
+            numRatings      = int(new_user_info['numRatings']),
+        )
+        db.session.add(newUser)
+        db.session.commit()
+        db.session.refresh(newUser)
+        if newUser.userid is None:
+            return False
+        return True
+    except Exception as e:
+        return False
+    return False
 
 def get_post_id(postid):
     try:
@@ -68,16 +78,18 @@ def update_current_user(current_user, result):
 
 def get_posting_by_id(postid):
     posting_info = models.Posting.query.filter_by(postid=postid).first()
+    if posting_info is None:
+        return None, None
     if posting_info.contactmethod == 'personalemail':
         poster_info = models.User.query.filter_by(userid=posting_info.userid).with_entities(
-            models.User.personalemail, models.User.rating
+            models.User.personalemail, models.User.rating, models.User.userid, models.User.username
         ).first()
     elif posting_info.contactmethod == "phonenumber":
         poster_info = models.User.query.filter_by(userid=posting_info.userid).with_entities(
-            models.User.phonenumber, models.User.rating
+            models.User.phonenumber, models.User.rating, models.User.userid, models.User.username
         ).first()
     else:
         poster_info = models.User.query.filter_by(userid=posting_info.userid).with_entities(
-            models.User.email, models.User.rating
+            models.User.email, models.User.rating, models.User.userid, models.User.username
         ).first()
     return posting_info, poster_info

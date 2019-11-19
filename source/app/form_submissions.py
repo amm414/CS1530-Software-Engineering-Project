@@ -162,7 +162,7 @@ def generate_return_values(given):
     error = []
     good_results = {}
     for key, elem in given.items():
-        print("ELEM: " + str(elem))
+        print("ELEM: is " + str(key) + "..." + str(elem))
         if elem[0]:
             good_results[key] = elem[1]
         else:
@@ -194,19 +194,20 @@ def get_username(email):
 def generate_fields_create_account(forms):
     new_account_info = {}
     new_account_info['email']           = validate_email(forms['email'])
-    new_account_info['userid']          = get_username(new_account_info['email'])
+    new_account_info['username']        = get_username(new_account_info['email'][1])
     new_account_info['password']        = validate_password(forms['password'], forms['password2'])
     new_account_info['phone']           = validate_phone_number(forms['phonenumber'])
     new_account_info['personalemail']   = validate_personal_email(forms['personalemail'])
     new_account_info['bio']             = validate_bio(forms['bio'])
     new_account_info['rating']          = [True, '5']
     new_account_info['numRatings']      = [True, '0']
+    print(forms['phonenumber'])
     return new_account_info
 
 def validate_email(field):
     try:
         field = get_email(str(field))
-        if not field:
+        if not field == False:
             return [True, field]
         raise ValueError
     except Exception as e:
@@ -277,3 +278,13 @@ def generate_fields_edit_account(forms, userid):
     new_account_info['personalemail']   = validate_personal_email(forms['personalemail'])
     new_account_info['bio']             = validate_bio(forms['bio'])
     return new_account_info
+
+#############################################################################
+# Claims
+def get_new_claims_form(forms, current_user, postid):
+    results = generate_claims_forms(forms, current_user)
+    return generate_return_values(results)
+
+def generate_claims_forms(forms, current_user, postid):
+    claim_info = {}
+    claim_info['postid'] = [True, postid]

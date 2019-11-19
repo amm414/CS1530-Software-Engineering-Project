@@ -29,12 +29,12 @@ def initdb_command():
 class User(db.Model):
     userid   	 	= db.Column(db.Integer, primary_key = True)
     username  	 	= db.Column(db.String(24), nullable = False)
-    email    	 	= db.Column(db.String(80), nullable = False)
+    email    	 	= db.Column(db.String(80), unique=True, nullable = False)
     # hashed password is 128 chars ALWAYS
     password 	 	= db.Column(db.String(128), nullable = False)
     phonenumber  	= db.Column(db.String(64), nullable = False)
-    personalemail  	= db.Column(db.String(80))
-    bio		  	 	= db.Column(db.String(250))
+    personalemail  	= db.Column(db.String(80), nullable = False)
+    bio		  	 	= db.Column(db.String(250), nullable = False)
     rating 			= db.Column(db.Float(2), nullable = False)
     numRatings		= db.Column(db.Integer, nullable = False)
 
@@ -62,9 +62,10 @@ class Claim(db.Model):
     claimid			= db.Column(db.Integer, primary_key = True)
     postid 			= db.Column(db.Integer, db.ForeignKey("posting.postid"))
     sellerid 		= db.Column(db.Integer, db.ForeignKey("user.userid"))
-    buyerid 		= db.Column(db.Integer, db.ForeignKey("user.userid"))
+    buyer 		    = db.Column(db.Integer, db.ForeignKey("user.userid"))
     date 			= db.Column(db.Date, nullable = False)
     isSeller		= db.Column(db.Boolean, nullable = False)
+    Rating          = db.Column(db.Integer, nullable = False)
 
     def __repr__(self):
         return '<Claim {}: "{}">'.format(self.claimid)

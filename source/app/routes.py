@@ -82,8 +82,10 @@ def create_account(error=""):
     if request.method == 'POST':
         [results, errors] = form_submissions.generate_new_account_form(request.form)
         if len(errors) == 0:
-            database_helpers.addUser(results)
-            return redirect(url_for('login'))
+            added_successfully = database_helpers.add_user(results)
+            if added_successfully:
+                return redirect(url_for('login'))
+            errors = "Could not process. Try again."
     return render_template('create-account.html', current_user_is_auth=False, error=errors, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
 
 # The user screen
@@ -187,6 +189,38 @@ def user_home_screen():
     for elem in postings:
         print(elem)
     return render_template('user-view.html', category=CATEGORIES, able_to_filter=True, submitted=submitted, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings)
+
+########################### CLAIMS ##########################################
+# the claim pages
+@app.route('/claim', methods=['GET', 'POST'])
+def claim_submission():
+    if g.user is None:
+        return redirect(url_for('login'))
+    title = "Claim Submission"
+    error = ''
+    IsSeller = False
+    post_info = {'title': '', 'postid': '', 'username': '' }
+    try:
+        [posting_info, poster_info] = database_helpers.get_posting_by_id(request.args.get('postid'))
+        if posting_info is None:
+            return redirect(url_for('error'))
+        print(posting_info.postid)
+        post_info = helper_functions.get_post_info_claims(posting_info, poster_info)
+        isSeller = (posting_info.userid == g.user.userid)
+        if isSeller:
+            title = "Seller " + title
+        else:
+            title = "Buyer " + title
+    except Exception as e:
+        error = "Please Try Resubmitting. Something went Wrong."
+        return render_template('claim.html', error=error, post=post_info, isSeller=False, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('claim') )
+
+    if request.method == 'POST':
+        [submitted, error] = form_submissions.get_new_claims_form(request.form, current_user, post_info['postid'])
+        if len(errors) == 0:
+            return render_template('claim-completed')
+
+    return render_template('claim.html', error=error, post=post_info, isSeller=isSeller, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('claim') )
 
 
 # The HELP page
