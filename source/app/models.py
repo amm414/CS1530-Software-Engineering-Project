@@ -30,7 +30,7 @@ class User(db.Model):
     userid   	 	= db.Column(db.Integer, primary_key = True)
     username  	 	= db.Column(db.String(24), nullable = False)
     email    	 	= db.Column(db.String(80), unique=True, nullable = False)
-    # hashed password is 128 chars ALWAYS
+    # hashed password is ~100 chars ALWAYS
     password 	 	= db.Column(db.String(128), nullable = False)
     phonenumber  	= db.Column(db.String(64), nullable = False)
     personalemail  	= db.Column(db.String(80), nullable = False)
