@@ -9,7 +9,7 @@
 <div class="row">
   <div class="col-xs-12">
     <h3 class="posting-information-functions">Functions: </h3>
-    {% if (post.userid | int) == (CURRENT_USER_ID | int) %}
+    {% if (post.userid | int) == (current_user_id | int) %}
     <a href="/edit-posting?postid={{ post.postid }}">
       <div class="posting-button-action">
         <i class="fas fa-edit"></i>
@@ -18,7 +18,7 @@
     </a>
     {% endif %}
 
-    <a href="#">
+    <a href="claim?postid={{ post.postid }}">
       <div class="posting-button-action">
         <i class="fas fa-file-signature"></i>
         Claim Transaction
@@ -43,29 +43,29 @@
 
       <div class="posting-preferred-contact posting-grouping">
         <h4 class="posting-label">Preferred Contact Method: </h4>
-        {{ post.contactmethod }}
+        {{ poster_info[0] }}
       </div>
 
       <div class="posting-poster-data posting-grouping">
         <h4 class="posting-label">Poster Information: </h4>
         <div class="posting-poster-account">
-          Poster's username is {{ post.poster_username }}.
+          Poster's username is {{ post.poster_username }}
           <a href="/user?userid={{ post.userid }}">
             <div class="posting-poster-account-button">
-               {{ username }}
+               {{ post.username }}
             </div>
           </a>
         </div>
 
         <div class="posting-poster-rating">
           Rating:
-          <h5 class="posting-poster-rating-text">{{ 3 }}/5</h5>
+          <h5 class="posting-poster-rating-text">{{ poster_info.rating }}/5</h5>
         </div>
 
         <div class="posting-poster-rating-stars">
           {% set seq = [0, 1, 2, 3, 4] %}
           {% for i in seq %}
-            {% if 3 | int > i %}
+            {% if poster_info.rating | int > i %}
               <i class="fas fa-star"></i>
             {% else %}
               <i class="far fa-star"></i>
@@ -89,7 +89,7 @@
 
     <div class="posting-tags posting-grouping-small">
       <h4 class="posting-label-small">Tags: </h4>
-      {{ post.tags}}
+      <p>{{ post.tags }}</p>
     </div>
   </div>
 </div>

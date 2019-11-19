@@ -1,0 +1,43 @@
+{% extends "base-no-box-template.html" %}
+
+{% block content %}
+<div class="claim-content">
+  <h2 class="claim-title">Submit Claim of Transaction</h2>
+
+  <h4>Title of Posting: {{ post['title'] }}</h4>
+  {% if error != '' %}
+    {% with error_message=error %}
+      {% include 'error.html' %}
+    {% endwith %}
+  {% endif %}
+
+  <form class="form" method="post" action="">
+    <input type="text" name="postid" value="{{ post['postid'] }}" hidden disabled>
+    <div name='buyerUsername' class="claim-enter-info">
+      {% if isSeller %}
+      <h4 class="claim-label">Buyer Email: </h4>
+      <input name="buyeremail" class="form-control form-control-md claim-text-box" type="text" value="">
+      {% else %}
+      <h4 class="claim-label">Seller Username: </h4>
+      <input name='sellerUsername' class="form-control form-control-md claim-text-box" type="text" value="{{ post['username'] }}" disabled>
+      {% endif %}
+    </div>
+
+    <div class="claim-input-group">
+      <h4 class="claim-label">Rating of Poster: </h4>
+      <select class="selectpicker claim-select-category" name='rating'>
+        {% for i in [5, 4, 3, 2, 1] %}
+          <option value="{{i}}" {% if i == 3 %} selected {% endif %}>{{i}} Stars!</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="claim-options-group">
+      <div class="claim-submit-button-group">
+        <button type="submit" class="btn btn-primary claim-submit-button">Submit!</button>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+{% endblock %}

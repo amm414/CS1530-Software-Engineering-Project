@@ -11,6 +11,15 @@ $(document).ready(function() {
   let hiddenTagField = document.querySelector('#hidden-tag-list-value');
   let tags = [];
 
+  set_value();
+
+  function set_value() {
+    if (hiddenTagField.value !== ''){
+      tags = hiddenTagField.value.split(',');
+      addTags();
+    }
+  }
+
   function createTag(label){
     let div = document.createElement('div');
     div.setAttribute('class', 'tag-div');
@@ -61,6 +70,6 @@ $(document).ready(function() {
   });
 
   function setHiddenField(){
-    hiddenTagField.value = tags.join(',');
+    hiddenTagField.value = tags.join(', ');
   }
 });

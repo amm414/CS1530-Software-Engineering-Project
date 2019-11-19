@@ -7,48 +7,42 @@
   <hr class="styled-hrline"/>
 </div>
 
-<form action="" method="post">
+{% if error != '' and error != [] %}
+  {% with error_message=error %}
+    {% include 'error.html' %}
+  {% endwith %}
+{% endif %}
+
+<form onkeydown="return event.key != 'Enter';" action="" method="post">
   <div class="form">
     <div class="row">
       <div class="col-md-12 col-lg-6">
         <div class="create-posting-input-group">
           <h4 class="create-posting-label">Posting Title</h4>
-          <input class="form-control form-control-lg" type="text" value={{post.title}} name="title">
+          <input class="form-control form-control-lg" type="text" value="{{post.title}}"" name="title">
         </div>
 
         <div class="create-posting-input-group">
           <h4 class="create-posting-label">Category for Post</h4>
-          <select class="selectpicker create-posting-select-category" value={{post.category}} name="category">
-            <option>Textbooks</option>
-            <option>Events</option>
-            <option>Opprotunities</option>
-            <option>Furniture</option>
-            <option>Goods</option>
-            <option>Software or Digital Media</option>
-            <option>Miscellaneous</option>
+          <select class="selectpicker create-posting-select-category" value="{{ post.category }}" name="category">
+            {% for option in categories %}
+              <option value="{{ option }}" {% if post.category | string == option | string %} selected {% endif %}>
+                {{ option }}
+              </option>
+            {% endfor %}
           </select>
         </div>
 
         <div class="create-posting-input-group">
           <h4 class="create-posting-label">Preferred Contact Method</h4>
           <div class="create-posting-radio-contact list-radio-options create-posting-list-group">
+            {% for option in contact_options %}
             <label class="form-check-label radio-label">
-              <input type="radio" class="form-check-input create-posting-radio-buttons" name="preferredContact" value="Email" checked="checked">
+              <input type="radio" class="form-check-input create-posting-radio-buttons" name="preferredContact" value="{{ option }}" {% if option | string == post.contactmethod | string %} checked="checked" {% endif %}>
               <span class="radio-button-span"></span>
-              Email
+              {{ contact_options[option] }}
             </label>
-
-            <label class="form-check-label radio-label">
-              <input type="radio" class="form-check-input create-posting-radio-buttons" name="preferredContact" value="Phone">
-              <span class="radio-button-span"></span>
-              Phone
-            </label>
-
-            <label class="form-check-label radio-label">
-              <input type="radio" class="form-check-input create-posting-radio-buttons" name="preferredContact" value="PersonalEmail" >
-              <span class="radio-button-span"></span>
-              Personal Email
-            </label>
+            {% endfor %}
           </div>
         </div>
       </div>
@@ -61,7 +55,7 @@
             <div class="input-group-prepend">
               <div class="input-group-text" style="background-color:  #bfa458;"><i class="fas fa-dollar-sign" style="color: #192857; font-size: 120%;"></i></div>
             </div>
-            <input type="text" class="form-control form-control-lg" id="inlineFormInputGroupUsername2" value={{post.price}} name="price">
+            <input type="text" class="form-control form-control-lg" id="inlineFormInputGroupUsername2" value="{{post.price}}" name="price">
           </div>
         </div>
 
@@ -91,7 +85,8 @@
       <div class="col-xs-12 col-lg-8 offset-lg-2">
         <div class="create-posting-input-group">
           <h4 class="create-posting-label">Enter Tags for Filtering Searches:</h4>
-          <input class="form-control form-control-lg" type="text" value={{post.tags}} name='tags'>
+          <input id='tag-input' class="form-control form-control-lg" type="text" >
+          <textarea id="hidden-tag-list-value" name="tags" hidden>{{ post.tags }}</textarea>
         </div>
       </div>
     </div>

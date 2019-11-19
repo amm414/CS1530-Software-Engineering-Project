@@ -2,6 +2,14 @@
 <div class="error-message">
   <h3 class="error-header">Error: </h3>
   <div class="error-content">
-    {{ error_message }}
+    {% if error_message is string %}
+      Message: {{ error_message }}
+    {% elif error_message | length > 0  %}
+      <div class="multiple-error-messages">
+        {% for e in error_message %}
+        <p>Message: {{e}}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
   </div>
 </div>

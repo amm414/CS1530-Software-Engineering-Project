@@ -1,3 +1,4 @@
 
 demo/__pycache__/helper_functions.cpython-36.pyc
 *.pyc
+*/__pycache__.*

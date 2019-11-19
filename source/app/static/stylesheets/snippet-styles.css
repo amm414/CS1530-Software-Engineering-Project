@@ -14,6 +14,19 @@ body{
 
 }
 
+.form-control{
+  color: black;
+  font-weight: 450;
+}
+
+.form-control:focus{
+  color: black;
+  font-weight: 450;
+  outline: None;
+  border: 0px solid black;
+
+}
+
 .error-header{
   text-align: center;
   margin: auto;
@@ -34,6 +47,17 @@ body{
   font-size: 110%;
   margin: auto;
   text-align: center;
+}
+
+.requirement-submission{
+  margin-top: -10px;
+  font-size: 90%;
+  color: #6b6a6a;
+}
+
+.multiple-error-messages{
+  text-align: left;
+  padding-left: 10px;
 }
 
 body::-webkit-scrollbar-button:vertical:single-button{

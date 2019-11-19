@@ -10,7 +10,7 @@
         <h2>Edit Account</h2>
       </div>
 
-      {% if error != '' %}
+      {% if error != [] and error != '' %}
         {% with error_message=error %}
           {% include 'error.html' %}
         {% endwith %}
