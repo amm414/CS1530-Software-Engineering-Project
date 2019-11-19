@@ -2,9 +2,40 @@ from flask_sqlalchemy import SQLAlchemy
 from app import app, db
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from app.form_submissions import get_username
+import csv
 
 
 # INITS THE DBs
+def add_users(file):
+    list = []
+    key_list = ['phonenumber', 'email', 'personalemail', 'password', 'bio']
+    with open(file, 'r') as csv_file:
+        reader = csv.DictReader(csv_file, delimiter=',', fieldnames=key_list)
+        for row in reader:
+            new_item = {}
+            for key in key_list:
+                new_item[key] = row[key]
+            new_item['username'] = get_username(new_item['email'])
+            list.append(new_item)
+    for value in list:
+        newUser = User(
+            username            = value['username'][1],
+            email               = value['email'],
+            personalemail       = value['personalemail'],
+            password            = generate_password_hash(value['password']),
+            phonenumber         = value['phonenumber'],
+            bio                 = value['bio'],
+            rating              = 5,
+            numRatings          = 0
+        )
+        db.session.add(newUser)
+        db.session.commit()
+        if value['username'] == "admin" or value['username'] == 'jmd230':
+                db.session.refresh(newUser)
+                print(value['username'] + ": " + str(newUser.userid))
+    print("Finished")
+
 
 @app.cli.command('initdb')
 def initdb_command():
@@ -12,14 +43,15 @@ def initdb_command():
     db.drop_all()
     db.create_all()
 
+    add_users("sampleUser.csv")
     # add some default data
-    db.session.add(User(username='jmd230', email="jmd230@pitt.edu", password=generate_password_hash('pass'), phonenumber='4121234567', personalemail='jordanmdeller@gmail.com', bio='Serious offers only', rating=2.51, numRatings=10))
-    db.session.add(User(username='admin', email="admin@pitt.edu", password=generate_password_hash('foobiz'), phonenumber='2341172381', personalemail='admin@admin.com', bio='I am an admin. This account is used to manage and test out the APP!', rating=5, numRatings=1))
-    db.session.add(User(username='tester1', email="tester1@pitt.edu", password=generate_password_hash('foobar'), phonenumber='2456734224', personalemail='tester1@gmail.com', bio='Tester is testing account for testing...', rating=3, numRatings=10))
+    # db.session.add(User(username='jmd230', email="jmd230@pitt.edu", password=generate_password_hash('pass'), phonenumber='4121234567', personalemail='jordanmdeller@gmail.com', bio='Serious offers only', rating=2.51, numRatings=10))
+    # db.session.add(User(username='admin', email="admin@pitt.edu", password=generate_password_hash('foobiz'), phonenumber='2341172381', personalemail='admin@admin.com', bio='I am an admin. This account is used to manage and test out the APP!', rating=5, numRatings=1))
+    # db.session.add(User(username='tester1', email="tester1@pitt.edu", password=generate_password_hash('foobar'), phonenumber='2456734224', personalemail='tester1@gmail.com', bio='Tester is testing account for testing...', rating=3, numRatings=10))
 
-    db.session.add(Posting(userid=1, username='jmd230', date=datetime.now(), title='Cool Book', description='Very good quality, barely used.', price=50.00, category='Textbooks', contactmethod='email', tags='book'))
-    db.session.add(Posting(userid=2, username='admin', date=datetime.now(), title='Brown couch', description='No signs of wear.', price=100.00, category='Furniture', contactmethod='phonenumber', tags='furniture, couch, seating, brown, comfy'))
-    db.session.add(Posting(userid=3, username='tester1', date=datetime.now(), title='Cheap Book', description='Great quality.', price=20.00, category='Textbooks', contactmethod='personalemail', tags='book'))
+    db.session.add(Posting(userid=1, date=datetime.now(), title='Cool Book', description='Very good quality, barely used.', price=50.00, category='Textbooks', contactmethod='email', tags='book'))
+    db.session.add(Posting(userid=2, date=datetime.now(), title='Brown couch', description='No signs of wear.', price=100.00, category='Furniture', contactmethod='phonenumber', tags='furniture, couch, seating, brown, comfy'))
+    db.session.add(Posting(userid=2, date=datetime.now(), title='Cheap Book', description='Great quality.', price=20.00, category='Textbooks', contactmethod='personalemail', tags='book'))
 
     db.session.commit()
 
@@ -45,7 +77,6 @@ class User(db.Model):
 class Posting(db.Model):
     postid 			= db.Column(db.Integer, primary_key = True)
     userid 			= db.Column(db.Integer, db.ForeignKey("user.userid"))
-    username        = db.Column(db.String(24), nullable = False)
     date 			= db.Column(db.Date, nullable = False)
     title   		= db.Column(db.String(30), nullable = False)
     description 	= db.Column(db.String(250), nullable = False)
