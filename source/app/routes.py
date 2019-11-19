@@ -174,13 +174,18 @@ def user_home_screen():
     if g.user is None:
         return redirect(url_for('login'))
     if request.method == 'GET':
-        [submitted, randomize] = form_submissions.get_filters(request.form)
+        [submitted, randomize] = form_submissions.get_filters(request.form, False)
         # need to filter somehow
-        if randomize:
+        minPrice = request.args.get('minPrice')
+        maxPrice = request.args.get('maxPrice')
+        if not minPrice:
             postings = database_helpers.generate_random_postings()
         else:
             # this is where the FILTERING should go
-            postings = database_helpers.generate_random_postings()
+            #postings = database_helpers.generate_random_postings()
+            postings = Posting.query.filter(Posting.price < request.args.get('maxPrice')). \
+                                     filter(Posting.price > request.args.get('minPrice')).all()
+                                     #filter(Posting.title.like(request.args.get('search')).all()
     else:
         # do not bother filtering at all...
         submitted = form_submissions.get_filters('', True)
@@ -227,3 +232,22 @@ def claim_submission():
 @app.route('/help-and-FAQ')
 def help():
     return render_template('help.html')
+
+
+@app.route('/remove-posting', methods=['GET', 'POST'])
+def remove_posting_view(error=""):
+    title = 'Remove Posting'
+    if g.user is None:
+        return redirect(url_for('login'))
+
+    posting_info = database_helpers.get_post_id(request.args.get('postid'))
+    if posting_info is None or g.user.userid != posting_info.userid:
+        return redirect(url_for('user_home_screen'))
+
+    if request.method == 'POST':
+        posting_info_remove = Posting.query.filter_by(postid=request.args.get('postid')).first()
+        db.session.delete(posting_info_remove)
+        db.session.commit()
+        return redirect(url_for('user_home_screen'))
+
+    return render_template('remove-posting-view.html',contact_options=CONTACT_METHOD,  categories=CATEGORIES, js_file="tag-javascript.js", current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'), post=posting_info)

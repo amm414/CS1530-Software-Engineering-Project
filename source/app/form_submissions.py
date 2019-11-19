@@ -73,7 +73,7 @@ def get_min_price(field):
 def should_randomize(submitted):
     return submitted == {'minPrice': '0', 'maxPrice': '0', 'search': '', 'category': ''}
 
-def get_filters(forms, get_recieved=False):
+def get_filters(forms, get_recieved):
     if get_recieved:
         submitted = {}
         submitted['minPrice'] = get_min_price(forms['minPrice'])
