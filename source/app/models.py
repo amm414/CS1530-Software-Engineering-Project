@@ -6,7 +6,7 @@ from app.form_submissions import get_username
 import csv
 
 
-# INITS THE DBs
+# INITS THE DBs for USERs
 def add_users(file):
     list = []
     key_list = ['phonenumber', 'email', 'personalemail', 'password', 'bio']
