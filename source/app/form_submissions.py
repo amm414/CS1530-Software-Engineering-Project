@@ -207,7 +207,7 @@ def generate_fields_create_account(forms):
 def validate_email(field):
     try:
         field = get_email(str(field))
-        if not field == False:
+        if not field == False and len(field) < 75:
             return [True, field]
         raise ValueError
     except Exception as e:
