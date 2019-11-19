@@ -7,8 +7,13 @@ from datetime import datetime
 
 CATEGORIES = ['All', 'Textbooks', 'Furniture', 'Food', 'Events', 'Software', 'Electronics',
  'Beauty and Personal Care', 'Clothes', 'School Supplies', 'Appliances']
-CONTACT_METHOD = ['Email', 'Phone', 'PersonalEmail']
+CONTACT_METHOD = {
+    "email": "Email (university provided)",
+    "phonenumber": "Phone Number (if provided)",
+    "personalemail": "Personal Email (if provided)"
+}
 
+# forces logout on browser close(); aka senses packets have stopped flowing
 @socketio.on('disconnect')
 def disconnect_user():
     logout()
@@ -29,12 +34,6 @@ def request_authentication():
     if 'userid' in session:
         g.user = User.query.filter_by(userid=session['userid']).first()
 
-# Given a email (universit), gives
-def get_userid(email):
-	rv = User.query.filter_by(email=email).first()
-	return rv.userid if rv else None
-
-
 ### ERROR HANDLING PAGES
 @app.route('/error')
 def not_found_error_item():
@@ -49,12 +48,10 @@ def internal_error(error):
     db.session.rollback()
     return render_template('500.html'), 500
 
-
 @app.route('/')
 def slash_redirect():
     return redirect(url_for('login'))
-
-
+########################## LOGIN ###########################################
 # The login screen
 @app.route('/login', methods=['GET', 'POST'])
 def login(error=""):
@@ -73,7 +70,7 @@ def login(error=""):
                 return redirect(url_for('user_home_screen'))
     return render_template('login.html', current_user_is_auth=False, error=error, page_title=title, css_file=helper_functions.generate_linked_files('login'))
 
-
+############################ ACCOUNT ROUTES ###############################
 # The create account screen
 @app.route('/create-account', methods=['GET', 'POST'])
 def create_account(error=""):
@@ -89,7 +86,85 @@ def create_account(error=""):
             return redirect(url_for('login'))
     return render_template('create-account.html', current_user_is_auth=False, error=errors, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
 
+# The user screen
+@app.route('/user', methods=['GET', 'POST'])
+def users_account():
+    if g.user is None:
+        return redirect(url_for('login'))
+    account_info = g.user
+    title = "USER: " + g.user.username
+    if request.method == "GET":
+        userid = (request.args.get('userid'))
+        account_info = User.query.filter_by(userid=userid).first()
+        if account_info is None:
+            return redirect(url_for('not_found_error_item'))
+        title = "USER: " + account_info.username
+    return render_template('account-view.html',current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('account-view'), account=account_info)
 
+# The edit account screen
+@app.route('/edit-account', methods=['GET', 'POST'])
+def edit_account(error=""):
+    if g.user is None:
+        return redirect(url_for('login'))
+    title = 'Edit Account'
+    current_user = g.user
+
+    if request.method == 'POST':
+        [result, error] = form_submissions.get_modified_account_info(request.form, g.user.userid)
+        if len(error) == 0 and check_password_hash(g.user.password, str(result['oldpassword'])):
+            if database_helpers.update_current_user(g.user, result):
+                return redirect(url_for('user_home_screen'))
+    return render_template('edit-account.html', current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  error=error, current_user=current_user, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
+
+###################################################################
+###################### POSTINGS ###################################
+# The new posting submission screen
+@app.route('/new-posting-submission', methods=['GET', 'POST'])
+def new_posting_submission(error=""):
+    title = "Submit a New Posting!"
+    error = []
+    if g.user is None:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        [results, error] = form_submissions.get_form_create_post(request.form, CATEGORIES)
+        if len(error) == 0:
+            database_helpers.add_new_post(results, g.user)
+            return redirect(url_for('login'))
+    return render_template('create-posting-view.html', contact_options=CONTACT_METHOD, categories=CATEGORIES, current_user_id=g.user.userid, js_file="tag-javascript.js", current_user_is_auth=(g.user.userid > 0), page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'))
+
+# NEED TO REWORK CONTACT METHOD!!!
+@app.route('/edit-posting', methods=['GET', 'POST'])
+def edit_posting(error=""):
+    title = 'Edit Posting'
+    if g.user is None:
+        return redirect(url_for('login'))
+
+    posting_info = database_helpers.get_post_id(request.args.get('postid'))
+    if posting_info is None or g.user.userid != posting_info.userid:
+        return redirect(url_for('user_home_screen'))
+
+    if request.method == 'POST':
+        [results, error] = form_submissions.get_form_create_post(request.form, CATEGORIES)
+        if len(error) == 0:
+            database_helpers.modify_post_by_id(results, posting_info[0])
+            return redirect(url_for('user_home_screen'))
+    return render_template('edit-posting-view.html',contact_options=CONTACT_METHOD,  categories=CATEGORIES, js_file="tag-javascript.js", current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'), post=posting_info)
+
+# The posting screen
+@app.route('/posting', methods=['GET'])
+def full_posting_view():
+    if g.user is None:
+        return redirect(url_for('login'))
+    #posting_info = {}
+    if request.method == 'GET':
+        [posting_info, user_info] = database_helpers.get_posting_by_id(request.args.get('postid'))
+        if posting_info is None:
+            return redirect(url_for('not_found_error_item'))
+        title = "POSTING: " + posting_info.title
+        print(user_info)
+    return render_template('full-posting-view.html',current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('full-posting-view'), post=posting_info, poster_info=user_info)
+
+########################################################################
 # The home user logged in screen that lists postings
 @app.route('/search-and-filter-postings', methods=['GET'])
 def user_home_screen():
@@ -114,126 +189,7 @@ def user_home_screen():
     return render_template('user-view.html', category=CATEGORIES, able_to_filter=True, submitted=submitted, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings)
 
 
-# The new posting submission screen
-@app.route('/new-posting-submission', methods=['GET', 'POST'])
-def new_posting_submission(error=""):
-    title = "Submit a New Posting!"
-    error = []
-    if g.user is None:
-        return redirect(url_for('login'))
-    if request.method == 'POST':
-        [results, error] = form_submissions.get_form_create_post(request.form, CATEGORIES)
-        if len(error) == 0:
-            print(results['preferredContact'])
-            results['preferredContact'] = form_submissions.validate_contact_method(g.user, results['preferredContact'])
-            database_helpers.add_new_post(results, g.user)
-            return redirect(url_for('login'))
-    return render_template('create-posting-view.html', contact_options=CONTACT_METHOD, categories=CATEGORIES, current_user_id=g.user.userid, js_file="tag-javascript.js", current_user_is_auth=(g.user.userid > 0), page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'))
-
-
 # The HELP page
 @app.route('/help-and-FAQ')
 def help():
     return render_template('help.html')
-
-
-# The user screen
-@app.route('/user', methods=['GET', 'POST'])
-def users_account():
-    if g.user is None:
-        return redirect(url_for('login'))
-    global CURRENT_USER_ID
-    #account_info = {}
-    account_info = g.user
-    title = "USER: " + g.user.username
-    if request.method == "GET":
-        userid = (request.args.get('userid'))
-        account_info = User.query.filter_by(userid=userid).first()
-        if account_info is None:
-            return redirect(url_for('not_found_error_item'))
-        title = "USER: " + account_info.username
-    return render_template('account-view.html',current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('account-view'), account=account_info)
-
-
-# The posting screen
-@app.route('/posting', methods=['GET'])
-def full_posting_view():
-    if g.user is None:
-        return redirect(url_for('login'))
-    #posting_info = {}
-    if request.method == 'GET':
-        postid = request.args.get('postid')
-        posting_info = Posting.query.filter_by(postid=postid).first()
-        if posting_info is None:
-            return redirect(url_for('not_found_error_item'))
-        user_info = User.query.filter_by(userid=posting_info.userid).first()
-    title = "POSTING: " + posting_info.title
-    return render_template('full-posting-view.html',current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid, CURRENT_USER_ID=g.user.userid, username=user_info.username, page_title=title, css_file=helper_functions.generate_linked_files('full-posting-view'), post=posting_info)
-
-# The edit account screen
-@app.route('/edit-account', methods=['GET', 'POST'])
-def edit_account(error=""):
-    if g.user is None:
-        return redirect(url_for('login'))
-    title = 'Edit Account'
-    if request.method == 'POST':
-        if not check_password_hash(g.user.password, str(request.form['oldpassword'])):
-            error = "Old password does not match"
-        elif request.form['newpassword'] != request.form['newpassword2']:
-            error = "New passwords do not match"
-        else:
-            if not request.form['newpassword']:
-                g.user.phonenumber = request.form['phonenumber']
-                g.user.personalemail = request.form['personalemail']
-                g.user.bio = request.form['bio']
-                db.session.commit()
-                return redirect(url_for('user_home_screen'))
-            else:
-                g.user.password = generate_password_hash(request.form['newpassword'])
-                g.user.phonenumber = request.form['phonenumber']
-                g.user.personalemail = request.form['personalemail']
-                g.user.bio = request.form['bio']
-                db.session.commit()
-                return redirect(url_for('user_home_screen'))
-    current_user = g.user
-    return render_template('edit-account.html', current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  error=error, current_user=current_user, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
-
-
-# NEED TO REWORK CONTACT METHOD!!!
-@app.route('/edit-posting', methods=['GET', 'POST'])
-def edit_posting(error=""):
-    if g.user is None:
-        return redirect(url_for('login'))
-    post_id = (request.args.get('postid'))
-    if post_id is None:
-        return redirect(url_for('user_home_screen'))
-    posting_info = Posting.query.filter_by(postid=post_id).first()
-    if g.user.userid != posting_info.userid:
-        return redirect(url_for('user_home_screen'))
-    title = 'Edit Posting'
-    if request.method == 'POST':
-        if not request.form['title']:
-            error = 'You have to enter a title'
-        elif not request.form['category']:
-            error = 'You have to choose a category'
-        elif not request.form['price']:
-            error = 'You have to enter a price'
-        elif not request.form['description']:
-            error = 'You have to enter a description'
-        else:
-            if request.form['preferredContact'] == "Email":
-                contact = g.user.email
-            elif request.form['preferredContact'] == "Phone":
-                contact = g.user.phonenumber
-            else:
-                contact = g.user.personalemail
-            posting_info.date = datetime.now()
-            posting_info.title = request.form['title']
-            posting_info.description = request.form['description']
-            posting_info.price = request.form['price']
-            posting_info.category = request.form['category']
-            posting_info.contactmethod = contact
-            posting_info.tags = request.form['tags']
-            db.session.commit()
-            return redirect(url_for('user_home_screen'))
-    return render_template('edit-posting-view.html',contact_options=CONTACT_METHOD,  categories=CATEGORIES, js_file="tag-javascript.js", current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'), post=posting_info)

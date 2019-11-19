@@ -93,8 +93,8 @@ def validate_title(field):
         if len(field) > 0 and len(field) <31:
             return [True, field]
     except Exception as e:
-        return [False, "Title is too long. Needs to be 1-30 characters long."]
-    return [False, "Title is too long. Needs to be 1-30 characters long. Your input was " + str(len(field)) + " characters."]
+        return [False, "The title needs to be 1-30 characters long."]
+    return [False, "The title needs to be 1-30 characters long. Your input was " + str(len(field)) + " characters."]
 
 # this should never really fail. It is on us if it does
 def validate_category(field, CATEGORIES):
@@ -131,21 +131,11 @@ def validate_desc(field):
 def validate_preferred_contact(field):
     try:
         field = str(field)
-        if field == "Email" or field == "Phone" or field == "PersonalEmail":
+        if field == "email" or field == "phonenumber" or field == "personalemail":
             return [True, field]
     except Exception as e:
         return [False, "Invalid preffered contact method. Try resubmitting."]
     return [False, "Invalid preffered contact method. Try resubmitting."]
-
-def validate_contact_method(current_user, method):
-    try:
-        if form_input['preferredContact'] == 'PersonalEmail':
-            return current_user.personalemail
-        elif form_input['preferredContact'] == 'Phone':
-            return current_user.phone
-    except Exception as e:
-        return current_user.email
-    return current_user.email
 
 def validate_preferred_tags(field):
     try:
@@ -164,7 +154,7 @@ def validate_input(forms, CATEGORIES):
     result['category'] = validate_category(forms['category'], CATEGORIES)
     result['price'] = validate_price(forms['price'])
     result['description'] = validate_desc(forms['description'])
-    result['preferredContact'] = validate_preferred_contact(forms['preferredContact'])
+    result['contactmethod'] = validate_preferred_contact(forms['preferredContact'])
     result['tags'] = validate_preferred_tags(forms['tags'])
     return result
 
@@ -172,6 +162,7 @@ def generate_return_values(given):
     error = []
     good_results = {}
     for key, elem in given.items():
+        print("ELEM: " + str(elem))
         if elem[0]:
             good_results[key] = elem[1]
         else:
@@ -241,16 +232,21 @@ def validate_phone_number(field):
             return [True, phone_number]
         elif len(phone_number) == 11 and phone_number[0] == '1':
             return [True, phone_number]
+        elif phone_number.split() == '':
+            return [True, '']
     except Exception as e:
         return [False, "Phone number must be 10 characters long or 11 characters long with the country code being '1' in order to be processed."]
+    return [True, '']
+
 
 def validate_personal_email(field):
     try:
         field = str(field)
-        if re.search('\w+@(\w+.)+') is not None:
+        if re.search(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", field) is not None:
             return [True, field]
     except Exception as e:
         return [False, "The personal email address is not a legal value."]
+    return [True, ""]
 
 def validate_bio(field):
     try:
@@ -258,3 +254,26 @@ def validate_bio(field):
         return [True, field]
     except Exception as e:
         return [False, "The biography is unable to be processed. Possibly an invalid symbol."]
+
+def get_modified_account_info(forms, userid):
+    result = generate_fields_edit_account(forms, userid)
+    print(result)
+    return generate_return_values(result)
+
+def validate_password_simple(password):
+    try:
+        password = str(password)
+        return [True, password]
+    except Exception as e:
+        return [False, "Try Resubmitting information."]
+
+def generate_fields_edit_account(forms, userid):
+    new_account_info = {}
+    new_account_info['userid']          = [True, str(userid)]
+    if forms['newpassword'] and forms['newpassword'] != '':
+        new_account_info['password']    = validate_password(forms['newpassword'], forms['newpassword2'])
+    new_account_info['oldpassword']     = validate_password_simple(forms['oldpassword'])
+    new_account_info['phonenumber']     = validate_phone_number(forms['phonenumber'])
+    new_account_info['personalemail']   = validate_personal_email(forms['personalemail'])
+    new_account_info['bio']             = validate_bio(forms['bio'])
+    return new_account_info

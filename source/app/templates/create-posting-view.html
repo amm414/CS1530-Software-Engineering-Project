@@ -36,9 +36,9 @@
           <div class="create-posting-radio-contact list-radio-options create-posting-list-group">
             {% for option in contact_options %}
             <label class="form-check-label radio-label">
-              <input type="radio" class="form-check-input create-posting-radio-buttons" name="preferredContact" value="{{option}}" checked="checked">
+              <input type="radio" class="form-check-input create-posting-radio-buttons" name="preferredContact" value="{{option}}" {% if option == 'email' %} checked="checked" {% endif %}>
               <span class="radio-button-span"></span>
-              {{ option }}
+              {{ contact_options[option] }}
             </label>
             {% endfor %}
           </div>

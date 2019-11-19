@@ -35,3 +35,49 @@ def add_user(new_user_info):
         rating          = new_user_info['rating'],
         numRatings      = new_user_info['numRatings'],
     ))
+
+def get_post_id(postid):
+    try:
+        if postid is None and not int(postid) > 0:
+            return None
+    except Exception as e:
+        return None
+    current_post_info = models.Posting.query.filter_by(postid=postid).join(
+        models.User).with_entities(
+        models.Posting.postid, models.Posting.title, models.Posting.category,
+        models.Posting.price, models.Posting.description,
+        models.Posting.contactmethod, models.Posting.tags,
+        models.User.phonenumber, models.User.email, models.User.userid,
+        models.User.username, models.User.rating, models.User.personalemail
+    ).first()
+    return current_post_info
+
+def modify_post_by_id(results, postid):
+    models.Posting.query.filter_by(postid=postid).update(dict(results))
+    db.session.commit()
+
+def update_current_user(current_user, result):
+    if 'password' in result:
+        print("change password")
+        current_user.password = result['password']
+    current_user.phonenumber = result['phonenumber']
+    current_user.personalemail = result['personalemail']
+    current_user.bio = result['bio']
+    db.session.commit()
+    return True
+
+def get_posting_by_id(postid):
+    posting_info = models.Posting.query.filter_by(postid=postid).first()
+    if posting_info.contactmethod == 'personalemail':
+        poster_info = models.User.query.filter_by(userid=posting_info.userid).with_entities(
+            models.User.personalemail, models.User.rating
+        ).first()
+    elif posting_info.contactmethod == "phonenumber":
+        poster_info = models.User.query.filter_by(userid=posting_info.userid).with_entities(
+            models.User.phonenumber, models.User.rating
+        ).first()
+    else:
+        poster_info = models.User.query.filter_by(userid=posting_info.userid).with_entities(
+            models.User.email, models.User.rating
+        ).first()
+    return posting_info, poster_info

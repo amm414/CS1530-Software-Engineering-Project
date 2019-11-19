@@ -70,6 +70,6 @@ $(document).ready(function() {
   });
 
   function setHiddenField(){
-    hiddenTagField.value = tags.join(',');
+    hiddenTagField.value = tags.join(', ');
   }
 });
