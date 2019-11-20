@@ -168,7 +168,6 @@ def full_posting_view():
         if posting_info is None:
             return redirect(url_for('not_found_error_item'))
         title = "POSTING: " + posting_info.title
-        print(user_info)
     return render_template('full-posting-view.html',current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('full-posting-view'), post=posting_info, poster_info=user_info)
 
 ########################################################################
@@ -181,8 +180,6 @@ def user_home_screen():
     if request.method == 'GET':
         [submitted, randomize] = form_submissions.get_filters(request.args, True)
         # need to filter somehow
-        print("\n\nSubmitted:")
-        print(submitted)
         categoryIsAll = True if submitted['category'] == 'All' else False
         if randomize:
             postings = database_helpers.generate_random_postings()
@@ -192,27 +189,31 @@ def user_home_screen():
             if submitted['search'] == '':
                 postings = Posting.query.filter(
                                     and_(
-                                        Posting.price > float(submitted['minPrice']),
-                                        Posting.price < float(submitted['maxPrice']),
+                                        Posting.price >= float(submitted['minPrice']),
+                                        Posting.price <= float(submitted['maxPrice']),
                                          or_(Posting.category.contains(submitted['category']), categoryIsAll)
                                          )
-                                    )
+                                    ).join(User).with_entities(
+                                        Posting.postid, Posting.userid, User.username,
+                                        Posting.title, Posting.price, Posting.description,
+                                        User.rating).limit(30)
             else:
                 postings = Posting.query.filter(
                                     and_(
                                         Posting.title.contains(submitted['search']),
-                                        Posting.price > float(submitted['minPrice']),
-                                        Posting.price < float(submitted['maxPrice']),
+                                        Posting.price >= float(submitted['minPrice']),
+                                        Posting.price <= float(submitted['maxPrice']),
                                         or_(Posting.category.contains(submitted['category']), categoryIsAll)
                                         )
-                                    )
+                                    ).join(User).with_entities(
+                                        Posting.postid, Posting.userid, User.username,
+                                        Posting.title, Posting.price, Posting.description,
+                                        User.rating).limit(30)
     else:
         # do not bother filtering at all...
         submitted = form_submissions.get_filters('', True)
         # randomize
         postings = database_helpers.generate_random_postings()
-    for elem in postings:
-        print(elem)
     return render_template('user-view.html', categories=CATEGORIES, able_to_filter=True, submitted=submitted, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings)
 
 ########################### CLAIMS ##########################################
@@ -229,7 +230,6 @@ def claim_submission():
         [posting_info, poster_info] = database_helpers.get_posting_by_id(request.args.get('postid'))
         if posting_info is None:
             return redirect(url_for('error'))
-        print(posting_info.postid)
         post_info = helper_functions.get_post_info_claims(posting_info, poster_info)
         isSeller = (posting_info.userid == g.user.userid)
         if isSeller:
@@ -243,11 +243,9 @@ def claim_submission():
     if request.method == 'POST':
         [submitted, error] = form_submissions.get_new_claims_form(request.form, g.user, post_info['postid'])
         if len(error) == 0:
-            print(post_info)
             [completed_claim, claim] = database_helpers.add_claim(submitted, post_info['postid'], g.user)
             if completed_claim:
                 if database_helpers.check_for_transaction(claim):
-                    print("\n\nTransactiom Completed\n")
                     return redirect(url_for('claim_completion', is_transaction_complete=True ))
                 return redirect(url_for('claim_completion', is_transaction_complete=False ))
             else:

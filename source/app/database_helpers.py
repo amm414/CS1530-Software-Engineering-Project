@@ -10,6 +10,8 @@ def generate_random_postings():
     return result
 
 
+
+
 def add_new_post(form_input, current_user):
     db.session.add(models.Posting(
         userid = current_user.userid,
