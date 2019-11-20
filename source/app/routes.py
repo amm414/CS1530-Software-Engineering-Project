@@ -110,12 +110,14 @@ def edit_account(error=""):
         return redirect(url_for('login'))
     title = 'Edit Account'
     current_user = g.user
-
+    error = ''
     if request.method == 'POST':
         [result, error] = form_submissions.get_modified_account_info(request.form, g.user.userid)
         if len(error) == 0 and check_password_hash(g.user.password, str(result['oldpassword'])):
+            if result['deleteaccount']:
+                database_helpers.remove_user(g.user.userid)
             if database_helpers.update_current_user(g.user, result):
-                return redirect(url_for('user_home_screen'))
+                return redirect(url_for('login'))
     return render_template('edit-account.html', current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  error=error, current_user=current_user, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
 
 ###################################################################
@@ -148,6 +150,8 @@ def edit_posting(error=""):
     if request.method == 'POST':
         [results, error] = form_submissions.get_form_create_post(request.form, CATEGORIES)
         if len(error) == 0:
+            if result['deletepost']:
+                database_helpers.remove_post_archive(results['postid'])
             database_helpers.modify_post_by_id(results, posting_info[0])
             return redirect(url_for('user_home_screen'))
     return render_template('edit-posting-view.html',contact_options=CONTACT_METHOD,  categories=CATEGORIES, js_file="tag-javascript.js", current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'), post=posting_info)
@@ -188,7 +192,7 @@ def user_home_screen():
         postings = database_helpers.generate_random_postings()
     for elem in postings:
         print(elem)
-    return render_template('user-view.html', category=CATEGORIES, able_to_filter=True, submitted=submitted, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings)
+    return render_template('user-view.html', categories=CATEGORIES, able_to_filter=True, submitted=submitted, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings)
 
 ########################### CLAIMS ##########################################
 # the claim pages

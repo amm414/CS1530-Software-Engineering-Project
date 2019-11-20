@@ -23,6 +23,7 @@
   font-weight: bold;
   padding: 0 30px;
   text-align: center;
+  overflow: hidden;
 }
 
 .card-button:hover{

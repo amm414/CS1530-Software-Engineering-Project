@@ -13,7 +13,6 @@ def generate_random_postings():
 def add_new_post(form_input, current_user):
     db.session.add(models.Posting(
         userid = current_user.userid,
-        username = current_user.username,
         date = datetime.now(),
         title = form_input['title'],
         description = form_input['description'],
@@ -93,3 +92,11 @@ def get_posting_by_id(postid):
             models.User.email, models.User.rating, models.User.userid, models.User.username
         ).first()
     return posting_info, poster_info
+
+def remove_user(userid):
+    User.query.filter_by(userid=userid).delete()
+    db.session.commit()
+
+def remove_post_archive(postid):
+    Posting.query.filter_by(postid=postid).delete()
+    db.session.commit()
