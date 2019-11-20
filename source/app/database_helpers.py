@@ -95,7 +95,7 @@ def get_posting_by_id(postid):
     return posting_info, poster_info
 
 def remove_user(userid):
-    User.query.filter_by(userid=userid).delete()
+    models.User.query.filter_by(userid=userid).delete()
     db.session.commit()
 
 def remove_post_archive(postid):

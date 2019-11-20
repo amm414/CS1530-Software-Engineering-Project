@@ -66,8 +66,19 @@
         <textarea class="form-control textarea-box" name="bio" id="exampleFormControlTextarea1" rows="10">{{current_user.bio}}</textarea>
       </div>
 
+      <div class="delete-grouping">
+        <p>Check this to delete your Account. Be careful, this will be hard to undo...</p>
+        <label class="form-check-label checkmark-label ">
+          <input type="checkbox" class="form-check-input create-posting-checkmark" name="deleteaccount" value="delete">
+          <span class="checkmark-span"></span>
+          Delete Account
+        </label>
+      </div>
+
+
     </div>
   </div>
+
 
 
   <div class="edit-posting-submit-button-group">

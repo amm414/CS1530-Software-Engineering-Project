@@ -263,6 +263,14 @@ def validate_password_simple(password):
     except Exception as e:
         return [False, "Try Resubmitting information."]
 
+def validate_delete(forms):
+    try:
+        if forms['deleteaccount'] == 'delete':
+            return [True, 'delete']
+    except Exception as e:
+        pass
+    return [False, "nothing"]
+
 def generate_fields_edit_account(forms, userid):
     new_account_info = {}
     new_account_info['userid']          = [True, str(userid)]
@@ -272,6 +280,7 @@ def generate_fields_edit_account(forms, userid):
     new_account_info['phonenumber']     = validate_phone_number(forms['phonenumber'])
     new_account_info['personalemail']   = validate_personal_email(forms['personalemail'])
     new_account_info['bio']             = validate_bio(forms['bio'])
+    new_account_info['deleteaccount']   = validate_delete(forms)
     return new_account_info
 
 #############################################################################

@@ -43,3 +43,9 @@
 .create-account-submit-button{
   margin-top: 30px;
 }
+
+.delete-grouping{
+  padding-bottom: 50px;
+  margin: auto;
+  width: 300px;
+}

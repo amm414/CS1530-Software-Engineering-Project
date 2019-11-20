@@ -115,7 +115,7 @@ def edit_account(error=""):
     if request.method == 'POST':
         [result, error] = form_submissions.get_modified_account_info(request.form, g.user.userid)
         if len(error) == 0 and check_password_hash(g.user.password, str(result['oldpassword'])):
-            if result['deleteaccount']:
+            if result['deleteaccount'] == "delete":
                 database_helpers.remove_user(g.user.userid)
             if database_helpers.update_current_user(g.user, result):
                 return redirect(url_for('login'))
