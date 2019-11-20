@@ -111,12 +111,14 @@ def edit_account(error=""):
         return redirect(url_for('login'))
     title = 'Edit Account'
     current_user = g.user
-
+    error = ''
     if request.method == 'POST':
         [result, error] = form_submissions.get_modified_account_info(request.form, g.user.userid)
         if len(error) == 0 and check_password_hash(g.user.password, str(result['oldpassword'])):
+            if result['deleteaccount']:
+                database_helpers.remove_user(g.user.userid)
             if database_helpers.update_current_user(g.user, result):
-                return redirect(url_for('user_home_screen'))
+                return redirect(url_for('login'))
     return render_template('edit-account.html', current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  error=error, current_user=current_user, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
 
 ###################################################################
@@ -149,6 +151,8 @@ def edit_posting(error=""):
     if request.method == 'POST':
         [results, error] = form_submissions.get_form_create_post(request.form, CATEGORIES)
         if len(error) == 0:
+            if result['deletepost']:
+                database_helpers.remove_post_archive(results['postid'])
             database_helpers.modify_post_by_id(results, posting_info[0])
             return redirect(url_for('user_home_screen'))
     return render_template('edit-posting-view.html',contact_options=CONTACT_METHOD,  categories=CATEGORIES, js_file="tag-javascript.js", current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'), post=posting_info)
@@ -237,12 +241,26 @@ def claim_submission():
         return render_template('claim.html', error=error, post=post_info, isSeller=False, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('claim') )
 
     if request.method == 'POST':
-        [submitted, error] = form_submissions.get_new_claims_form(request.form, current_user, post_info['postid'])
-        if len(errors) == 0:
-            return render_template('claim-completed')
+        [submitted, error] = form_submissions.get_new_claims_form(request.form, g.user, post_info['postid'])
+        if len(error) == 0:
+            print(post_info)
+            [completed_claim, claim] = database_helpers.add_claim(submitted, post_info['postid'], g.user)
+            if completed_claim:
+                if database_helpers.check_for_transaction(claim):
+                    print("\n\nTransactiom Completed\n")
+                    return redirect(url_for('claim_completion', is_transaction_complete=True ))
+                return redirect(url_for('claim_completion', is_transaction_complete=False ))
+            else:
+                error = "Please resubmit your claim. There was an issue. You may have entered invalid data."
+
 
     return render_template('claim.html', error=error, post=post_info, isSeller=isSeller, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('claim') )
 
+@app.route('/claim-complete', methods=['GET', 'POST'])
+def claim_completion(is_transaction_complete=False):
+    if g.user is None:
+        return redirect(url_for('login'))
+    return render_template('claim-complete.html', is_transaction_complete=is_transaction_complete, title="Claim Complete", error='', current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), css_file=helper_functions.generate_linked_files('claim'))
 
 # The HELP page
 @app.route('/help-and-FAQ')
