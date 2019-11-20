@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import redirect, render_template, request, session, url_for, abort, g, flash
 from random import shuffle
 from datetime import datetime
-from sqlalchemy import and_
+from sqlalchemy import and_, or_
 
 CATEGORIES = ['All', 'Textbooks', 'Furniture', 'Food', 'Events', 'Software', 'Electronics',
  'Beauty and Personal Care', 'Clothes', 'School Supplies', 'Appliances']
@@ -180,21 +180,29 @@ def user_home_screen():
         minPrice = request.args.get('minPrice')
         maxPrice = request.args.get('maxPrice')
         search = request.args.get('search')
+        category = request.args.get('category')
+        categoryIsAll = False
+        if category == 'All':
+            categoryIsAll = True
         if not minPrice:
             postings = database_helpers.generate_random_postings()
         else:
             # this is where the FILTERING should go
             #postings = database_helpers.generate_random_postings()
             if not search:
-                postings = Posting.query.filter(Posting.price < request.args.get('maxPrice')). \
-                                         filter(Posting.price > request.args.get('minPrice')).all()
-                                         #filter(Posting.title.like(request.args.get('search')).all()
+                postings = Posting.query.filter(
+                                    and_(Posting.price > minPrice,
+                                         Posting.price < maxPrice,
+                                         or_(Posting.category.contains(category), categoryIsAll)
+                                         )
+                                    )
             else:
                 postings = Posting.query.filter(
                                     and_(
                                         Posting.title.contains(search),
                                         Posting.price > minPrice,
-                                        Posting.price < maxPrice
+                                        Posting.price < maxPrice,
+                                        or_(Posting.category.contains(category), categoryIsAll)
                                         )
                                     )
     else:
@@ -204,7 +212,7 @@ def user_home_screen():
         postings = database_helpers.generate_random_postings()
     for elem in postings:
         print(elem)
-    return render_template('user-view.html', category=CATEGORIES, able_to_filter=True, submitted=submitted, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings)
+    return render_template('user-view.html', categories=CATEGORIES, able_to_filter=True, submitted=submitted, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings)
 
 ########################### CLAIMS ##########################################
 # the claim pages
