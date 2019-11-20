@@ -162,7 +162,6 @@ def generate_return_values(given):
     error = []
     good_results = {}
     for key, elem in given.items():
-        print("ELEM: is " + str(key) + "..." + str(elem))
         if elem[0]:
             good_results[key] = elem[1]
         else:
@@ -201,7 +200,6 @@ def generate_fields_create_account(forms):
     new_account_info['bio']             = validate_bio(forms['bio'])
     new_account_info['rating']          = [True, '5']
     new_account_info['numRatings']      = [True, '0']
-    print(forms['phonenumber'])
     return new_account_info
 
 def validate_email(field):
@@ -258,7 +256,6 @@ def validate_bio(field):
 
 def get_modified_account_info(forms, userid):
     result = generate_fields_edit_account(forms, userid)
-    print(result)
     return generate_return_values(result)
 
 def validate_password_simple(password):
@@ -282,9 +279,32 @@ def generate_fields_edit_account(forms, userid):
 #############################################################################
 # Claims
 def get_new_claims_form(forms, current_user, postid):
-    results = generate_claims_forms(forms, current_user)
+    results = generate_claims_forms(forms, current_user, postid)
     return generate_return_values(results)
 
 def generate_claims_forms(forms, current_user, postid):
     claim_info = {}
-    claim_info['postid'] = [True, postid]
+    claim_info['postid']        = [True, postid]
+    claim_info['userid']        = [True, current_user.userid]
+    claim_info['rating']        = validate_rating_claims(forms['rating'])
+    claim_info['buyeremail']    = validate_buyer_email(forms)
+    return claim_info
+
+def validate_rating_claims(field):
+    try:
+        field = int(field)
+        if field > 0 and field < 6:
+            return [True, field]
+        raise ValueError
+    except Exception as e:
+        return [False, "Please resubmit your claim!"]
+
+def validate_buyer_email(forms):
+    if 'buyeremail' in forms:
+        try:
+            field = str(forms['buyeremail'])
+            if get_email(field) != False:
+                return [True, get_email(field)]
+        except Exception as e:
+            pass
+    return [True, False]

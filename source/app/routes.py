@@ -220,12 +220,26 @@ def claim_submission():
         return render_template('claim.html', error=error, post=post_info, isSeller=False, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('claim') )
 
     if request.method == 'POST':
-        [submitted, error] = form_submissions.get_new_claims_form(request.form, current_user, post_info['postid'])
-        if len(errors) == 0:
-            return render_template('claim-completed')
+        [submitted, error] = form_submissions.get_new_claims_form(request.form, g.user, post_info['postid'])
+        if len(error) == 0:
+            print(post_info)
+            [completed_claim, claim] = database_helpers.add_claim(submitted, post_info['postid'], g.user)
+            if completed_claim:
+                if database_helpers.check_for_transaction(claim):
+                    print("\n\nTransactiom Completed\n")
+                    return redirect(url_for('claim_completion', is_transaction_complete=True ))
+                return redirect(url_for('claim_completion', is_transaction_complete=False ))
+            else:
+                error = "Please resubmit your claim. There was an issue. You may have entered invalid data."
+
 
     return render_template('claim.html', error=error, post=post_info, isSeller=isSeller, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('claim') )
 
+@app.route('/claim-complete', methods=['GET', 'POST'])
+def claim_completion(is_transaction_complete=False):
+    if g.user is None:
+        return redirect(url_for('login'))
+    return render_template('claim-complete.html', is_transaction_complete=is_transaction_complete, title="Claim Complete", error='', current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), css_file=helper_functions.generate_linked_files('claim'))
 
 # The HELP page
 @app.route('/help-and-FAQ')

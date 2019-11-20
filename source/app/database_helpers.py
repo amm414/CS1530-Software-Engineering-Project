@@ -67,7 +67,6 @@ def modify_post_by_id(results, postid):
 
 def update_current_user(current_user, result):
     if 'password' in result:
-        print("change password")
         current_user.password = result['password']
     current_user.phonenumber = result['phonenumber']
     current_user.personalemail = result['personalemail']
@@ -100,3 +99,72 @@ def remove_user(userid):
 def remove_post_archive(postid):
     Posting.query.filter_by(postid=postid).delete()
     db.session.commit()
+
+def get_user_by_email(email):
+    return models.User.query.filter_by(email=email).first()
+
+def add_claim(form, postid, user):
+    try:
+        post_info, poster_info = get_posting_by_id(postid)
+        if user.userid == post_info.userid and not form['buyeremail'] == False:
+            buyer_info = get_user_by_email(form['buyeremail'])
+            newClaim = models.Claim(
+                postid          = postid,
+                sellerid        = user.userid,
+                buyerid         = buyer_info.userid,
+                usersubmitted   = user.userid,
+                date            = datetime.now(),
+                Rating          = form['rating']
+            )
+            db.session.add(newClaim)
+            db.session.commit()
+            db.session.refresh(newClaim)
+            if newClaim.claimid is None:
+                return False, False
+            return True, newClaim
+        elif not user.userid == post_info.userid:
+            newClaim = models.Claim(
+                postid          = postid,
+                sellerid        = post_info.userid,
+                buyerid         = user.userid,
+                usersubmitted   = user.userid,
+                date            = datetime.now(),
+                Rating          = form['rating']
+            )
+            db.session.add(newClaim)
+            db.session.commit()
+            db.session.refresh(newClaim)
+            if newClaim.claimid is None:
+                return False, False
+            return True, newClaim
+    except Exception as e:
+        db.session.rollback()
+        return False, False
+
+def check_for_transaction(claim):
+    other_claim = models.Claim.query.filter(
+        models.Claim.postid==claim.postid,
+        models.Claim.sellerid==claim.sellerid,
+        models.Claim.buyerid==claim.buyerid,
+        models.Claim.claimid!=claim.claimid
+    ).first()
+    if other_claim is not None:
+        newTransaction = models.Transaction(
+            claimidseller   = claim.sellerid,
+            claimidbuyer    = claim.buyerid
+        )
+        db.session.add(newTransaction)
+        db.session.commit()
+        db.session.refresh(newTransaction)
+        if newTransaction.transactionid is not None:
+            archive_posting(claim.postid)
+            return True
+        db.session.rollback()
+    return False
+
+def archive_posting(postid):
+    try:
+        models.Posting.query.filter_by(postid=postid).delete()
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()

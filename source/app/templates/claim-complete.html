@@ -1,0 +1,27 @@
+{% extends "base-no-box-template.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="col-xs-12 col-xl-8 offset-xl-2">
+    <div class="claim-response-content success">
+      <h3 class="claim-response-title">Claim was Successfully Processed!</h3>
+      {% if is_transaction_complete %}
+      <p>
+        Transaction completed. Your claim was paired with the other user
+        involved in the transaction. Your rating should be altered from
+        their rating; likewise their overall rating has been altered by
+        your rating.
+      </p>
+      {% else %}
+      <p>
+        Your claim has been saved. No other user has submitted the opposite
+        claim so your rating will not have affected the other user's rating.
+        Both user's invovled in a transaction need to submit 2 differnet
+        claims before ratigns are altered.
+      </p>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{% endblock %}

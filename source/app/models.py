@@ -33,9 +33,6 @@ def add_users(file):
         db.session.commit()
         if value['username'] == "admin" or value['username'] == 'jmd230':
                 db.session.refresh(newUser)
-                print(value['username'] + ": " + str(newUser.userid))
-    print("Finished")
-
 
 @app.cli.command('initdb')
 def initdb_command():
@@ -90,12 +87,15 @@ class Posting(db.Model):
 
 
 class Claim(db.Model):
+    __table_args__ = (
+        db.UniqueConstraint('postid', 'sellerid', 'buyerid', 'usersubmitted', name='unique_claim_buyer_seller'),
+    )
     claimid			= db.Column(db.Integer, primary_key = True)
     postid 			= db.Column(db.Integer, db.ForeignKey("posting.postid"))
     sellerid 		= db.Column(db.Integer, db.ForeignKey("user.userid"))
-    buyer 		    = db.Column(db.Integer, db.ForeignKey("user.userid"))
+    buyerid 		= db.Column(db.Integer, db.ForeignKey("user.userid"))
+    usersubmitted	= db.Column(db.Integer, db.ForeignKey("user.userid"))
     date 			= db.Column(db.Date, nullable = False)
-    isSeller		= db.Column(db.Boolean, nullable = False)
     Rating          = db.Column(db.Integer, nullable = False)
 
     def __repr__(self):
