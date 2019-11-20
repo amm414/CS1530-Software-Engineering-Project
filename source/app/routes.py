@@ -175,34 +175,31 @@ def user_home_screen():
     if g.user is None:
         return redirect(url_for('login'))
     if request.method == 'GET':
-        [submitted, randomize] = form_submissions.get_filters(request.form, False)
+        [submitted, randomize] = form_submissions.get_filters(request.args, True)
         # need to filter somehow
-        minPrice = request.args.get('minPrice')
-        maxPrice = request.args.get('maxPrice')
-        search = request.args.get('search')
-        category = request.args.get('category')
-        categoryIsAll = False
-        if category == 'All':
-            categoryIsAll = True
-        if not minPrice:
+        print("\n\nSubmitted:")
+        print(submitted)
+        categoryIsAll = True if submitted['category'] == 'All' else False
+        if randomize:
             postings = database_helpers.generate_random_postings()
         else:
             # this is where the FILTERING should go
             #postings = database_helpers.generate_random_postings()
-            if not search:
+            if submitted['search'] == '':
                 postings = Posting.query.filter(
-                                    and_(Posting.price > minPrice,
-                                         Posting.price < maxPrice,
-                                         or_(Posting.category.contains(category), categoryIsAll)
+                                    and_(
+                                        Posting.price > float(submitted['minPrice']),
+                                        Posting.price < float(submitted['maxPrice']),
+                                         or_(Posting.category.contains(submitted['category']), categoryIsAll)
                                          )
                                     )
             else:
                 postings = Posting.query.filter(
                                     and_(
-                                        Posting.title.contains(search),
-                                        Posting.price > minPrice,
-                                        Posting.price < maxPrice,
-                                        or_(Posting.category.contains(category), categoryIsAll)
+                                        Posting.title.contains(submitted['search']),
+                                        Posting.price > float(submitted['minPrice']),
+                                        Posting.price < float(submitted['maxPrice']),
+                                        or_(Posting.category.contains(submitted['category']), categoryIsAll)
                                         )
                                     )
     else:

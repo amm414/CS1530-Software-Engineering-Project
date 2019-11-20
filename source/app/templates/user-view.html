@@ -23,7 +23,7 @@
           <h4 class="sidebar-label">Filter by Category</h4>
           <select class="selectpicker sidebar-select-category" name="category">
             {% for category in categories %}
-              <option value="{{ category }}">{{ category}}</option>
+              <option value="{{ category }}" {% if submitted['category'] == category %} selected {% endif %}>{{ category}}</option>
             {% endfor %}
           </select>
         </div>
@@ -37,12 +37,12 @@
 
         <div class="sidebar-price-grouping">
           <h5 class="sidebar-price-text">Minimum Price: </h5>
-          <input type="text" name="minPrice" class="form-control mb-2 mr-sm-2 sidebar-price-box" id="inlineFormInputName2" {% if (submitted.minPrice | string) != '' %} value="{{ submitted.minPrice }}" {% endif %}>
+          <input type="text" name="minPrice" class="form-control mb-2 mr-sm-2 sidebar-price-box" id="inlineFormInputName2" {% if submitted['minPrice'] %} value="{{ submitted['minPrice'] }}"{% else %} value='0' {% endif %}>
         </div>
 
         <div class="sidebar-price-grouping">
           <h5 class="sidebar-price-text">Maximum Price:</h5>
-          <input type="text" name="maxPrice" class="form-control mb-2 mr-sm-2 sidebar-price-box" id="inlineFormInputName2" {% if (submitted.maxPrice | string) != '' %} value="{{ submitted.maxPrice }}" {% endif %}>
+          <input type="text" name="maxPrice" class="form-control mb-2 mr-sm-2 sidebar-price-box" id="inlineFormInputName2" {% if submitted['maxPrice'] != '0' %} value="{{ submitted['maxPrice'] }}"{% else %} value='2000' {% endif %}>
         </div>
       </li>
 

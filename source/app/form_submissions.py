@@ -30,10 +30,10 @@ def verify_password(user, password):
 def get_category(field):
     try:
         if str(field) == "All":
-            return ''
+            return 'All'
         return str(field)
     except Exception as e:
-        return ''
+        return 'All'
 
 #               MAY WANT TO EDIT THIS
 # takes inputted search textbox input for backend search
@@ -49,32 +49,30 @@ def get_max_price(field, min_field):
     try:
         field = float(field)
         min_field = float(min_field)
-        if field > 0 and field > min_field and field <= 2000:
+        if field > 0 and field > min_field and field < 2000:
             return str(field)
-        elif field > 2000:
-            return '2000'
         else:
-            return '0'
-    except ValueError as e:
-        return '0'
+            return '2000'
+    except Exception as e:
+        return '2000'
 
 def get_min_price(field):
     try:
         field = float(field)
-        if field > 0 and field > min_field and field <= 2000:
+        if field > 0 and field <= 2000:
             return str(field)
         elif field > 2000:
             return '2000'
         else:
             return '0'
-    except ValueError as e:
+    except Exception as e:
         return '0'
 
 def should_randomize(submitted):
     return submitted == {'minPrice': '0', 'maxPrice': '0', 'search': '', 'category': ''}
 
 def get_filters(forms, get_recieved):
-    if get_recieved:
+    if get_recieved and forms.get('minPrice') is not None:
         submitted = {}
         submitted['minPrice'] = get_min_price(forms['minPrice'])
         submitted['maxPrice'] = get_max_price(forms['maxPrice'], submitted['minPrice'])
