@@ -18,21 +18,24 @@ def add_users(file):
                 new_item[key] = row[key]
             new_item['username'] = get_username(new_item['email'])
             list.append(new_item)
+    i = 0
     for value in list:
-        newUser = User(
-            username            = value['username'][1],
-            email               = value['email'],
-            personalemail       = value['personalemail'],
-            password            = generate_password_hash(value['password']),
-            phonenumber         = value['phonenumber'],
-            bio                 = value['bio'],
-            rating              = 5,
-            numRatings          = 0
-        )
-        db.session.add(newUser)
-        db.session.commit()
-        if value['username'] == "admin" or value['username'] == 'jmd230':
-                db.session.refresh(newUser)
+        i += 1
+        if i <20:
+            newUser = User(
+                username            = value['username'][1],
+                email               = value['email'],
+                personalemail       = value['personalemail'],
+                password            = generate_password_hash(value['password']),
+                phonenumber         = value['phonenumber'],
+                bio                 = value['bio'],
+                rating              = 5,
+                numRatings          = 0
+            )
+            db.session.add(newUser)
+            db.session.commit()
+            if value['username'] == "admin" or value['username'] == 'jmd230':
+                    db.session.refresh(newUser)
 
 @app.cli.command('initdb')
 def initdb_command():

@@ -159,7 +159,10 @@ def check_for_transaction(claim):
         db.session.commit()
         db.session.refresh(newTransaction)
         if newTransaction.transactionid is not None:
+            print("Try to Archive!")
+            # alter_ratings(claim, other_claim)
             archive_posting(claim.postid)
+            print("Archived!")
             return True
         db.session.rollback()
     return False
@@ -170,3 +173,23 @@ def archive_posting(postid):
         db.session.commit()
     except Exception as e:
         db.session.rollback()
+
+def alter_ratings(claim, other_claim):
+    print("alter ratings")
+    [current_rating, current_number] = list(models.User.query.filter_by(
+        userid=claim.userid).with_entities(models.User.rating, models.User.numRatings).first())
+    [other_current_rating, other_current_number] = list(models.User.query.filter_by(
+        userid=other_claim.userid).with_entities(models.User.rating, models.User.numRatings).first())
+    current_rating = (current_rating*(current_number+1) + claim.Rating)/(current_number+1)
+    other_current_rating = (other_current_rating*(other_current_number+1) + other_claim.Rating)/(other_current_number+1)
+    current_number += 1
+    other_current_number += 1
+    models.User.query.filter_by(userid=claim.userid).update(
+        rating      = current_rating,
+        numRatings  = current_number
+    )
+    models.User.query.filter_by(userid=claim.userid).update(
+        rating      = other_current_rating,
+        numRatings  = other_current_number
+    )
+    print("FINISHED alter ratings")

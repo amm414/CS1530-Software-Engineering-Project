@@ -246,6 +246,7 @@ def claim_submission():
             [completed_claim, claim] = database_helpers.add_claim(submitted, post_info['postid'], g.user)
             if completed_claim:
                 if database_helpers.check_for_transaction(claim):
+                    print("Archived!: should give altered claim completion")
                     return redirect(url_for('claim_completion', is_transaction_complete=True ))
                 return redirect(url_for('claim_completion', is_transaction_complete=False ))
             else:
@@ -258,7 +259,9 @@ def claim_submission():
 def claim_completion(is_transaction_complete=False):
     if g.user is None:
         return redirect(url_for('login'))
-    return render_template('claim-complete.html', is_transaction_complete=is_transaction_complete, title="Claim Complete", error='', current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), css_file=helper_functions.generate_linked_files('claim'))
+    is_transaction_complete = request.args.get('is_transaction_complete')
+    print(is_transaction_complete)
+    return render_template('claim-complete.html', is_transaction_complete=is_transaction_complete=="True", title="Claim Complete", error='', current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), css_file=helper_functions.generate_linked_files('claim'))
 
 # The HELP page
 @app.route('/help-and-FAQ')
