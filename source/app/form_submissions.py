@@ -3,8 +3,10 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 # Returns email if in valid format; else returns false
 def get_email(email_field):
+    regex = '^\w+([\.-]?\w+ )*@(\w+.)*pitt.edu'
+    old_regex = '\w+@(\w+.)*pitt.edu'
     try:
-        if re.search('\w+@(\w+.)*pitt.edu', str(email_field)) is not None:
+        if re.search(regex, str(email_field)) is not None:
             return email_field
         raise ValueError
     except Exception as e:
@@ -220,26 +222,33 @@ def validate_password(password1, password2):
     except Exception as e:
         return [False, "Both Password fields must match and have between 8 and 32 characters (inclusive)."]
 
+def convert_number(phone):
+    phone = phone.replace('-', '')
+    phone = phone.replace('(', '')
+    phone = phone.replace(')', '')
+    print(phone)
+    if len(phone) == 10:
+        phone = '1' + phone
+    elif not len(phone) == 11 or not phone[0] == '1':
+        raise ValueError
+    return int(phone)
+
+
 ### ADD MORE HERE ###
 def validate_phone_number(field):
     try:
         phone_number = str(field)
-        if len(phone_number) == 10:
-            phone_number = '1' + phone_number
-            return [True, phone_number]
-        elif len(phone_number) == 11 and phone_number[0] == '1':
-            return [True, phone_number]
-        elif phone_number.split() == '':
-            return [True, '']
+        phone_number = convert_number(phone_number)
     except Exception as e:
         return [False, "Phone number must be 10 characters long or 11 characters long with the country code being '1' in order to be processed."]
     return [True, '']
 
 
 def validate_personal_email(field):
+    email_regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
     try:
         field = str(field)
-        if re.search(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", field) is not None:
+        if re.search(email_regex, field) is not None:
             return [True, field]
     except Exception as e:
         return [False, "The personal email address is not a legal value."]
@@ -248,9 +257,11 @@ def validate_personal_email(field):
 def validate_bio(field):
     try:
         field = str(field)
-        return [True, field]
+        if len(field) <  251:
+            return [True, field]
     except Exception as e:
         return [False, "The biography is unable to be processed. Possibly an invalid symbol."]
+    return [False, "Length exceeds 250 characters"]
 
 def get_modified_account_info(forms, userid):
     result = generate_fields_edit_account(forms, userid)
