@@ -98,10 +98,6 @@ def remove_user(userid):
     models.User.query.filter_by(userid=userid).delete()
     db.session.commit()
 
-def remove_post_archive(postid):
-    Posting.query.filter_by(postid=postid).delete()
-    db.session.commit()
-
 def get_user_by_email(email):
     return models.User.query.filter_by(email=email).first()
 
@@ -119,10 +115,6 @@ def add_claim(form, postid, user):
                 Rating          = form['rating']
             )
             db.session.add(newClaim)
-            db.session.commit()
-            db.session.refresh(newClaim)
-            if newClaim.claimid is None:
-                return False, False
             return True, newClaim
         elif not user.userid == post_info.userid:
             newClaim = models.Claim(
@@ -134,62 +126,69 @@ def add_claim(form, postid, user):
                 Rating          = form['rating']
             )
             db.session.add(newClaim)
-            db.session.commit()
-            db.session.refresh(newClaim)
-            if newClaim.claimid is None:
-                return False, False
             return True, newClaim
     except Exception as e:
         db.session.rollback()
         return False, False
+    return False, False
 
 def check_for_transaction(claim):
-    other_claim = models.Claim.query.filter(
-        models.Claim.postid==claim.postid,
-        models.Claim.sellerid==claim.sellerid,
-        models.Claim.buyerid==claim.buyerid,
-        models.Claim.claimid!=claim.claimid
-    ).first()
-    if other_claim is not None:
-        newTransaction = models.Transaction(
-            claimidseller   = claim.sellerid,
-            claimidbuyer    = claim.buyerid
-        )
-        db.session.add(newTransaction)
-        db.session.commit()
-        db.session.refresh(newTransaction)
-        if newTransaction.transactionid is not None:
+    try:
+        print(claim.postid)
+        print(claim.sellerid)
+        print(claim.buyerid)
+        print(claim.usersubmitted)
+        other_claim = models.Claim.query.filter(
+            models.Claim.postid==claim.postid,
+            models.Claim.sellerid==claim.sellerid,
+            models.Claim.buyerid==claim.buyerid,
+            models.Claim.usersubmitted!=claim.usersubmitted
+        ).first()
+        print("Finihsed")
+        if other_claim is not None:
+            print(other_claim.usersubmitted)
+            newTransaction = models.Transaction(
+                claimidseller   = claim.sellerid,
+                claimidbuyer    = claim.buyerid
+            )
+            db.session.add(newTransaction)
+            print("Try to Alter Ratings!")
+            alter_ratings(claim, other_claim)
             print("Try to Archive!")
-            # alter_ratings(claim, other_claim)
             archive_posting(claim.postid)
-            print("Archived!")
+            print("Archived! Now Delete The Claims:")
+            delete_claim(claim.claimid)
+            delete_claim(other_claim.claimid)
             return True
+    except Exception as e:
+        print(e)
+        print("Rollback in check_for_transaction")
         db.session.rollback()
+        return None
     return False
+
+def delete_claim(claimid):
+    try:
+        models.Claim.query.filter_by(claimid=claimid).delete()
+    except Exception as e:
+        pass
 
 def archive_posting(postid):
     try:
         models.Posting.query.filter_by(postid=postid).delete()
-        db.session.commit()
     except Exception as e:
         db.session.rollback()
 
-def alter_ratings(claim, other_claim):
-    print("alter ratings")
-    [current_rating, current_number] = list(models.User.query.filter_by(
-        userid=claim.userid).with_entities(models.User.rating, models.User.numRatings).first())
-    [other_current_rating, other_current_number] = list(models.User.query.filter_by(
-        userid=other_claim.userid).with_entities(models.User.rating, models.User.numRatings).first())
-    current_rating = (current_rating*(current_number+1) + claim.Rating)/(current_number+1)
-    other_current_rating = (other_current_rating*(other_current_number+1) + other_claim.Rating)/(other_current_number+1)
+def get_new_rating(current_rating, current_number, new_rating):
     current_number += 1
-    other_current_number += 1
-    models.User.query.filter_by(userid=claim.userid).update(
-        rating      = current_rating,
-        numRatings  = current_number
-    )
-    models.User.query.filter_by(userid=claim.userid).update(
-        rating      = other_current_rating,
-        numRatings  = other_current_number
-    )
+    current_rating = current_rating * (current_number-1)/current_number + new_rating * 1/current_number
+    return [current_rating, current_number]
+
+def alter_ratings(claim, other_claim):
+    print("Getting Ratings")
+    user1 = models.User.query.filter_by(userid=claim.usersubmitted).first()
+    user2 = models.User.query.filter_by(userid=other_claim.usersubmitted).first()
+    print("Update the Ratings Manually")
+    [user1.rating, user1.numRatings] = get_new_rating(user1.rating, user1.numRatings, other_claim.Rating)
+    [user2.rating, user2.numRatings] = get_new_rating(user2.rating, user2.numRatings, claim.Rating)
     print("FINISHED alter ratings")

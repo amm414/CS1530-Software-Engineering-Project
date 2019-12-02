@@ -243,14 +243,14 @@ def claim_submission():
         if len(error) == 0:
             [completed_claim, claim] = database_helpers.add_claim(submitted, post_info['postid'], g.user)
             if completed_claim:
-                if database_helpers.check_for_transaction(claim):
-                    print("Archived!: should give altered claim completion")
+                is_transaction_completed = database_helpers.check_for_transaction(claim)
+                if is_transaction_completed:
+                    db.session.commit()
                     return redirect(url_for('claim_completion', is_transaction_complete=True ))
-                return redirect(url_for('claim_completion', is_transaction_complete=False ))
-            else:
-                error = "Please resubmit your claim. There was an issue. You may have entered invalid data."
-
-
+                elif is_transaction_completed is not None:
+                    db.session.commit()
+                    return redirect(url_for('claim_completion', is_transaction_complete=False ))
+            error = "Please resubmit your claim. There was an issue. You may have entered invalid data."
     return render_template('claim.html', error=error, post=post_info, isSeller=isSeller, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('claim') )
 
 @app.route('/claim-complete', methods=['GET', 'POST'])
