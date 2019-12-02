@@ -22,17 +22,20 @@
   <div class="row">
     <div class="col-md-12 col-lg-6">
       <div class="create-account-input-group">
-        <h5 class="create-account-label">Old Password (Must Enter)</h5>
+        <h5 class="create-account-label">Old Password (REQUIRED)</h5>
+        <p class='requirement-submission'>REQUIRED. Need in order for any change to persist.</p>
         <input class="form-control form-control-lg" name="oldpassword" type="password" placeholder="Password...">
       </div>
 
       <div class="create-account-input-group">
         <h5 class="create-account-label">New Password</h5>
+        <p class='requirement-submission'>REQUIRED. Must have between 8 and 32 characters, inclusive.</p>
         <input class="form-control form-control-lg" name="newpassword" type="password" placeholder="New Password...">
       </div>
 
       <div class="create-account-input-group">
         <h5 class="create-account-label">Retype New Password</h5>
+        <p class='requirement-submission'>REQUIRED. Must be identical to above)</p>
         <input class="form-control form-control-lg" name="newpassword2" type="password" placeholder="Retype New Password...">
       </div>
     </div>
@@ -40,12 +43,14 @@
     <div class="col-md-12 col-lg-6">
 
       <div class="create-account-input-group">
-        <h5 class="create-account-label">Phone Number (Optional)</h5>
+        <h5 class="create-account-label">Phone Number</h5>
+        <p class='requirement-submission'>OPTIONAL. Must be 10 characters long or 11 with USA country code (1) at the start.</p>
         <input class="form-control form-control-lg" name="phonenumber" type="text" value={{current_user.phonenumber}}>
       </div>
 
       <div class="create-account-input-group">
-        <h5 class="create-account-label">Personal Email (Optional)</h5>
+        <h5 class="create-account-label">Personal Email</h5>
+        <p class='requirement-submission'>OPTIONAL. Maximum of 70 characters.</p>
         <input class="form-control form-control-lg" name="personalemail" type="text" value={{current_user.personalemail}}>
       </div>
     </div>
@@ -58,6 +63,7 @@
 
       <div class="create-account-description-box">
         <h5 class="create-posting-label">Describe yourself!</h5>
+        <p class='requirement-submission'>OPTIONAL. Maximum of 1,000 characters)</p>
         <p>
           This description may help attract users to your postings.
           It can help paint a picture to other users about whou <i>you</i> are.

@@ -151,8 +151,6 @@ def edit_posting(error=""):
     if request.method == 'POST':
         [results, error] = form_submissions.get_form_create_post(request.form, CATEGORIES)
         if len(error) == 0:
-            if result['deletepost']:
-                database_helpers.remove_post_archive(results['postid'])
             database_helpers.modify_post_by_id(results, posting_info[0])
             return redirect(url_for('user_home_screen'))
     return render_template('edit-posting-view.html',contact_options=CONTACT_METHOD,  categories=CATEGORIES, js_file="tag-javascript.js", current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'), post=posting_info)
