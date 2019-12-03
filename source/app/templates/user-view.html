@@ -82,7 +82,7 @@
                </div>
 
                <div class="card-seller-price">
-                 <div class="card-cost-amount">${{ post.price }}</div>
+                 <div class="card-cost-amount">${{'%0.2f' | format( post.price | float)  }}</div>
                </div>
              </div>
            </div>

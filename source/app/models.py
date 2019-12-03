@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from app import app, db
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
-from app.form_submissions import get_username
+from app.form_submissions import get_username, validate_phone_number
 import csv
 
 
@@ -17,7 +17,6 @@ def add_postings(file):
             for key in key_list:
                 new_item[key] = row[key]
             list.append(new_item)
-
     for value in list:
         newPosting = Posting(
             userid          = value['userid'],
@@ -41,6 +40,7 @@ def add_users(file):
             new_item = {}
             for key in key_list:
                 new_item[key] = row[key]
+            new_item['phonenumber'] = validate_phone_number(new_item['phonenumber'])[1]
             new_item['username'] = get_username(new_item['email'])
             list.append(new_item)
     for value in list:
@@ -56,7 +56,7 @@ def add_users(file):
         )
         db.session.add(newUser)
         db.session.commit()
-        
+
 
 @app.cli.command('initdb')
 def initdb_command():
@@ -130,8 +130,9 @@ class Claim(db.Model):
 
 class Transaction(db.Model):
     transactionid	= db.Column(db.Integer, primary_key = True)
-    claimidseller	= db.Column(db.Integer, db.ForeignKey("claim.claimid"))
-    claimidbuyer	= db.Column(db.Integer, db.ForeignKey("claim.claimid"))
+    date            = db.Column(db.Date, nullable = False)
+    claimidseller	= db.Column(db.Integer, db.ForeignKey("claim.claimid"), nullable = False)
+    claimidbuyer	= db.Column(db.Integer, db.ForeignKey("claim.claimid"), nullable = False)
 
     def __repr__(self):
         return '<Transaction {}: "{}">'.format(self.transactionid)
@@ -142,12 +143,13 @@ class ArchivedPosting(db.Model):
         db.UniqueConstraint('postid', 'buyerid', 'archivedpostid', 'sellerid', name='unique_archive_posting_constraint'),
     )
     archivedpostid  = db.Column(db.Integer, primary_key = True)
-    postid 			= db.Column(db.Integer, db.ForeignKey("posting.postid"), nullable = False)
+    transactionid   = db.Column(db.Integer, db.ForeignKey('transaction.transactionid'), nullable = False)
+    postid 			= db.Column(db.Integer, nullable = False)
     buyerid         = db.Column(db.Integer, db.ForeignKey("user.userid"), nullable = False)
     sellerid        = db.Column(db.Integer, db.ForeignKey("user.userid"), nullable = False)
     date 			= db.Column(db.Date, nullable = False)
     title   		= db.Column(db.String(80), nullable = False)
-    description 	= db.Column(db.String(250), nullable = False)
+    description 	= db.Column(db.String(250), nullable = True)
     price 			= db.Column(db.Integer, nullable = False)
     category 		= db.Column(db.String(80), nullable = False)
     contactmethod 	= db.Column(db.String(80), nullable = True)

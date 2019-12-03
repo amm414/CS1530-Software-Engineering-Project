@@ -3,7 +3,7 @@
   width: 100%;
   padding: 30px 10px;
   margin: 30px 0;
-  border: 5px solid #192857;
+  border: 5px solid #fff;
   font-size: 120%;
 }
 
@@ -20,7 +20,7 @@
 .account-column-info{
   background-color: #fff !important;
   width: 100%;
-  border: 3px solid #bfa458;
+  border: 3px solid #ffb81c;
   font-size: 115%;
   margin-bottom: 30px;
 }
@@ -38,14 +38,14 @@
 .account-edit-button{
   padding: 10px 30px;
   text-align: center;
-  border: 2px solid #bfa458;
-  color: #bfa458;
-  background-color: #192857;
+  border: 2px solid #ffb81c;
+  color: #ffb81c;
+  background-color: #003594;
 }
 
 .account-edit-button:hover{
-  background-color: #bfa458;
-  color: #192857;
+  background-color: #ffb81c;
+  color: #003594;
 }
 
 .bio-label{
@@ -61,12 +61,30 @@
   margin: 20px 0 10px 0;
   font-size: 115%;
   margin: auto;
-  color: #bfa458;
+  color: #ffb81c;
   display: inline-block;
 }
+
+
+.history-box{
+  width: 100%;
+  padding: 20px 30px;
+}
+
+.history-title{
+  text-align: center;
+  padding: 20px 0;
+}
+
 
 @media (min-width: 500px) {
   .account-email, .account-phone{
     font-size: 130%;
+  }
+}
+
+@media (max-width:499px) {
+  .history-box{
+    padding: 5px 25px;
   }
 }

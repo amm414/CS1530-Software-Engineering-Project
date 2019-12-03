@@ -101,8 +101,12 @@ def users_account():
         account_info = User.query.filter_by(userid=userid).first()
         if account_info is None:
             return redirect(url_for('not_found_error_item'))
+        postings    = database_helpers.get_postings(account_info.userid)
+        claims      = database_helpers.get_claims(account_info.userid)
+        sales       = database_helpers.get_sales(account_info.userid)
+        purchases   = database_helpers.get_purchases(account_info.userid)
         title = "USER: " + account_info.username
-    return render_template('account-view.html',current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('account-view'), account=account_info)
+    return render_template('account-view.html', purchases=purchases, postings=postings, sales=sales, claims=claims, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('account-view'), account=account_info)
 
 # The edit account screen
 @app.route('/edit-account', methods=['GET', 'POST'])

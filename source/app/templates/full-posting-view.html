@@ -44,7 +44,7 @@
       <div class="posting-price posting-grouping">
         <h4 class="posting-price-label">Price: </h4>
          <div class="posting-price-value">
-           $ {{ post.price }}
+           $ {{'%0.2f' | format(post.price | float)  }}
          </div>
       </div>
 

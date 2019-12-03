@@ -10,13 +10,13 @@ def populate():
 
 	category = ["All", "Textbooks", "Furniture", "Food", "Events", "Software", "Electronics", "Beauty and Personal Care", "Clothes", "School Supplies", "Appliances"]
 	contact = ["email", "phonenumber", "personalemail"]
-	
-	for i in range(0, 100):
-		title = WORDS[random.randint(0, len(WORDS))].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS))].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS))].decode('utf8')
+
+	for i in range(0, 5_000):
+		title = WORDS[random.randint(0, len(WORDS)-1)].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS)-1)].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS)-1)].decode('utf8')
 		if len(title) > 30:
 			title = title[:30]
 
-		description = WORDS[random.randint(0, len(WORDS))].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS))].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS))].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS))].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS))].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS))].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS))].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS))].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS))].decode('utf8')
+		description = WORDS[random.randint(0, len(WORDS)-1)].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS)-1)].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS)-1)].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS)-1)].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS)-1)].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS)-1)].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS)-1)].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS)-1)].decode('utf8') + " " + WORDS[random.randint(0, len(WORDS)-1)].decode('utf8')
 		if len(description) > 250:
 			description = description[:250]
 		with open('postingsData.csv', 'a') as the_file:

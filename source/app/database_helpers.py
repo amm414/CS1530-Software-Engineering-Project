@@ -9,9 +9,6 @@ def generate_random_postings():
         models.User.rating).order_by(func.random()).limit(30)
     return result
 
-
-
-
 def add_new_post(form_input, current_user):
     db.session.add(models.Posting(
         userid = current_user.userid,
@@ -134,20 +131,16 @@ def add_claim(form, postid, user):
 
 def check_for_transaction(claim):
     try:
-        print(claim.postid)
-        print(claim.sellerid)
-        print(claim.buyerid)
-        print(claim.usersubmitted)
         other_claim = models.Claim.query.filter(
             models.Claim.postid==claim.postid,
             models.Claim.sellerid==claim.sellerid,
             models.Claim.buyerid==claim.buyerid,
             models.Claim.usersubmitted!=claim.usersubmitted
         ).first()
-        print("Finihsed")
         if other_claim is not None:
             print(other_claim.usersubmitted)
             newTransaction = models.Transaction(
+                date            = datetime.now(),
                 claimidseller   = claim.sellerid,
                 claimidbuyer    = claim.buyerid
             )
@@ -155,11 +148,14 @@ def check_for_transaction(claim):
             print("Try to Alter Ratings!")
             alter_ratings(claim, other_claim)
             print("Try to Archive!")
-            archive_posting(claim.postid)
-            print("Archived! Now Delete The Claims:")
-            delete_claim(claim.claimid)
-            delete_claim(other_claim.claimid)
-            return True
+            if archive_posting(claim.postid, newTransaction):
+                print("Archived! Now Delete The Claims:")
+                delete_claim(claim.claimid)
+                delete_claim(other_claim.claimid)
+                print("Finished")
+                return True
+            else:
+                raise ValueError
     except Exception as e:
         print(e)
         print("Rollback in check_for_transaction")
@@ -173,11 +169,30 @@ def delete_claim(claimid):
     except Exception as e:
         pass
 
-def archive_posting(postid):
+def archive_posting(postid, transaction):
     try:
-        models.Posting.query.filter_by(postid=postid).delete()
+        post = models.Posting.query.filter_by(postid=postid).first()
+        print("got Post")
+        archivedPost = models.ArchivedPosting(
+            transactionid   = transaction.transactionid,
+            postid 			= post.postid,
+            buyerid         = transaction.claimidbuyer,
+            sellerid        = transaction.claimidseller,
+            date 			= datetime.now(),
+            title   		= post.title,
+            description 	= post.description,
+            price 			= post.price,
+            category 		= post.category,
+            contactmethod 	= post.contactmethod,
+            tags 			= post.tags
+        )
+        print(post.postid)
+        db.session.add(archivedPost)
+        db.session.delete(post)
+        return True
     except Exception as e:
         db.session.rollback()
+    return False
 
 def get_new_rating(current_rating, current_number, new_rating):
     current_number += 1
@@ -192,3 +207,51 @@ def alter_ratings(claim, other_claim):
     [user1.rating, user1.numRatings] = get_new_rating(user1.rating, user1.numRatings, other_claim.Rating)
     [user2.rating, user2.numRatings] = get_new_rating(user2.rating, user2.numRatings, claim.Rating)
     print("FINISHED alter ratings")
+
+def get_postings(userid):
+    try:
+        postings = models.Posting.query.filter_by(userid=userid).all()
+        print("Got postings for user")
+        return postings
+    except Exception as e:
+        pass
+    return None
+
+def get_claims(userid):
+    try:
+        claims = models.Claim.query.filter_by(usersubmitted=userid).join(models.Posting).with_entities(
+            models.Claim.date, models.Posting.title, models.Posting.postid
+        ).all()
+        print("Got Claims")
+        return claims
+    except Exception as e:
+        pass
+    return None
+
+def get_sales(userid):
+    try:
+        sales = models.ArchivedPosting.query.filter_by(sellerid=userid).with_entities(
+            models.ArchivedPosting.title, models.ArchivedPosting.buyerid, models.ArchivedPosting.price,
+            ).join(
+            models.Transaction).join(models.User, models.User.userid == models.ArchivedPosting.buyerid).with_entities(
+                    models.Transaction.date, models.ArchivedPosting.title, models.ArchivedPosting.price,
+                    models.User.username, models.User.userid).all()
+        print("Got sales")
+        return sales
+    except Exception as e:
+        pass
+    return None
+
+def get_purchases(userid):
+    try:
+        purchases = models.ArchivedPosting.query.filter_by(buyerid=userid).with_entities(
+            models.ArchivedPosting.title, models.ArchivedPosting.sellerid, models.ArchivedPosting.price,
+            ).join(
+            models.Transaction).join(models.User, models.User.userid == models.ArchivedPosting.sellerid).with_entities(
+                    models.Transaction.date, models.ArchivedPosting.title, models.ArchivedPosting.price,
+                    models.User.username, models.User.userid).all()
+        print("Got purchases")
+        return purchases
+    except Exception as e:
+        pass
+    return None

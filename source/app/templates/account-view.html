@@ -54,4 +54,122 @@
   </div>
 </div>
 
+<hr class="styled-hrline"/>
+
+<div class="row">
+  <div class="history-box">
+    <div class="row">
+      {% if postings %}
+      <h4 class="history-title">User's Ongoing Postings:</h4>
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered ">
+          <thead>
+            <tr>
+              <th scope="col">Post Title</th>
+              <th scope="col">Post Price</th>
+              <th scope="col">Link to Posting</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for posting in postings %}
+            <tr>
+              <td>{{ posting.title }}</td>
+              <td>{{ '%0.2f' | format(posting.price | float)  }}</td>
+              <td><a href="/posting?postid={{ posting.postid }}">Go To Post</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="row">
+      {% if claims %}
+      <h4 class="history-title">Pending Transactions:</h4>
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered ">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Post Title</th>
+              <th scope="col">Link to Posting</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for claim in claims %}
+            <tr>
+              <td>{{ claim.date }}</td>
+              <td>{{ claim.title }}</td>
+              <td><a href="/posting?postid={{ claim.postid }}">Go To Post</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="row">
+      {% if sales %}
+      <h4 class="history-title">Completed Transactions as Seller:</h4>
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Post Title</th>
+              <th scope="col">Post Price</th>
+              <th scope="col">Buyer</th>
+              <th scope="col">Link to Buyer</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for sale in sales %}
+            <tr>
+              <td>{{ sale.date }}</td>
+              <td>{{ sale.title }}</td>
+              <td>{{ '%0.2f' | format(sale.price | float) }}</td>
+              <td>{{ sale.username }}</td>
+              <td><a href="/user?userid={{ sale.userid }}">To User Page</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="row">
+      {% if purchases %}
+      <h4 class="history-title">Completed Transactions as Buyer:</h4>
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Post Title</th>
+              <th scope="col">Post Price</th>
+              <th scope="col">Buyer</th>
+              <th scope="col">Link to Buyer</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for purchase in purchases %}
+            <tr>
+              <td>{{ purchase.date }}</td>
+              <td>{{ purchase.title }}</td>
+              <td>{{ '%0.2f' | format(purchase.price | float) }}</td>
+              <td>{{ purchase.username }}</td>
+              <td><a href="/user?userid={{ purchase.userid }}">To User Page</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
 {% endblock %}

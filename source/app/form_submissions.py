@@ -226,22 +226,26 @@ def convert_number(phone):
     phone = phone.replace('-', '')
     phone = phone.replace('(', '')
     phone = phone.replace(')', '')
-    print(phone)
     if len(phone) == 10:
         phone = '1' + phone
     elif not len(phone) == 11 or not phone[0] == '1':
         raise ValueError
     return int(phone)
 
+def convert_again_number(phone):
+    converted = phone[0] + "(" + phone[1:4] + ")" + phone[4:7] + "-" + phone[7:10]
+    return converted
 
 ### ADD MORE HERE ###
 def validate_phone_number(field):
     try:
         phone_number = str(field)
         phone_number = convert_number(phone_number)
+        phone_number = convert_again_number(str(phone_number))
+        return [True, phone_number]
     except Exception as e:
         return [False, "Phone number must be 10 characters long or 11 characters long with the country code being '1' in order to be processed."]
-    return [True, '']
+    return [True, phone_number]
 
 
 def validate_personal_email(field):
@@ -252,7 +256,7 @@ def validate_personal_email(field):
             return [True, field]
     except Exception as e:
         return [False, "The personal email address is not a legal value."]
-    return [True, ""]
+    return [True, field]
 
 def validate_bio(field):
     try:
