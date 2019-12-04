@@ -1,0 +1,28 @@
+{% extends 'base-template.html' %}
+
+{% block content %}
+<table style="width:100%">
+  <thead>
+  			<tr>
+  				<th>User ID</th>
+  				<th>Username</th>
+          <th>Remove User?</th>
+  			</tr>
+  </thead>
+  <tbody>
+    {% for someUser in UserQuery %}
+      <tr>
+        <td> {{someUser.userid}} </td>
+        <td> {{someUser.username}} </td>
+        {% if someUser.userid != 1%}
+        <td>
+          <form method="post">
+							<button type="submit" name="user_id" value={{ someUser.userid }}>Remove this user</button>
+					</form>
+        </td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

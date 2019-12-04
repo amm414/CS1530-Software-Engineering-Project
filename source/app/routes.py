@@ -288,3 +288,55 @@ def remove_posting_view(error=""):
         return redirect(url_for('user_home_screen'))
 
     return render_template('remove-posting-view.html',contact_options=CONTACT_METHOD,  categories=CATEGORIES, js_file="tag-javascript.js", current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'), post=posting_info)
+
+# Admin view of users
+@app.route('/admin-view/users', methods=['GET', 'POST'])
+def admin_view_users():
+    if g.user is None:
+        return redirect(url_for('login'))
+    elif g.user.userid != 1:
+        return redirect(url_for('user_home_screen'))
+    else:
+        if request.method == 'POST':
+            someUserID = request.form.get('user_id')
+            someUser = User.query.filter_by(userid=someUserID).first()
+            db.session.delete(someUser)
+            db.session.commit()
+        UserQuery = User.query.order_by(User.userid).all()
+        return render_template('admin-view-users.html', UserQuery=UserQuery)
+
+# Admin view of postings
+@app.route('/admin-view/postings', methods=['GET', 'POST'])
+def admin_view_postings():
+    if g.user is None:
+        return redirect(url_for('login'))
+    elif g.user.userid != 1:
+        return redirect(url_for('user_home_screen'))
+    else:
+        if request.method == 'POST':
+            somePostID = request.form.get('post_id')
+            somePost = Posting.query.filter_by(postid=somePostID).first()
+            db.session.delete(somePost)
+            db.session.commit()
+        PostingQuery = Posting.query.order_by(Posting.postid).all()
+        return render_template('admin-view-postings.html', PostingQuery=PostingQuery)
+
+# Admin view of creating accounts
+@app.route('/admin-view/create-account', methods=['GET', 'POST'])
+def admin_view_create_account(error=""):
+    if g.user is None:
+        return redirect(url_for('login'))
+    elif g.user.userid != 1:
+        return redirect(url_for('user_home_screen'))
+    else:
+        title = "Create a User"
+        CREATE_ERROR = "Need to fill in ALL fields marked with an '*'"
+        errors = []
+        if request.method == 'POST':
+            [results, errors] = form_submissions.generate_new_account_form(request.form)
+            if len(errors) == 0:
+                added_successfully = database_helpers.add_user(results)
+                if added_successfully:
+                    return redirect(url_for('admin_view_users'))
+                errors = "Could not process. Try again."
+        return render_template('create-account.html', current_user_is_auth=False, error=errors, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )

@@ -60,6 +60,12 @@
                 Edit Account
                 <i class="fas fa-desktop navbar-button-dropdown-icon "></i>
               </a>
+              {% if current_user_id == 1 %}
+              <a class="navbar-button-dropdown-items navbar-color-scheme" href="/admin-view/users">
+                Admin View
+                <i class="fas fa-desktop navbar-button-dropdown-icon "></i>
+              </a>
+              {% endif %}
               <a class="navbar-button-dropdown-items navbar-color-scheme" href="/logout">
                 Logout
                 <i class="fas fa-sign-out-alt navbar-button-dropdown-icon"></i>
