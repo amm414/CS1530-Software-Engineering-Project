@@ -313,7 +313,7 @@ def admin_view_postings():
         return redirect(url_for('user_home_screen'))
     else:
         if request.method == 'POST':
-            database_helpers.archivedPost(request.form.get('post_id'))
+            database_helpers.archive_posting(request.form.get('post_id'))
             db.session.commit()
         PostingQuery = Posting.query.order_by(Posting.postid).all()
         return render_template('admin-view-postings.html', PostingQuery=PostingQuery)

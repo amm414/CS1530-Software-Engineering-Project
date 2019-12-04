@@ -174,8 +174,8 @@ def delete_user(userid):
 
 def archive_posting(postid, transaction=None):
     try:
-        if postid is not None:
-            post = models.Posting.query.filter_by(postid=postid).first()
+        post = models.Posting.query.filter_by(postid=postid).first()
+        if transaction is not None:
             print("got Post")
             archivedPost = models.ArchivedPosting(
                 transactionid   = transaction.transactionid,
