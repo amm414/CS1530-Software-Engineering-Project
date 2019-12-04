@@ -53,7 +53,6 @@ def get_search_elems(search):
         return_search = []
         for e in elems:
             return_search.append('%' + e + '%')
-        print(return_search)
         return return_search
     except Exception as e:
         pass
@@ -62,7 +61,6 @@ def get_search_elems(search):
 def get_page_number(field, number_postings, posts_per_page):
     try:
         field = int(field)
-        print((int(number_postings/posts_per_page)+1))
         if field > 0 and field <= (int(number_postings/posts_per_page)+1):
             return field
     except Exception as e:
@@ -167,16 +165,20 @@ def validate_preferred_contact(field):
         return [False, "Invalid preffered contact method. Try resubmitting."]
     return [False, "Invalid preffered contact method. Try resubmitting."]
 
-def validate_preferred_tags(field):
+def validate_preferred_tags(field, title):
     try:
-        field = str(field)
-        if len(field) < 1000:
-            if len(field.split(',')) > 50:
-                return [False, "Too many tags. The maximum tags are 50. Maximum character limit is 1,000"]
+        title = str(title[1]).split()
+        field = str(field) + ',' + ','.join(title)
+        field = ''.join(field.split()).lower().split(',')
+        if len(field) < 900:
+            if len(field) > 50:
+                return [False, "Too many tags. The maximum tags are 50. Maximum character limit is 900"]
+            field = list(set(field))
+            field = ','.join(field)
             return [True, field]
         raise ValueError
     except Exception as e:
-        return [False, "Too many tags. Maximum character limit is 1,000"]
+        return [False, "Too many tags. Maximum character limit is 900"]
 
 def validate_input(forms, CATEGORIES):
     result = {}
@@ -185,9 +187,7 @@ def validate_input(forms, CATEGORIES):
     result['price'] = validate_price(forms['price'])
     result['description'] = validate_desc(forms['description'])
     result['contactmethod'] = validate_preferred_contact(forms['preferredContact'])
-    print("Contact Method:")
-    print(result['contactmethod'])
-    result['tags'] = validate_preferred_tags(forms['tags'])
+    result['tags'] = validate_preferred_tags(forms['tags'], result['title'])
     return result
 
 def generate_return_values(given):

@@ -183,13 +183,10 @@ def user_home_screen():
         return redirect(url_for('login'))
     if request.method == 'GET':
         [submitted, randomize] = form_submissions.get_filters(request.args, True)
-        # need to filter somehow
         categoryIsAll = True if submitted['category'] == 'All' else False
         if randomize:
             postings = database_helpers.generate_random_postings()
         else:
-            # this is where the FILTERING should go
-            #postings = database_helpers.generate_random_postings()
             if submitted['search'] == '':
                 postings = Posting.query.filter(
                                     and_(
@@ -204,8 +201,7 @@ def user_home_screen():
             else:
                 search_elems = form_submissions.get_search_elems(submitted['search'])
                 postings = Posting.query.filter(and_(
-                                        or_(and_(Posting.tags.like(e) for e in search_elems),
-                                         and_(Posting.title.like(e) for e in search_elems)),
+                                        and_(Posting.tags.like(e) for e in search_elems),
                                         Posting.price >= float(submitted['minPrice']),
                                         Posting.price <= float(submitted['maxPrice']),
                                         or_(Posting.category.contains(submitted['category']), categoryIsAll)
@@ -215,12 +211,9 @@ def user_home_screen():
                                         Posting.title, Posting.price, Posting.description,
                                         User.rating)
     else:
-        # do not bother filtering at all...
         submitted = form_submissions.get_filters('', True)
-        # randomize
         postings = database_helpers.generate_random_postings()
 
-    print(postings.count())
     page = form_submissions.get_page_number(submitted['page'], postings.count(), app.config['POSTS_PER_PAGE'])
     postings = postings.paginate(page, app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('user_home_screen',search=submitted['search'], category=submitted['category'], minPrice=submitted['minPrice'], maxPrice=submitted['maxPrice'], page=postings.next_num) if postings.has_next else None

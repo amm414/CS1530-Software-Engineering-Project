@@ -54,7 +54,11 @@ $(document).ready(function() {
 
   collectionOfTagsInput.addEventListener('keyup', function(e){
     if ( e.key === 'Enter'){
-      tags.push(collectionOfTagsInput.value);
+      let new_tags = collectionOfTagsInput.value.split(" ")
+      console.log(new_tags);
+      new_tags.forEach(function (item){
+        tags.push(item);
+      })
       addTags();
       collectionOfTagsInput.value = '';
     }

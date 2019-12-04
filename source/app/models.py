@@ -18,6 +18,8 @@ def add_postings(file):
                 new_item[key] = row[key]
             list.append(new_item)
     for value in list:
+        tags = value['title'].split()
+        tags = ','.join(tags)
         newPosting = Posting(
             userid          = value['userid'],
             date            = datetime.now(),
@@ -26,6 +28,7 @@ def add_postings(file):
             price 			= value['price'],
             category 		= value['category'],
             contactmethod 	= value['contactmethod'],
+            tags            = tags
         )
         db.session.add(newPosting)
         db.session.commit()

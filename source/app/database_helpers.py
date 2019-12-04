@@ -138,7 +138,6 @@ def check_for_transaction(claim):
             models.Claim.usersubmitted!=claim.usersubmitted
         ).first()
         if other_claim is not None:
-            print(other_claim.usersubmitted)
             newTransaction = models.Transaction(
                 date            = datetime.now(),
                 claimidseller   = claim.sellerid,
@@ -157,7 +156,6 @@ def check_for_transaction(claim):
             else:
                 raise ValueError
     except Exception as e:
-        print(e)
         print("Rollback in check_for_transaction")
         db.session.rollback()
         return None
@@ -186,7 +184,6 @@ def archive_posting(postid, transaction):
             contactmethod 	= post.contactmethod,
             tags 			= post.tags
         )
-        print(post.postid)
         db.session.add(archivedPost)
         db.session.delete(post)
         return True
