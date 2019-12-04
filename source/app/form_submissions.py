@@ -228,7 +228,9 @@ def convert_number(phone):
     phone = phone.replace(')', '')
     if len(phone) == 10:
         phone = '1' + phone
-    elif not len(phone) == 11 or not phone[0] == '1':
+    elif len(phone) == 0:
+        return ''
+    elif not len(phone) == 11 or not phone[0] or len(phone)  == '1':
         raise ValueError
     return int(phone)
 
@@ -241,7 +243,7 @@ def validate_phone_number(field):
     try:
         phone_number = str(field)
         phone_number = convert_number(phone_number)
-        phone_number = convert_again_number(str(phone_number))
+        phone_number = convert_again_number(str(phone_number)) if phone_number != '' else ''
         return [True, phone_number]
     except Exception as e:
         return [False, "Phone number must be 10 characters long or 11 characters long with the country code being '1' in order to be processed."]
