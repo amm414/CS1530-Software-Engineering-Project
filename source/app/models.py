@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship
 from app import app, db
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
@@ -95,6 +96,7 @@ class User(db.Model):
     bio		  	 	= db.Column(db.String(250), nullable = False)
     rating 			= db.Column(db.Float(2), nullable = False)
     numRatings		= db.Column(db.Integer, nullable = False)
+    postings        = relationship("Posting", cascade="all,delete", backref="User")
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -110,6 +112,7 @@ class Posting(db.Model):
     category 		= db.Column(db.String(80), nullable = False)
     contactmethod 	= db.Column(db.String(80), nullable = True)
     tags 			= db.Column(db.String(1000), nullable = True)
+    claims        = relationship("Claim", cascade="all,delete", backref="Posting")
 
     def __repr__(self):
         return '<Posting {}: "{}">'.format(self.postid, self.title)

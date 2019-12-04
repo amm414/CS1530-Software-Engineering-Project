@@ -1,0 +1,26 @@
+{% extends 'base-template.html' %}
+
+{% block content %}
+<table style="width:100%">
+  <thead>
+  			<tr>
+  				<th>Posting ID</th>
+  				<th>Title</th>
+          <th>Remove Posting?</th>
+  			</tr>
+  </thead>
+  <tbody>
+    {% for somePosting in PostingQuery %}
+      <tr>
+        <td> {{somePosting.postid}} </td>
+        <td> {{somePosting.title}} </td>
+        <td>
+          <form method="post">
+							<button type="submit" name="post_id" value={{ somePosting.postid }}>Remove this posting</button>
+					</form>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
