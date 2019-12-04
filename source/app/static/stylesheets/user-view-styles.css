@@ -6,6 +6,42 @@
   margin: 30px 10px;
 }
 
+.page-button{
+  font-size: 120%;
+  font-weight: bolder;
+  color: #bfa458;
+  margin: 0 15px;
+  padding: 10px 30px;
+  border-radius: 10px;
+  background-color: #192857;
+  display: inline-block;
+}
+
+.page-button-holder{
+  margin: 0 10px;
+  display: inline-block;
+}
+.page-href{
+  width: 0px;
+}
+
+.top-of-page-button{
+  margin: auto;
+  margin: 20px 0 40px 0;
+}
+
+.page-button:hover{
+  background-color: #bfa458;
+  color: #192857;
+}
+
+.page-control{
+  display: inline-block;
+  text-align: center;
+  margin: auto;
+  padding: 10px 0;
+}
+
 .card-title{
   font-weight: bold;
   font-family: sans-serif;

@@ -155,6 +155,7 @@ def edit_posting(error=""):
     if request.method == 'POST':
         [results, error] = form_submissions.get_form_create_post(request.form, CATEGORIES)
         if len(error) == 0:
+            print(results)
             database_helpers.modify_post_by_id(results, posting_info[0])
             return redirect(url_for('user_home_screen'))
     return render_template('edit-posting-view.html',contact_options=CONTACT_METHOD,  categories=CATEGORIES, js_file="tag-javascript.js", current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  user_id=g.user.userid,  CURRENT_USER_ID=g.user.userid, page_title=title, error=error, css_file=helper_functions.generate_linked_files('create-posting-view'), post=posting_info)
@@ -177,6 +178,7 @@ def full_posting_view():
 @app.route('/search-and-filter-postings', methods=['GET'])
 def user_home_screen():
     title = "Search and Filter Postings!"
+    page = 1
     if g.user is None:
         return redirect(url_for('login'))
     if request.method == 'GET':
@@ -198,11 +200,12 @@ def user_home_screen():
                                     ).join(User).with_entities(
                                         Posting.postid, Posting.userid, User.username,
                                         Posting.title, Posting.price, Posting.description,
-                                        User.rating).limit(30)
+                                        User.rating)
             else:
-                postings = Posting.query.filter(
-                                    and_(
-                                        Posting.title.contains(submitted['search']),
+                search_elems = form_submissions.get_search_elems(submitted['search'])
+                postings = Posting.query.filter(and_(
+                                        or_(and_(Posting.tags.like(e) for e in search_elems),
+                                         and_(Posting.title.like(e) for e in search_elems)),
                                         Posting.price >= float(submitted['minPrice']),
                                         Posting.price <= float(submitted['maxPrice']),
                                         or_(Posting.category.contains(submitted['category']), categoryIsAll)
@@ -210,13 +213,19 @@ def user_home_screen():
                                     ).join(User).with_entities(
                                         Posting.postid, Posting.userid, User.username,
                                         Posting.title, Posting.price, Posting.description,
-                                        User.rating).limit(30)
+                                        User.rating)
     else:
         # do not bother filtering at all...
         submitted = form_submissions.get_filters('', True)
         # randomize
         postings = database_helpers.generate_random_postings()
-    return render_template('user-view.html', categories=CATEGORIES, able_to_filter=True, submitted=submitted, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings)
+
+    print(postings.count())
+    page = form_submissions.get_page_number(submitted['page'], postings.count(), app.config['POSTS_PER_PAGE'])
+    postings = postings.paginate(page, app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('user_home_screen',search=submitted['search'], category=submitted['category'], minPrice=submitted['minPrice'], maxPrice=submitted['maxPrice'], page=postings.next_num) if postings.has_next else None
+    prev_url = url_for('user_home_screen',search=submitted['search'], category=submitted['category'], minPrice=submitted['minPrice'], maxPrice=submitted['maxPrice'], page=postings.prev_num) if postings.has_prev else None
+    return render_template('user-view.html', next_url=next_url, prev_url=prev_url, page=page, categories=CATEGORIES, able_to_filter=True, submitted=submitted, current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0), page_title=title, css_file=helper_functions.generate_linked_files('user-view'), filtered_postings=postings.items)
 
 ########################### CLAIMS ##########################################
 # the claim pages

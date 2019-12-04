@@ -47,6 +47,28 @@ def get_search_text(field):
     except Exception as e:
         return ''
 
+def get_search_elems(search):
+    try:
+        elems = search.split()
+        return_search = []
+        for e in elems:
+            return_search.append('%' + e + '%')
+        print(return_search)
+        return return_search
+    except Exception as e:
+        pass
+    return ''
+
+def get_page_number(field, number_postings, posts_per_page):
+    try:
+        field = int(field)
+        print((int(number_postings/posts_per_page)+1))
+        if field > 0 and field <= (int(number_postings/posts_per_page)+1):
+            return field
+    except Exception as e:
+        pass
+    return 1
+
 def get_max_price(field, min_field):
     try:
         field = float(field)
@@ -71,7 +93,14 @@ def get_min_price(field):
         return '0'
 
 def should_randomize(submitted):
-    return submitted == {'minPrice': '0', 'maxPrice': '0', 'search': '', 'category': ''}
+    return submitted == {'minPrice': '0', 'maxPrice': '0', 'search': '', 'category': '', 'page': 1}
+
+def get_page(field):
+    try:
+        return int(field)
+    except Exception as e:
+        pass
+    return 1
 
 def get_filters(forms, get_recieved):
     if get_recieved and forms.get('minPrice') is not None:
@@ -80,9 +109,10 @@ def get_filters(forms, get_recieved):
         submitted['maxPrice'] = get_max_price(forms['maxPrice'], submitted['minPrice'])
         submitted['search'] = get_search_text(forms['search'])
         submitted['category'] = get_category(forms['category'])
+        submitted['page']       = get_page(forms['page']) if 'page' in forms else 1
         return [submitted, should_randomize(submitted)]
     else:
-        return [{'minPrice': '0', 'maxPrice': '0', 'search': '', 'category': ''}, True]
+        return [{'minPrice': '0', 'maxPrice': '0', 'search': '', 'category': '', 'page': 1}, True]
 
 
 ############################## New Posting Submission #####################
@@ -155,6 +185,8 @@ def validate_input(forms, CATEGORIES):
     result['price'] = validate_price(forms['price'])
     result['description'] = validate_desc(forms['description'])
     result['contactmethod'] = validate_preferred_contact(forms['preferredContact'])
+    print("Contact Method:")
+    print(result['contactmethod'])
     result['tags'] = validate_preferred_tags(forms['tags'])
     return result
 

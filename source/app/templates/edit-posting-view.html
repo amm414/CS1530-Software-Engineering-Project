@@ -20,7 +20,7 @@
         <div class="create-posting-input-group">
           <h4 class="create-posting-label">Posting Title</h4>
           <p class='requirement-submission'>REQUIRED. 1 to 30 characters long.</p>
-          <input class="form-control form-control-lg" type="text" value="{{post.title}}"" name="title">
+          <input class="form-control form-control-lg" type="text" value="{{post.title}}" name="title">
         </div>
 
         <div class="create-posting-input-group">
@@ -41,11 +41,12 @@
           <div class="create-posting-radio-contact list-radio-options create-posting-list-group">
             {% for option in contact_options %}
             <label class="form-check-label radio-label">
-              <input type="radio" class="form-check-input create-posting-radio-buttons" name="preferredContact" value="{{ option }}" {% if option | string == post.contactmethod | string %} checked="checked" {% endif %}>
+              <input type="radio" class="form-check-input create-posting-radio-buttons" name="preferredContact" value="{{ option }}" {% if (option | string) == (post.contactmethod | string) %} checked {% endif %}>
               <span class="radio-button-span"></span>
               {{ contact_options[option] }}
             </label>
             {% endfor %}
+            {{ post[contactmethod]}}
           </div>
         </div>
       </div>

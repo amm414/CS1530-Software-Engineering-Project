@@ -6,7 +6,7 @@ def generate_random_postings():
     result = models.Posting.query.join(models.User).with_entities(
         models.Posting.postid, models.Posting.userid, models.User.username,
         models.Posting.title, models.Posting.price, models.Posting.description,
-        models.User.rating).order_by(func.random()).limit(30)
+        models.User.rating)
     return result
 
 def add_new_post(form_input, current_user):
@@ -17,7 +17,7 @@ def add_new_post(form_input, current_user):
         description = form_input['description'],
         price = form_input['price'],
         category = form_input['category'],
-        contactmethod = form_input['description'],
+        contactmethod = form_input['contactmethod'],
         tags = form_input['tags']))
     db.session.commit()
     return True

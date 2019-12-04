@@ -76,7 +76,6 @@
   padding: 20px 0;
 }
 
-
 @media (min-width: 500px) {
   .account-email, .account-phone{
     font-size: 130%;

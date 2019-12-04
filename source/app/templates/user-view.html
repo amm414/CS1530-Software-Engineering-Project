@@ -57,6 +57,29 @@
 
 <div class="container content-panel">
   <div class="row">
+    <div class="page-control">
+      {% if prev_url %}
+      <div class="page-button-holder">
+        <a class="page-href" href="{{ prev_url }}">
+          <div class="page-button">
+            <i class="fas fa-arrow-circle-left"></i> Prev
+          </div>
+        </a>
+      </div>
+      {% endif %}
+      {% if next_url %}
+      <div class="page-button-holder">
+        <a class="page-href" href="{{ next_url }}">
+          <div class="page-button">
+            <span>Next <i class="fas fa-arrow-circle-right"></i></span>
+          </div>
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="row">
     {% for post in filtered_postings %}
     <div class="col-lg-6 col-xl-4">
       <div class="card posting-card">
@@ -100,5 +123,41 @@
     </div>
     {% endfor %}
   </div>
+
+  <div class="row">
+    <div class="page-control">
+      {% if prev_url %}
+      <div class="page-button-holder">
+        <a class="page-href" href="{{ prev_url }}">
+          <div class="page-button">
+            <i class="fas fa-arrow-circle-left"></i> Prev
+          </div>
+        </a>
+      </div>
+      {% endif %}
+      {% if next_url %}
+      <div class="page-button-holder">
+        <a class="page-href" href="{{ next_url }}">
+          <div class="page-button">
+            <span>Next <i class="fas fa-arrow-circle-right"></i></span>
+          </div>
+        </a>
+      </div>
+      {% endif %}
+
+      <div class="top-of-page-button">
+        <div class="page-button-holder">
+          <a class="page-href" href="#">
+            <div class="page-button">
+              <span>Top of Page <i class="fas fa-arrow-circle-up"></i></span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
 </div>
 {% endblock %}
