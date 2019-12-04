@@ -91,10 +91,6 @@ def get_posting_by_id(postid):
         ).first()
     return posting_info, poster_info
 
-def remove_user(userid):
-    models.User.query.filter_by(userid=userid).delete()
-    db.session.commit()
-
 def get_user_by_email(email):
     return models.User.query.filter_by(email=email).first()
 
@@ -167,23 +163,45 @@ def delete_claim(claimid):
     except Exception as e:
         pass
 
-def archive_posting(postid, transaction):
+def delete_user(userid):
     try:
-        post = models.Posting.query.filter_by(postid=postid).first()
-        print("got Post")
-        archivedPost = models.ArchivedPosting(
-            transactionid   = transaction.transactionid,
-            postid 			= post.postid,
-            buyerid         = transaction.claimidbuyer,
-            sellerid        = transaction.claimidseller,
-            date 			= datetime.now(),
-            title   		= post.title,
-            description 	= post.description,
-            price 			= post.price,
-            category 		= post.category,
-            contactmethod 	= post.contactmethod,
-            tags 			= post.tags
-        )
+        someUser = User.query.filter_by(userid=someUserID).first()
+        db.session.delete(someUser)
+        db.session.commit()
+    except Exception as e:
+        pass
+
+
+def archive_posting(postid, transaction=None):
+    try:
+        if postid is not None:
+            post = models.Posting.query.filter_by(postid=postid).first()
+            print("got Post")
+            archivedPost = models.ArchivedPosting(
+                transactionid   = transaction.transactionid,
+                postid 			= post.postid,
+                buyerid         = transaction.claimidbuyer,
+                sellerid        = transaction.claimidseller,
+                date 			= datetime.now(),
+                title   		= post.title,
+                description 	= post.description,
+                price 			= post.price,
+                category 		= post.category,
+                contactmethod 	= post.contactmethod,
+                tags 			= post.tags
+            )
+        else:
+            archivedPost = models.ArchivedPosting(
+                postid 			= post.postid,
+                date 			= datetime.now(),
+                title   		= post.title,
+                description 	= post.description,
+                price 			= post.price,
+                category 		= post.category,
+                contactmethod 	= post.contactmethod,
+                tags 			= post.tags
+            )
+
         db.session.add(archivedPost)
         db.session.delete(post)
         return True

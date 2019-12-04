@@ -1,26 +1,45 @@
 {% extends 'base-template.html' %}
 
 {% block content %}
-<table style="width:100%">
-  <thead>
-  			<tr>
-  				<th>Posting ID</th>
-  				<th>Title</th>
-          <th>Remove Posting?</th>
-  			</tr>
-  </thead>
-  <tbody>
-    {% for somePosting in PostingQuery %}
+<div class="admin-center-buttons">
+  <div class="admin-space">
+    <a href="/admin-view/users">
+      <div class="admin-user-button">
+        User Data <i class="fas fa-users"></i>
+      </div>
+    </a>
+  </div>
+
+  <div class="admin-space">
+    <a href="/admin-view/postings">
+      <div class="admin-user-button">
+        Posting Data <i class="fas fa-file"></i>
+      </div>
+    </a>
+  </div>
+</div>
+<div class="table-responsive">
+  <table class="table table-striped table-bordered">
+    <thead>
       <tr>
-        <td> {{somePosting.postid}} </td>
-        <td> {{somePosting.title}} </td>
-        <td>
-          <form method="post">
-							<button type="submit" name="post_id" value={{ somePosting.postid }}>Remove this posting</button>
-					</form>
-        </td>
+        <th scope="col">Posting ID</th>
+        <th scope="col">Title</th>
+        <th scope="col">Remove Posting?</th>
       </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {% for somePosting in PostingQuery %}
+        <tr>
+          <td> {{somePosting.postid}} </td>
+          <td> {{somePosting.title}} </td>
+          <td>
+            <form method="post">
+  							<button type="submit" name="post_id" value={{ somePosting.postid }}>Remove this posting</button>
+  					</form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

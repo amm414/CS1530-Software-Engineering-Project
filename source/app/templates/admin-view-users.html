@@ -1,28 +1,47 @@
 {% extends 'base-template.html' %}
 
 {% block content %}
-<table style="width:100%">
-  <thead>
-  			<tr>
-  				<th>User ID</th>
-  				<th>Username</th>
-          <th>Remove User?</th>
-  			</tr>
-  </thead>
-  <tbody>
-    {% for someUser in UserQuery %}
+<div class="admin-center-buttons">
+  <div class="admin-space">
+    <a href="/admin-view/users">
+      <div class="admin-user-button">
+        User Data <i class="fas fa-users"></i>
+      </div>
+    </a>
+  </div>
+
+  <div class="admin-space">
+    <a href="/admin-view/postings">
+      <div class="admin-user-button">
+        Posting Data <i class="fas fa-file"></i>
+      </div>
+    </a>
+  </div>
+</div>
+<div class="table-responsive">
+  <table class="table table-striped table-bordered">
+    <thead>
       <tr>
-        <td> {{someUser.userid}} </td>
-        <td> {{someUser.username}} </td>
-        {% if someUser.userid != 1%}
-        <td>
-          <form method="post">
-							<button type="submit" name="user_id" value={{ someUser.userid }}>Remove this user</button>
-					</form>
-        </td>
-        {% endif %}
+        <th scope="col">User ID</th>
+        <th scope="col">Username</th>
+        <th scope="col">Remove User?</th>
       </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {% for someUser in UserQuery %}
+        <tr>
+          <td> {{someUser.userid}} </td>
+          <td> {{someUser.username}} </td>
+          {% if someUser.userid != 1%}
+          <td>
+            <form method="post">
+  							<button type="submit" name="user_id" value={{ someUser.userid }}>Remove this user</button>
+  					</form>
+          </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

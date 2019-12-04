@@ -1,5 +1,29 @@
+
+/*  Snippet Styles  */
+
 body{
   background-color: #ccc;
+}
+
+.admin-center-buttons{
+  text-align: center;
+  margin: auto;
+  padding-bottom: 30px;
+}
+
+.admin-space{
+  display: inline-block;
+  margin: 0 20px;
+}
+
+.admin-user-button{
+  font-size: 120%;
+  font-weight: bolder;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #192857;
+  display: inline-block;
+  color: #bfa458;
 }
 
 .main-page{

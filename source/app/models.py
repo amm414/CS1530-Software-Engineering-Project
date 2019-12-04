@@ -149,10 +149,10 @@ class ArchivedPosting(db.Model):
         db.UniqueConstraint('postid', 'buyerid', 'archivedpostid', 'sellerid', name='unique_archive_posting_constraint'),
     )
     archivedpostid  = db.Column(db.Integer, primary_key = True)
-    transactionid   = db.Column(db.Integer, db.ForeignKey('transaction.transactionid'), nullable = False)
+    transactionid   = db.Column(db.Integer, db.ForeignKey('transaction.transactionid'), nullable = True)
     postid 			= db.Column(db.Integer, nullable = False)
-    buyerid         = db.Column(db.Integer, db.ForeignKey("user.userid"), nullable = False)
-    sellerid        = db.Column(db.Integer, db.ForeignKey("user.userid"), nullable = False)
+    buyerid         = db.Column(db.Integer, db.ForeignKey("user.userid"), nullable = True)
+    sellerid        = db.Column(db.Integer, db.ForeignKey("user.userid"), nullable = True)
     date 			= db.Column(db.Date, nullable = False)
     title   		= db.Column(db.String(80), nullable = False)
     description 	= db.Column(db.String(250), nullable = True)

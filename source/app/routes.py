@@ -120,7 +120,7 @@ def edit_account(error=""):
         [result, error] = form_submissions.get_modified_account_info(request.form, g.user.userid)
         if len(error) == 0 and check_password_hash(g.user.password, str(result['oldpassword'])):
             if result['deleteaccount'] == "delete":
-                database_helpers.remove_user(g.user.userid)
+                database_helpers.delete_user(g.user.userid)
             if database_helpers.update_current_user(g.user, result):
                 return redirect(url_for('login'))
     return render_template('edit-account.html', current_user_id=g.user.userid, current_user_is_auth=(g.user.userid > 0),  error=error, current_user=current_user, CURRENT_USER_ID=g.user.userid, page_title=title, css_file=helper_functions.generate_linked_files('create-account'), )
@@ -300,10 +300,7 @@ def admin_view_users():
         return redirect(url_for('user_home_screen'))
     else:
         if request.method == 'POST':
-            someUserID = request.form.get('user_id')
-            someUser = User.query.filter_by(userid=someUserID).first()
-            db.session.delete(someUser)
-            db.session.commit()
+            database_helpers.delete_user(request.form.get('user_id'))
         UserQuery = User.query.order_by(User.userid).all()
         return render_template('admin-view-users.html', UserQuery=UserQuery)
 
@@ -316,9 +313,7 @@ def admin_view_postings():
         return redirect(url_for('user_home_screen'))
     else:
         if request.method == 'POST':
-            somePostID = request.form.get('post_id')
-            somePost = Posting.query.filter_by(postid=somePostID).first()
-            db.session.delete(somePost)
+            database_helpers.archivedPost(request.form.get('post_id'))
             db.session.commit()
         PostingQuery = Posting.query.order_by(Posting.postid).all()
         return render_template('admin-view-postings.html', PostingQuery=PostingQuery)
