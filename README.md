@@ -1,6 +1,17 @@
 # CS1530-Software-Engineering-Project
 The Repository for Code and Documentation for the CS1530 class.
 
+## CraigVersity
+
+This web application was designed for a software engineering class at the University of Pittsburgh as a 5-man group. This application mirrors Craigslist in that it is a location for buyers and sellers to meet to proceed with transactions. We focus on creating a Craigslist for universities where the users have an account associated with the university (like email). 
+
+This app is a prototype with a focus on the software design lifecycle (waterfall to be more precise). We designed, planned, created mockups, estimated cost/time, and implemented a primitive version to showcase to our class and professor. 
+
+An online demo of this application can be found at [Andrew’s personal website here]( https://andrew-morgan-website.herokuapp.com/craigversity).
+ 
+
+## Getting it to run locally
+
 Get FLASK installed:
 
 https://timmyreilly.azurewebsites.net/python-flask-windows-development-environment-setup/
